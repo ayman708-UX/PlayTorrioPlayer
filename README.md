@@ -45,20 +45,6 @@ PlayTorrio Player aims to be mpv compatible, which means almost all mpv features
 - Build from source: check the [Compiling](https://github.com/tsl0922/ImPlay/wiki/Compiling) document
 
 Read the [FAQ](https://github.com/tsl0922/ImPlay/wiki/FAQ).
-
-# Screenshots
-### Context Menu
-
-![screenshot](screenshot/1.jpg)
-
-### Command Palette
-
-![screenshot](screenshot/2.jpg)
-
-### Quick Settings & Debug
-
-![screenshot](screenshot/3.jpg)
-
 # Credits
 
 ImPlay uses the following projects, thanks to their authors and contributors.
