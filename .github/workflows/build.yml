@@ -41,7 +41,7 @@ jobs:
             build/ImPlay-*.AppImage
             build/ImPlay-*.deb
   macos:
-    runs-on: macos-13
+    runs-on: macos-14
     name: macOS
     steps:
       - uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
           brew install cmake ninja git mpv freetype2 pkg-config
       - name: Build PlayTorrio
         env:
-          PKG_CONFIG_PATH: /usr/local/opt/libarchive/lib/pkgconfig
+          PKG_CONFIG_PATH: /opt/homebrew/opt/libarchive/lib/pkgconfig:/usr/local/opt/libarchive/lib/pkgconfig
         run: |
           mkdir build && cd build
           cmake -DCMAKE_BUILD_TYPE=RELEASE -DUSE_PATCHED_GLFW=ON -DCREATE_PACKAGE=ON -G Ninja ..
