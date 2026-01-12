@@ -26,7 +26,7 @@ class PlayerOverlay : public View {
   void drawBottomBar();
   void drawProgressBar();
   void drawControlButtons();
-  void drawVolumeControl();
+  void drawVolumeControl(float y, float btnSize);
   void drawSubtitleMenu();
   void drawAudioMenu();
   void drawSettingsMenu();

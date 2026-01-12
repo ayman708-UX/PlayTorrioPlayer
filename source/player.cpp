@@ -86,22 +86,17 @@ bool Player::init(std::map<std::string, std::string> &options) {
 void Player::draw() {
   drawVideo();
 
-  // Draw the PlayTorrio overlay
+  // Draw the PlayTorrioPlayer overlay
   if (!idle) {
-    // Playing - show player controls overlay
+    // Playing - show ONLY the PlayTorrioPlayer controls overlay
+    // No old ImPlay UI elements during playback
     playerOverlay->draw();
   } else {
-    // Idle - show PlayTorrio welcome screen
+    // Idle - show PlayTorrioPlayer welcome screen
     playerOverlay->drawIdleScreen();
   }
 
-  about->draw();
-  debug->draw();
-  quickview->draw();
-  settings->draw();
-  contextMenu->draw();
-  commandPalette->draw();
-
+  // Only draw dialogs (not the old UI views)
   drawOpenURL();
   drawDialog();
 }
@@ -431,12 +426,7 @@ void Player::writeMpvConf() {
     std::ofstream file(inputConf, std::ios::binary);
     auto content = romfs::get("mpv/input.conf");
     file.write(reinterpret_cast<const char *>(content.data()), content.size()) << "\n";
-    file << "MBTN_RIGHT   script-message-to implay context-menu    # show context menu\n";
-#ifdef __APPLE__
-    file << "Meta+Shift+p script-message-to implay command-palette # show command palette\n";
-#else
-    file << "Ctrl+Shift+p script-message-to implay command-palette # show command palette\n";
-#endif
+    // PlayTorrioPlayer - clean UI, no context menus or command palettes
     file << "`            script-message-to implay metrics         # open console window\n";
   }
 
@@ -467,11 +457,6 @@ void Player::execute(int n_args, const char **args_) {
       {"open-url", [&](int n, const char **args) { openURL(); }},
       {"open-config-dir", [&](int n, const char **args) { openUrl(config->dir()); }},
       {"load-sub", [&](int n, const char **args) { openFilesDlg(subtitleFilters); }},
-      {"load-conf",
-       [&](int n, const char **args) {
-         if (n > 0) mpv->loadConfig(args[0]);
-       }},
-      {"quickview", [&](int n, const char **args) { quickview->show(n > 0 ? args[0] : nullptr); }},
       {"playlist-add-files", [&](int n, const char **args) { openFilesDlg(mediaFilters, true); }},
       {"playlist-add-folder", [&](int n, const char **args) { openFolderDlg(true); }},
       {"playlist-sort", [&](int n, const char **args) { playlistSort(n > 0 && strcmp(args[0], "true") == 0); }},
@@ -490,18 +475,10 @@ void Player::execute(int n_args, const char **args_) {
            }
          }
        }},
-      {"about", [&](int n, const char **args) { about->show(); }},
-      {"settings", [&](int n, const char **args) { settings->show(); }},
       {"metrics", [&](int n, const char **args) { debug->show(); }},
-      {"command-palette", [&](int n, const char **args) { commandPalette->show(n, args); }},
-      {"context-menu", [&](int n, const char **args) { contextMenu->show(); }},
       {"show-message",
        [&](int n, const char **args) {
          if (n > 1) messageBox(args[0], args[1]);
-       }},
-      {"theme",
-       [&](int n, const char **args) {
-         if (n > 0) ImGui::SetTheme(args[0], nullptr, config->Data.Interface.Rounding, config->Data.Interface.Shadow);
        }},
   };
 

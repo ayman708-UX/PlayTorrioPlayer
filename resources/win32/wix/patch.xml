@@ -1,1132 +1,1132 @@
 <CPackWiXPatch>
-	<CPackWiXFragment Id="CM_CP_PlayTorrio.exe">
+	<CPackWiXFragment Id="CM_CP_PlayTorrioPlayer.exe">
         <!-- Open With -->
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe" Type="string" Name="FriendlyAppName" Value="PlayTorrio Media Player"/>
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\shell\open\command" Type="string" Value="[#CM_FP_PlayTorrio.exe] &quot;%1&quot;"/>
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe" Type="string" Name="FriendlyAppName" Value="PlayTorrioPlayer Media Player"/>
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\shell\open\command" Type="string" Value="[#CM_FP_PlayTorrioPlayer.exe] &quot;%1&quot;"/>
         <!-- App Paths -->
-        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\PlayTorrio.exe">
-            <RegistryValue Type="string" Value="[#CM_FP_PlayTorrio.exe]" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\PlayTorrioPlayer.exe">
+            <RegistryValue Type="string" Value="[#CM_FP_PlayTorrioPlayer.exe]" />
             <RegistryValue Type="string" Name="Path" Value="[INSTALL_ROOT]" />
         </RegistryKey>
         <!-- Default Programs Capabilities -->
-        <RegistryKey Root="HKLM" Key="SOFTWARE\Clients\Media\PlayTorrio\Capabilities">
-            <RegistryValue Type="string" Name="ApplicationName" Value="PlayTorrio" />
-            <RegistryValue Type="string" Name="ApplicationDescription" Value="PlayTorrio Media Player" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Clients\Media\PlayTorrioPlayer\Capabilities">
+            <RegistryValue Type="string" Name="ApplicationName" Value="PlayTorrioPlayer" />
+            <RegistryValue Type="string" Name="ApplicationDescription" Value="PlayTorrioPlayer Media Player" />
         </RegistryKey>
         <!-- File Types -->
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".ac3" Value="PlayTorrio.ac3" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".ac3" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".ac3\OpenWithProgids" Name="PlayTorrio.ac3" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.ac3" Description="AC-3 Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".ac3" Value="PlayTorrioPlayer.ac3" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".ac3" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".ac3\OpenWithProgids" Name="PlayTorrioPlayer.ac3" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.ac3" Description="AC-3 Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="ac3">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".a52" Value="PlayTorrio.a52" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".a52" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".a52\OpenWithProgids" Name="PlayTorrio.a52" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.a52" Description="AC-3 Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".a52" Value="PlayTorrioPlayer.a52" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".a52" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".a52\OpenWithProgids" Name="PlayTorrioPlayer.a52" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.a52" Description="AC-3 Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="a52">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".eac3" Value="PlayTorrio.eac3" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".eac3" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".eac3\OpenWithProgids" Name="PlayTorrio.eac3" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.eac3" Description="E-AC-3 Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".eac3" Value="PlayTorrioPlayer.eac3" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".eac3" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".eac3\OpenWithProgids" Name="PlayTorrioPlayer.eac3" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.eac3" Description="E-AC-3 Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="eac3">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mlp" Value="PlayTorrio.mlp" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mlp" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mlp\OpenWithProgids" Name="PlayTorrio.mlp" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mlp" Description="MLP Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mlp" Value="PlayTorrioPlayer.mlp" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mlp" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mlp\OpenWithProgids" Name="PlayTorrioPlayer.mlp" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mlp" Description="MLP Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mlp">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".dts" Value="PlayTorrio.dts" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".dts" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".dts\OpenWithProgids" Name="PlayTorrio.dts" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.dts" Description="DTS Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".dts" Value="PlayTorrioPlayer.dts" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".dts" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".dts\OpenWithProgids" Name="PlayTorrioPlayer.dts" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.dts" Description="DTS Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="dts">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".dts-hd" Value="PlayTorrio.dts-hd" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".dts-hd" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".dts-hd\OpenWithProgids" Name="PlayTorrio.dts-hd" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.dts-hd" Description="DTS-HD Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".dts-hd" Value="PlayTorrioPlayer.dts-hd" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".dts-hd" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".dts-hd\OpenWithProgids" Name="PlayTorrioPlayer.dts-hd" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.dts-hd" Description="DTS-HD Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="dts-hd">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".dtshd" Value="PlayTorrio.dtshd" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".dtshd" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".dtshd\OpenWithProgids" Name="PlayTorrio.dtshd" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.dtshd" Description="DTS-HD Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".dtshd" Value="PlayTorrioPlayer.dtshd" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".dtshd" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".dtshd\OpenWithProgids" Name="PlayTorrioPlayer.dtshd" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.dtshd" Description="DTS-HD Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="dtshd">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".true-hd" Value="PlayTorrio.true-hd" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".true-hd" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".true-hd\OpenWithProgids" Name="PlayTorrio.true-hd" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.true-hd" Description="TrueHD Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".true-hd" Value="PlayTorrioPlayer.true-hd" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".true-hd" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".true-hd\OpenWithProgids" Name="PlayTorrioPlayer.true-hd" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.true-hd" Description="TrueHD Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="true-hd">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".thd" Value="PlayTorrio.thd" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".thd" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".thd\OpenWithProgids" Name="PlayTorrio.thd" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.thd" Description="TrueHD Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".thd" Value="PlayTorrioPlayer.thd" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".thd" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".thd\OpenWithProgids" Name="PlayTorrioPlayer.thd" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.thd" Description="TrueHD Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="thd">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".truehd" Value="PlayTorrio.truehd" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".truehd" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".truehd\OpenWithProgids" Name="PlayTorrio.truehd" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.truehd" Description="TrueHD Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".truehd" Value="PlayTorrioPlayer.truehd" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".truehd" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".truehd\OpenWithProgids" Name="PlayTorrioPlayer.truehd" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.truehd" Description="TrueHD Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="truehd">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".thd+ac3" Value="PlayTorrio.thd+ac3" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".thd+ac3" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".thd+ac3\OpenWithProgids" Name="PlayTorrio.thd+ac3" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.thd+ac3" Description="TrueHD Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".thd+ac3" Value="PlayTorrioPlayer.thd+ac3" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".thd+ac3" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".thd+ac3\OpenWithProgids" Name="PlayTorrioPlayer.thd+ac3" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.thd+ac3" Description="TrueHD Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="thd+ac3">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".tta" Value="PlayTorrio.tta" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".tta" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".tta\OpenWithProgids" Name="PlayTorrio.tta" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.tta" Description="True Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".tta" Value="PlayTorrioPlayer.tta" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".tta" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".tta\OpenWithProgids" Name="PlayTorrioPlayer.tta" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.tta" Description="True Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="tta">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".pcm" Value="PlayTorrio.pcm" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".pcm" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".pcm\OpenWithProgids" Name="PlayTorrio.pcm" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.pcm" Description="PCM Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".pcm" Value="PlayTorrioPlayer.pcm" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".pcm" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".pcm\OpenWithProgids" Name="PlayTorrioPlayer.pcm" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.pcm" Description="PCM Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="pcm">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".wav" Value="PlayTorrio.wav" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".wav" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".wav\OpenWithProgids" Name="PlayTorrio.wav" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.wav" Description="Wave Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".wav" Value="PlayTorrioPlayer.wav" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".wav" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".wav\OpenWithProgids" Name="PlayTorrioPlayer.wav" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.wav" Description="Wave Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="wav">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".aiff" Value="PlayTorrio.aiff" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".aiff" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".aiff\OpenWithProgids" Name="PlayTorrio.aiff" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.aiff" Description="AIFF Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".aiff" Value="PlayTorrioPlayer.aiff" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".aiff" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".aiff\OpenWithProgids" Name="PlayTorrioPlayer.aiff" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.aiff" Description="AIFF Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="aiff">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".aif" Value="PlayTorrio.aif" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".aif" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".aif\OpenWithProgids" Name="PlayTorrio.aif" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.aif" Description="AIFF Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".aif" Value="PlayTorrioPlayer.aif" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".aif" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".aif\OpenWithProgids" Name="PlayTorrioPlayer.aif" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.aif" Description="AIFF Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="aif">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".aifc" Value="PlayTorrio.aifc" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".aifc" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".aifc\OpenWithProgids" Name="PlayTorrio.aifc" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.aifc" Description="AIFF Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".aifc" Value="PlayTorrioPlayer.aifc" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".aifc" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".aifc\OpenWithProgids" Name="PlayTorrioPlayer.aifc" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.aifc" Description="AIFF Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="aifc">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".amr" Value="PlayTorrio.amr" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".amr" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".amr\OpenWithProgids" Name="PlayTorrio.amr" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.amr" Description="AMR Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".amr" Value="PlayTorrioPlayer.amr" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".amr" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".amr\OpenWithProgids" Name="PlayTorrioPlayer.amr" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.amr" Description="AMR Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="amr">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".awb" Value="PlayTorrio.awb" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".awb" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".awb\OpenWithProgids" Name="PlayTorrio.awb" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.awb" Description="AMR-WB Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".awb" Value="PlayTorrioPlayer.awb" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".awb" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".awb\OpenWithProgids" Name="PlayTorrioPlayer.awb" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.awb" Description="AMR-WB Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="awb">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".au" Value="PlayTorrio.au" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".au" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".au\OpenWithProgids" Name="PlayTorrio.au" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.au" Description="AU Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".au" Value="PlayTorrioPlayer.au" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".au" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".au\OpenWithProgids" Name="PlayTorrioPlayer.au" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.au" Description="AU Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="au">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".snd" Value="PlayTorrio.snd" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".snd" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".snd\OpenWithProgids" Name="PlayTorrio.snd" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.snd" Description="AU Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".snd" Value="PlayTorrioPlayer.snd" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".snd" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".snd\OpenWithProgids" Name="PlayTorrioPlayer.snd" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.snd" Description="AU Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="snd">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".lpcm" Value="PlayTorrio.lpcm" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".lpcm" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".lpcm\OpenWithProgids" Name="PlayTorrio.lpcm" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.lpcm" Description="Linear PCM Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".lpcm" Value="PlayTorrioPlayer.lpcm" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".lpcm" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".lpcm\OpenWithProgids" Name="PlayTorrioPlayer.lpcm" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.lpcm" Description="Linear PCM Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="lpcm">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".yuv" Value="PlayTorrio.yuv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".yuv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".yuv\OpenWithProgids" Name="PlayTorrio.yuv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.yuv" Description="Raw YUV Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".yuv" Value="PlayTorrioPlayer.yuv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".yuv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".yuv\OpenWithProgids" Name="PlayTorrioPlayer.yuv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.yuv" Description="Raw YUV Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="yuv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".y4m" Value="PlayTorrio.y4m" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".y4m" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".y4m\OpenWithProgids" Name="PlayTorrio.y4m" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.y4m" Description="YUV4MPEG2 Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".y4m" Value="PlayTorrioPlayer.y4m" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".y4m" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".y4m\OpenWithProgids" Name="PlayTorrioPlayer.y4m" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.y4m" Description="YUV4MPEG2 Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="y4m">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".ape" Value="PlayTorrio.ape" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".ape" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".ape\OpenWithProgids" Name="PlayTorrio.ape" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.ape" Description="Monkey's Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".ape" Value="PlayTorrioPlayer.ape" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".ape" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".ape\OpenWithProgids" Name="PlayTorrioPlayer.ape" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.ape" Description="Monkey's Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="ape">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".wv" Value="PlayTorrio.wv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".wv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".wv\OpenWithProgids" Name="PlayTorrio.wv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.wv" Description="WavPack Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".wv" Value="PlayTorrioPlayer.wv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".wv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".wv\OpenWithProgids" Name="PlayTorrioPlayer.wv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.wv" Description="WavPack Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="wv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".shn" Value="PlayTorrio.shn" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".shn" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".shn\OpenWithProgids" Name="PlayTorrio.shn" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.shn" Description="Shorten Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".shn" Value="PlayTorrioPlayer.shn" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".shn" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".shn\OpenWithProgids" Name="PlayTorrioPlayer.shn" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.shn" Description="Shorten Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="shn">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".m2ts" Value="PlayTorrio.m2ts" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".m2ts" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".m2ts\OpenWithProgids" Name="PlayTorrio.m2ts" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.m2ts" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".m2ts" Value="PlayTorrioPlayer.m2ts" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".m2ts" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".m2ts\OpenWithProgids" Name="PlayTorrioPlayer.m2ts" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.m2ts" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="m2ts">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".m2t" Value="PlayTorrio.m2t" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".m2t" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".m2t\OpenWithProgids" Name="PlayTorrio.m2t" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.m2t" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".m2t" Value="PlayTorrioPlayer.m2t" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".m2t" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".m2t\OpenWithProgids" Name="PlayTorrioPlayer.m2t" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.m2t" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="m2t">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mts" Value="PlayTorrio.mts" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mts" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mts\OpenWithProgids" Name="PlayTorrio.mts" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mts" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mts" Value="PlayTorrioPlayer.mts" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mts" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mts\OpenWithProgids" Name="PlayTorrioPlayer.mts" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mts" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mts">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mtv" Value="PlayTorrio.mtv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mtv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mtv\OpenWithProgids" Name="PlayTorrio.mtv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mtv" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mtv" Value="PlayTorrioPlayer.mtv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mtv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mtv\OpenWithProgids" Name="PlayTorrioPlayer.mtv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mtv" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mtv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".ts" Value="PlayTorrio.ts" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".ts" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".ts\OpenWithProgids" Name="PlayTorrio.ts" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.ts" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".ts" Value="PlayTorrioPlayer.ts" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".ts" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".ts\OpenWithProgids" Name="PlayTorrioPlayer.ts" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.ts" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="ts">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".tsv" Value="PlayTorrio.tsv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".tsv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".tsv\OpenWithProgids" Name="PlayTorrio.tsv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.tsv" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".tsv" Value="PlayTorrioPlayer.tsv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".tsv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".tsv\OpenWithProgids" Name="PlayTorrioPlayer.tsv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.tsv" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="tsv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".tsa" Value="PlayTorrio.tsa" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".tsa" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".tsa\OpenWithProgids" Name="PlayTorrio.tsa" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.tsa" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".tsa" Value="PlayTorrioPlayer.tsa" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".tsa" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".tsa\OpenWithProgids" Name="PlayTorrioPlayer.tsa" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.tsa" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="tsa">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".tts" Value="PlayTorrio.tts" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".tts" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".tts\OpenWithProgids" Name="PlayTorrio.tts" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.tts" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".tts" Value="PlayTorrioPlayer.tts" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".tts" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".tts\OpenWithProgids" Name="PlayTorrioPlayer.tts" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.tts" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="tts">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".trp" Value="PlayTorrio.trp" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".trp" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".trp\OpenWithProgids" Name="PlayTorrio.trp" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.trp" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".trp" Value="PlayTorrioPlayer.trp" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".trp" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".trp\OpenWithProgids" Name="PlayTorrioPlayer.trp" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.trp" Description="MPEG-2 Transport Stream" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="trp">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".adts" Value="PlayTorrio.adts" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".adts" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".adts\OpenWithProgids" Name="PlayTorrio.adts" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.adts" Description="ADTS Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".adts" Value="PlayTorrioPlayer.adts" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".adts" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".adts\OpenWithProgids" Name="PlayTorrioPlayer.adts" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.adts" Description="ADTS Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="adts">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".adt" Value="PlayTorrio.adt" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".adt" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".adt\OpenWithProgids" Name="PlayTorrio.adt" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.adt" Description="ADTS Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".adt" Value="PlayTorrioPlayer.adt" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".adt" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".adt\OpenWithProgids" Name="PlayTorrioPlayer.adt" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.adt" Description="ADTS Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="adt">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mpa" Value="PlayTorrio.mpa" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mpa" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mpa\OpenWithProgids" Name="PlayTorrio.mpa" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mpa" Description="MPEG Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mpa" Value="PlayTorrioPlayer.mpa" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mpa" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mpa\OpenWithProgids" Name="PlayTorrioPlayer.mpa" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mpa" Description="MPEG Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mpa">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".m1a" Value="PlayTorrio.m1a" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".m1a" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".m1a\OpenWithProgids" Name="PlayTorrio.m1a" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.m1a" Description="MPEG Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".m1a" Value="PlayTorrioPlayer.m1a" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".m1a" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".m1a\OpenWithProgids" Name="PlayTorrioPlayer.m1a" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.m1a" Description="MPEG Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="m1a">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".m2a" Value="PlayTorrio.m2a" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".m2a" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".m2a\OpenWithProgids" Name="PlayTorrio.m2a" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.m2a" Description="MPEG Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".m2a" Value="PlayTorrioPlayer.m2a" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".m2a" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".m2a\OpenWithProgids" Name="PlayTorrioPlayer.m2a" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.m2a" Description="MPEG Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="m2a">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mp1" Value="PlayTorrio.mp1" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mp1" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mp1\OpenWithProgids" Name="PlayTorrio.mp1" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mp1" Description="MPEG Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mp1" Value="PlayTorrioPlayer.mp1" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mp1" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mp1\OpenWithProgids" Name="PlayTorrioPlayer.mp1" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mp1" Description="MPEG Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mp1">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mp2" Value="PlayTorrio.mp2" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mp2" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mp2\OpenWithProgids" Name="PlayTorrio.mp2" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mp2" Description="MPEG Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mp2" Value="PlayTorrioPlayer.mp2" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mp2" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mp2\OpenWithProgids" Name="PlayTorrioPlayer.mp2" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mp2" Description="MPEG Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mp2">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mp3" Value="PlayTorrio.mp3" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mp3" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mp3\OpenWithProgids" Name="PlayTorrio.mp3" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mp3" Description="MP3 Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mp3" Value="PlayTorrioPlayer.mp3" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mp3" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mp3\OpenWithProgids" Name="PlayTorrioPlayer.mp3" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mp3" Description="MP3 Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mp3">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mpeg" Value="PlayTorrio.mpeg" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mpeg" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mpeg\OpenWithProgids" Name="PlayTorrio.mpeg" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mpeg" Description="MPEG Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mpeg" Value="PlayTorrioPlayer.mpeg" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mpeg" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mpeg\OpenWithProgids" Name="PlayTorrioPlayer.mpeg" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mpeg" Description="MPEG Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mpeg">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mpg" Value="PlayTorrio.mpg" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mpg" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mpg\OpenWithProgids" Name="PlayTorrio.mpg" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mpg" Description="MPEG Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mpg" Value="PlayTorrioPlayer.mpg" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mpg" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mpg\OpenWithProgids" Name="PlayTorrioPlayer.mpg" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mpg" Description="MPEG Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mpg">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mpe" Value="PlayTorrio.mpe" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mpe" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mpe\OpenWithProgids" Name="PlayTorrio.mpe" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mpe" Description="MPEG Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mpe" Value="PlayTorrioPlayer.mpe" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mpe" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mpe\OpenWithProgids" Name="PlayTorrioPlayer.mpe" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mpe" Description="MPEG Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mpe">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mpeg2" Value="PlayTorrio.mpeg2" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mpeg2" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mpeg2\OpenWithProgids" Name="PlayTorrio.mpeg2" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mpeg2" Description="MPEG Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mpeg2" Value="PlayTorrioPlayer.mpeg2" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mpeg2" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mpeg2\OpenWithProgids" Name="PlayTorrioPlayer.mpeg2" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mpeg2" Description="MPEG Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mpeg2">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".m1v" Value="PlayTorrio.m1v" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".m1v" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".m1v\OpenWithProgids" Name="PlayTorrio.m1v" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.m1v" Description="MPEG Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".m1v" Value="PlayTorrioPlayer.m1v" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".m1v" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".m1v\OpenWithProgids" Name="PlayTorrioPlayer.m1v" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.m1v" Description="MPEG Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="m1v">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".m2v" Value="PlayTorrio.m2v" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".m2v" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".m2v\OpenWithProgids" Name="PlayTorrio.m2v" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.m2v" Description="MPEG Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".m2v" Value="PlayTorrioPlayer.m2v" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".m2v" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".m2v\OpenWithProgids" Name="PlayTorrioPlayer.m2v" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.m2v" Description="MPEG Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="m2v">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mp2v" Value="PlayTorrio.mp2v" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mp2v" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mp2v\OpenWithProgids" Name="PlayTorrio.mp2v" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mp2v" Description="MPEG Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mp2v" Value="PlayTorrioPlayer.mp2v" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mp2v" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mp2v\OpenWithProgids" Name="PlayTorrioPlayer.mp2v" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mp2v" Description="MPEG Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mp2v">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mpv" Value="PlayTorrio.mpv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mpv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mpv\OpenWithProgids" Name="PlayTorrio.mpv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mpv" Description="MPEG Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mpv" Value="PlayTorrioPlayer.mpv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mpv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mpv\OpenWithProgids" Name="PlayTorrioPlayer.mpv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mpv" Description="MPEG Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mpv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mpv2" Value="PlayTorrio.mpv2" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mpv2" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mpv2\OpenWithProgids" Name="PlayTorrio.mpv2" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mpv2" Description="MPEG Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mpv2" Value="PlayTorrioPlayer.mpv2" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mpv2" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mpv2\OpenWithProgids" Name="PlayTorrioPlayer.mpv2" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mpv2" Description="MPEG Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mpv2">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mod" Value="PlayTorrio.mod" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mod" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mod\OpenWithProgids" Name="PlayTorrio.mod" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mod" Description="MPEG Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mod" Value="PlayTorrioPlayer.mod" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mod" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mod\OpenWithProgids" Name="PlayTorrioPlayer.mod" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mod" Description="MPEG Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mod">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".tod" Value="PlayTorrio.tod" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".tod" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".tod\OpenWithProgids" Name="PlayTorrio.tod" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.tod" Description="MPEG Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".tod" Value="PlayTorrioPlayer.tod" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".tod" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".tod\OpenWithProgids" Name="PlayTorrioPlayer.tod" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.tod" Description="MPEG Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="tod">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".vob" Value="PlayTorrio.vob" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".vob" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".vob\OpenWithProgids" Name="PlayTorrio.vob" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.vob" Description="Video Object" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".vob" Value="PlayTorrioPlayer.vob" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".vob" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".vob\OpenWithProgids" Name="PlayTorrioPlayer.vob" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.vob" Description="Video Object" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="vob">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".vro" Value="PlayTorrio.vro" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".vro" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".vro\OpenWithProgids" Name="PlayTorrio.vro" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.vro" Description="Video Object" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".vro" Value="PlayTorrioPlayer.vro" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".vro" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".vro\OpenWithProgids" Name="PlayTorrioPlayer.vro" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.vro" Description="Video Object" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="vro">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".evob" Value="PlayTorrio.evob" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".evob" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".evob\OpenWithProgids" Name="PlayTorrio.evob" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.evob" Description="Enhanced VOB" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".evob" Value="PlayTorrioPlayer.evob" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".evob" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".evob\OpenWithProgids" Name="PlayTorrioPlayer.evob" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.evob" Description="Enhanced VOB" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="evob">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".evo" Value="PlayTorrio.evo" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".evo" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".evo\OpenWithProgids" Name="PlayTorrio.evo" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.evo" Description="Enhanced VOB" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".evo" Value="PlayTorrioPlayer.evo" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".evo" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".evo\OpenWithProgids" Name="PlayTorrioPlayer.evo" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.evo" Description="Enhanced VOB" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="evo">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mpeg4" Value="PlayTorrio.mpeg4" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mpeg4" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mpeg4\OpenWithProgids" Name="PlayTorrio.mpeg4" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mpeg4" Description="MPEG-4 Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mpeg4" Value="PlayTorrioPlayer.mpeg4" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mpeg4" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mpeg4\OpenWithProgids" Name="PlayTorrioPlayer.mpeg4" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mpeg4" Description="MPEG-4 Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mpeg4">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".m4v" Value="PlayTorrio.m4v" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".m4v" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".m4v\OpenWithProgids" Name="PlayTorrio.m4v" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.m4v" Description="MPEG-4 Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".m4v" Value="PlayTorrioPlayer.m4v" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".m4v" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".m4v\OpenWithProgids" Name="PlayTorrioPlayer.m4v" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.m4v" Description="MPEG-4 Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="m4v">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mp4" Value="PlayTorrio.mp4" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mp4" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mp4\OpenWithProgids" Name="PlayTorrio.mp4" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mp4" Description="MPEG-4 Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mp4" Value="PlayTorrioPlayer.mp4" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mp4" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mp4\OpenWithProgids" Name="PlayTorrioPlayer.mp4" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mp4" Description="MPEG-4 Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mp4">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mp4v" Value="PlayTorrio.mp4v" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mp4v" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mp4v\OpenWithProgids" Name="PlayTorrio.mp4v" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mp4v" Description="MPEG-4 Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mp4v" Value="PlayTorrioPlayer.mp4v" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mp4v" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mp4v\OpenWithProgids" Name="PlayTorrioPlayer.mp4v" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mp4v" Description="MPEG-4 Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mp4v">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mpg4" Value="PlayTorrio.mpg4" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mpg4" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mpg4\OpenWithProgids" Name="PlayTorrio.mpg4" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mpg4" Description="MPEG-4 Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mpg4" Value="PlayTorrioPlayer.mpg4" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mpg4" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mpg4\OpenWithProgids" Name="PlayTorrioPlayer.mpg4" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mpg4" Description="MPEG-4 Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mpg4">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".m4a" Value="PlayTorrio.m4a" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".m4a" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".m4a\OpenWithProgids" Name="PlayTorrio.m4a" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.m4a" Description="MPEG-4 Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".m4a" Value="PlayTorrioPlayer.m4a" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".m4a" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".m4a\OpenWithProgids" Name="PlayTorrioPlayer.m4a" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.m4a" Description="MPEG-4 Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="m4a">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".aac" Value="PlayTorrio.aac" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".aac" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".aac\OpenWithProgids" Name="PlayTorrio.aac" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.aac" Description="Raw AAC Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".aac" Value="PlayTorrioPlayer.aac" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".aac" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".aac\OpenWithProgids" Name="PlayTorrioPlayer.aac" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.aac" Description="Raw AAC Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="aac">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".h264" Value="PlayTorrio.h264" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".h264" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".h264\OpenWithProgids" Name="PlayTorrio.h264" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.h264" Description="Raw H264/AVC Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".h264" Value="PlayTorrioPlayer.h264" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".h264" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".h264\OpenWithProgids" Name="PlayTorrioPlayer.h264" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.h264" Description="Raw H264/AVC Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="h264">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".avc" Value="PlayTorrio.avc" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".avc" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".avc\OpenWithProgids" Name="PlayTorrio.avc" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.avc" Description="Raw H264/AVC Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".avc" Value="PlayTorrioPlayer.avc" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".avc" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".avc\OpenWithProgids" Name="PlayTorrioPlayer.avc" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.avc" Description="Raw H264/AVC Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="avc">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".x264" Value="PlayTorrio.x264" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".x264" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".x264\OpenWithProgids" Name="PlayTorrio.x264" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.x264" Description="Raw H264/AVC Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".x264" Value="PlayTorrioPlayer.x264" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".x264" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".x264\OpenWithProgids" Name="PlayTorrioPlayer.x264" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.x264" Description="Raw H264/AVC Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="x264">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".264" Value="PlayTorrio.264" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".264" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".264\OpenWithProgids" Name="PlayTorrio.264" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.264" Description="Raw H264/AVC Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".264" Value="PlayTorrioPlayer.264" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".264" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".264\OpenWithProgids" Name="PlayTorrioPlayer.264" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.264" Description="Raw H264/AVC Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="264">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".hevc" Value="PlayTorrio.hevc" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".hevc" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".hevc\OpenWithProgids" Name="PlayTorrio.hevc" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.hevc" Description="Raw H265/HEVC Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".hevc" Value="PlayTorrioPlayer.hevc" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".hevc" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".hevc\OpenWithProgids" Name="PlayTorrioPlayer.hevc" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.hevc" Description="Raw H265/HEVC Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="hevc">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".h265" Value="PlayTorrio.h265" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".h265" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".h265\OpenWithProgids" Name="PlayTorrio.h265" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.h265" Description="Raw H265/HEVC Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".h265" Value="PlayTorrioPlayer.h265" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".h265" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".h265\OpenWithProgids" Name="PlayTorrioPlayer.h265" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.h265" Description="Raw H265/HEVC Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="h265">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".x265" Value="PlayTorrio.x265" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".x265" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".x265\OpenWithProgids" Name="PlayTorrio.x265" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.x265" Description="Raw H265/HEVC Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".x265" Value="PlayTorrioPlayer.x265" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".x265" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".x265\OpenWithProgids" Name="PlayTorrioPlayer.x265" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.x265" Description="Raw H265/HEVC Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="x265">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".265" Value="PlayTorrio.265" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".265" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".265\OpenWithProgids" Name="PlayTorrio.265" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.265" Description="Raw H265/HEVC Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".265" Value="PlayTorrioPlayer.265" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".265" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".265\OpenWithProgids" Name="PlayTorrioPlayer.265" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.265" Description="Raw H265/HEVC Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="265">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".flac" Value="PlayTorrio.flac" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".flac" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".flac\OpenWithProgids" Name="PlayTorrio.flac" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.flac" Description="FLAC Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".flac" Value="PlayTorrioPlayer.flac" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".flac" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".flac\OpenWithProgids" Name="PlayTorrioPlayer.flac" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.flac" Description="FLAC Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="flac">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".oga" Value="PlayTorrio.oga" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".oga" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".oga\OpenWithProgids" Name="PlayTorrio.oga" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.oga" Description="Ogg Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".oga" Value="PlayTorrioPlayer.oga" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".oga" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".oga\OpenWithProgids" Name="PlayTorrioPlayer.oga" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.oga" Description="Ogg Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="oga">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".ogg" Value="PlayTorrio.ogg" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".ogg" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".ogg\OpenWithProgids" Name="PlayTorrio.ogg" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.ogg" Description="Ogg Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".ogg" Value="PlayTorrioPlayer.ogg" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".ogg" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".ogg\OpenWithProgids" Name="PlayTorrioPlayer.ogg" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.ogg" Description="Ogg Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="ogg">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".opus" Value="PlayTorrio.opus" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".opus" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".opus\OpenWithProgids" Name="PlayTorrio.opus" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.opus" Description="Opus Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".opus" Value="PlayTorrioPlayer.opus" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".opus" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".opus\OpenWithProgids" Name="PlayTorrioPlayer.opus" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.opus" Description="Opus Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="opus">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".spx" Value="PlayTorrio.spx" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".spx" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".spx\OpenWithProgids" Name="PlayTorrio.spx" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.spx" Description="Speex Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".spx" Value="PlayTorrioPlayer.spx" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".spx" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".spx\OpenWithProgids" Name="PlayTorrioPlayer.spx" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.spx" Description="Speex Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="spx">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".ogv" Value="PlayTorrio.ogv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".ogv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".ogv\OpenWithProgids" Name="PlayTorrio.ogv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.ogv" Description="Ogg Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".ogv" Value="PlayTorrioPlayer.ogv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".ogv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".ogv\OpenWithProgids" Name="PlayTorrioPlayer.ogv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.ogv" Description="Ogg Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="ogv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".ogm" Value="PlayTorrio.ogm" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".ogm" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".ogm\OpenWithProgids" Name="PlayTorrio.ogm" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.ogm" Description="Ogg Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".ogm" Value="PlayTorrioPlayer.ogm" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".ogm" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".ogm\OpenWithProgids" Name="PlayTorrioPlayer.ogm" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.ogm" Description="Ogg Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="ogm">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".ogx" Value="PlayTorrio.ogx" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".ogx" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".ogx\OpenWithProgids" Name="PlayTorrio.ogx" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.ogx" Description="Ogg Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".ogx" Value="PlayTorrioPlayer.ogx" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".ogx" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".ogx\OpenWithProgids" Name="PlayTorrioPlayer.ogx" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.ogx" Description="Ogg Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="ogx">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mkv" Value="PlayTorrio.mkv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mkv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mkv\OpenWithProgids" Name="PlayTorrio.mkv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mkv" Description="Matroska Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mkv" Value="PlayTorrioPlayer.mkv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mkv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mkv\OpenWithProgids" Name="PlayTorrioPlayer.mkv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mkv" Description="Matroska Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mkv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mk3d" Value="PlayTorrio.mk3d" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mk3d" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mk3d\OpenWithProgids" Name="PlayTorrio.mk3d" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mk3d" Description="Matroska 3D Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mk3d" Value="PlayTorrioPlayer.mk3d" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mk3d" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mk3d\OpenWithProgids" Name="PlayTorrioPlayer.mk3d" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mk3d" Description="Matroska 3D Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mk3d">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mka" Value="PlayTorrio.mka" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mka" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mka\OpenWithProgids" Name="PlayTorrio.mka" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mka" Description="Matroska Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mka" Value="PlayTorrioPlayer.mka" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mka" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mka\OpenWithProgids" Name="PlayTorrioPlayer.mka" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mka" Description="Matroska Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mka">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".webm" Value="PlayTorrio.webm" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".webm" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".webm\OpenWithProgids" Name="PlayTorrio.webm" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.webm" Description="WebM Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".webm" Value="PlayTorrioPlayer.webm" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".webm" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".webm\OpenWithProgids" Name="PlayTorrioPlayer.webm" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.webm" Description="WebM Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="webm">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".weba" Value="PlayTorrio.weba" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".weba" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".weba\OpenWithProgids" Name="PlayTorrio.weba" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.weba" Description="WebM Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".weba" Value="PlayTorrioPlayer.weba" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".weba" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".weba\OpenWithProgids" Name="PlayTorrioPlayer.weba" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.weba" Description="WebM Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="weba">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".avi" Value="PlayTorrio.avi" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".avi" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".avi\OpenWithProgids" Name="PlayTorrio.avi" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.avi" Description="Video Clip" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".avi" Value="PlayTorrioPlayer.avi" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".avi" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".avi\OpenWithProgids" Name="PlayTorrioPlayer.avi" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.avi" Description="Video Clip" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="avi">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".vfw" Value="PlayTorrio.vfw" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".vfw" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".vfw\OpenWithProgids" Name="PlayTorrio.vfw" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.vfw" Description="Video Clip" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".vfw" Value="PlayTorrioPlayer.vfw" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".vfw" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".vfw\OpenWithProgids" Name="PlayTorrioPlayer.vfw" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.vfw" Description="Video Clip" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="vfw">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".divx" Value="PlayTorrio.divx" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".divx" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".divx\OpenWithProgids" Name="PlayTorrio.divx" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.divx" Description="DivX Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".divx" Value="PlayTorrioPlayer.divx" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".divx" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".divx\OpenWithProgids" Name="PlayTorrioPlayer.divx" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.divx" Description="DivX Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="divx">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".3iv" Value="PlayTorrio.3iv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".3iv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".3iv\OpenWithProgids" Name="PlayTorrio.3iv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.3iv" Description="3ivx Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".3iv" Value="PlayTorrioPlayer.3iv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".3iv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".3iv\OpenWithProgids" Name="PlayTorrioPlayer.3iv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.3iv" Description="3ivx Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="3iv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".xvid" Value="PlayTorrio.xvid" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".xvid" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".xvid\OpenWithProgids" Name="PlayTorrio.xvid" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.xvid" Description="XVID Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".xvid" Value="PlayTorrioPlayer.xvid" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".xvid" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".xvid\OpenWithProgids" Name="PlayTorrioPlayer.xvid" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.xvid" Description="XVID Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="xvid">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".nut" Value="PlayTorrio.nut" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".nut" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".nut\OpenWithProgids" Name="PlayTorrio.nut" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.nut" Description="NUT Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".nut" Value="PlayTorrioPlayer.nut" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".nut" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".nut\OpenWithProgids" Name="PlayTorrioPlayer.nut" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.nut" Description="NUT Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="nut">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".flic" Value="PlayTorrio.flic" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".flic" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".flic\OpenWithProgids" Name="PlayTorrio.flic" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.flic" Description="FLIC Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".flic" Value="PlayTorrioPlayer.flic" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".flic" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".flic\OpenWithProgids" Name="PlayTorrioPlayer.flic" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.flic" Description="FLIC Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="flic">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".fli" Value="PlayTorrio.fli" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".fli" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".fli\OpenWithProgids" Name="PlayTorrio.fli" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.fli" Description="FLIC Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".fli" Value="PlayTorrioPlayer.fli" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".fli" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".fli\OpenWithProgids" Name="PlayTorrioPlayer.fli" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.fli" Description="FLIC Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="fli">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".flc" Value="PlayTorrio.flc" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".flc" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".flc\OpenWithProgids" Name="PlayTorrio.flc" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.flc" Description="FLIC Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".flc" Value="PlayTorrioPlayer.flc" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".flc" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".flc\OpenWithProgids" Name="PlayTorrioPlayer.flc" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.flc" Description="FLIC Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="flc">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".nsv" Value="PlayTorrio.nsv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".nsv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".nsv\OpenWithProgids" Name="PlayTorrio.nsv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.nsv" Description="Nullsoft Streaming Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".nsv" Value="PlayTorrioPlayer.nsv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".nsv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".nsv\OpenWithProgids" Name="PlayTorrioPlayer.nsv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.nsv" Description="Nullsoft Streaming Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="nsv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".gxf" Value="PlayTorrio.gxf" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".gxf" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".gxf\OpenWithProgids" Name="PlayTorrio.gxf" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.gxf" Description="General Exchange Format" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".gxf" Value="PlayTorrioPlayer.gxf" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".gxf" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".gxf\OpenWithProgids" Name="PlayTorrioPlayer.gxf" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.gxf" Description="General Exchange Format" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="gxf">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mxf" Value="PlayTorrio.mxf" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mxf" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mxf\OpenWithProgids" Name="PlayTorrio.mxf" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mxf" Description="Material Exchange Format" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mxf" Value="PlayTorrioPlayer.mxf" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mxf" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mxf\OpenWithProgids" Name="PlayTorrioPlayer.mxf" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mxf" Description="Material Exchange Format" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mxf">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".wma" Value="PlayTorrio.wma" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".wma" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".wma\OpenWithProgids" Name="PlayTorrio.wma" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.wma" Description="Windows Media Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".wma" Value="PlayTorrioPlayer.wma" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".wma" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".wma\OpenWithProgids" Name="PlayTorrioPlayer.wma" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.wma" Description="Windows Media Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="wma">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".wm" Value="PlayTorrio.wm" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".wm" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".wm\OpenWithProgids" Name="PlayTorrio.wm" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.wm" Description="Windows Media Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".wm" Value="PlayTorrioPlayer.wm" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".wm" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".wm\OpenWithProgids" Name="PlayTorrioPlayer.wm" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.wm" Description="Windows Media Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="wm">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".wmv" Value="PlayTorrio.wmv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".wmv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".wmv\OpenWithProgids" Name="PlayTorrio.wmv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.wmv" Description="Windows Media Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".wmv" Value="PlayTorrioPlayer.wmv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".wmv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".wmv\OpenWithProgids" Name="PlayTorrioPlayer.wmv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.wmv" Description="Windows Media Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="wmv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".asf" Value="PlayTorrio.asf" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".asf" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".asf\OpenWithProgids" Name="PlayTorrio.asf" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.asf" Description="Windows Media Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".asf" Value="PlayTorrioPlayer.asf" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".asf" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".asf\OpenWithProgids" Name="PlayTorrioPlayer.asf" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.asf" Description="Windows Media Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="asf">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".dvr-ms" Value="PlayTorrio.dvr-ms" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".dvr-ms" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".dvr-ms\OpenWithProgids" Name="PlayTorrio.dvr-ms" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.dvr-ms" Description="Microsoft Recorded TV Show" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".dvr-ms" Value="PlayTorrioPlayer.dvr-ms" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".dvr-ms" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".dvr-ms\OpenWithProgids" Name="PlayTorrioPlayer.dvr-ms" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.dvr-ms" Description="Microsoft Recorded TV Show" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="dvr-ms">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".dvr" Value="PlayTorrio.dvr" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".dvr" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".dvr\OpenWithProgids" Name="PlayTorrio.dvr" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.dvr" Description="Microsoft Recorded TV Show" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".dvr" Value="PlayTorrioPlayer.dvr" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".dvr" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".dvr\OpenWithProgids" Name="PlayTorrioPlayer.dvr" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.dvr" Description="Microsoft Recorded TV Show" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="dvr">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".wtv" Value="PlayTorrio.wtv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".wtv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".wtv\OpenWithProgids" Name="PlayTorrio.wtv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.wtv" Description="Windows Recorded TV Show" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".wtv" Value="PlayTorrioPlayer.wtv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".wtv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".wtv\OpenWithProgids" Name="PlayTorrioPlayer.wtv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.wtv" Description="Windows Recorded TV Show" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="wtv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".dv" Value="PlayTorrio.dv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".dv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".dv\OpenWithProgids" Name="PlayTorrio.dv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.dv" Description="DV Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".dv" Value="PlayTorrioPlayer.dv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".dv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".dv\OpenWithProgids" Name="PlayTorrioPlayer.dv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.dv" Description="DV Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="dv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".hdv" Value="PlayTorrio.hdv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".hdv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".hdv\OpenWithProgids" Name="PlayTorrio.hdv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.hdv" Description="DV Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".hdv" Value="PlayTorrioPlayer.hdv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".hdv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".hdv\OpenWithProgids" Name="PlayTorrioPlayer.hdv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.hdv" Description="DV Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="hdv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".flv" Value="PlayTorrio.flv" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".flv" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".flv\OpenWithProgids" Name="PlayTorrio.flv" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.flv" Description="Flash Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".flv" Value="PlayTorrioPlayer.flv" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".flv" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".flv\OpenWithProgids" Name="PlayTorrioPlayer.flv" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.flv" Description="Flash Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="flv">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".f4v" Value="PlayTorrio.f4v" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".f4v" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".f4v\OpenWithProgids" Name="PlayTorrio.f4v" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.f4v" Description="Flash Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".f4v" Value="PlayTorrioPlayer.f4v" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".f4v" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".f4v\OpenWithProgids" Name="PlayTorrioPlayer.f4v" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.f4v" Description="Flash Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="f4v">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".f4a" Value="PlayTorrio.f4a" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".f4a" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".f4a\OpenWithProgids" Name="PlayTorrio.f4a" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.f4a" Description="Flash Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".f4a" Value="PlayTorrioPlayer.f4a" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".f4a" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".f4a\OpenWithProgids" Name="PlayTorrioPlayer.f4a" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.f4a" Description="Flash Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="f4a">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".qt" Value="PlayTorrio.qt" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".qt" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".qt\OpenWithProgids" Name="PlayTorrio.qt" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.qt" Description="QuickTime Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".qt" Value="PlayTorrioPlayer.qt" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".qt" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".qt\OpenWithProgids" Name="PlayTorrioPlayer.qt" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.qt" Description="QuickTime Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="qt">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".mov" Value="PlayTorrio.mov" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".mov" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".mov\OpenWithProgids" Name="PlayTorrio.mov" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.mov" Description="QuickTime Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".mov" Value="PlayTorrioPlayer.mov" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".mov" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".mov\OpenWithProgids" Name="PlayTorrioPlayer.mov" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.mov" Description="QuickTime Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="mov">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".hdmov" Value="PlayTorrio.hdmov" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".hdmov" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".hdmov\OpenWithProgids" Name="PlayTorrio.hdmov" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.hdmov" Description="QuickTime HD Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".hdmov" Value="PlayTorrioPlayer.hdmov" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".hdmov" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".hdmov\OpenWithProgids" Name="PlayTorrioPlayer.hdmov" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.hdmov" Description="QuickTime HD Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="hdmov">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".rm" Value="PlayTorrio.rm" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".rm" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".rm\OpenWithProgids" Name="PlayTorrio.rm" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.rm" Description="Real Media Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".rm" Value="PlayTorrioPlayer.rm" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".rm" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".rm\OpenWithProgids" Name="PlayTorrioPlayer.rm" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.rm" Description="Real Media Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="rm">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".rmvb" Value="PlayTorrio.rmvb" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".rmvb" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".rmvb\OpenWithProgids" Name="PlayTorrio.rmvb" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.rmvb" Description="Real Media Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".rmvb" Value="PlayTorrioPlayer.rmvb" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".rmvb" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".rmvb\OpenWithProgids" Name="PlayTorrioPlayer.rmvb" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.rmvb" Description="Real Media Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="rmvb">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".ra" Value="PlayTorrio.ra" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".ra" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".ra\OpenWithProgids" Name="PlayTorrio.ra" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.ra" Description="Real Media Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".ra" Value="PlayTorrioPlayer.ra" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".ra" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".ra\OpenWithProgids" Name="PlayTorrioPlayer.ra" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.ra" Description="Real Media Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="ra">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".ram" Value="PlayTorrio.ram" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".ram" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".ram\OpenWithProgids" Name="PlayTorrio.ram" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.ram" Description="Real Media Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".ram" Value="PlayTorrioPlayer.ram" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".ram" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".ram\OpenWithProgids" Name="PlayTorrioPlayer.ram" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.ram" Description="Real Media Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="ram">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".3ga" Value="PlayTorrio.3ga" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".3ga" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".3ga\OpenWithProgids" Name="PlayTorrio.3ga" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.3ga" Description="3GPP Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".3ga" Value="PlayTorrioPlayer.3ga" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".3ga" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".3ga\OpenWithProgids" Name="PlayTorrioPlayer.3ga" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.3ga" Description="3GPP Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="3ga">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".3ga2" Value="PlayTorrio.3ga2" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".3ga2" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".3ga2\OpenWithProgids" Name="PlayTorrio.3ga2" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.3ga2" Description="3GPP Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".3ga2" Value="PlayTorrioPlayer.3ga2" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".3ga2" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".3ga2\OpenWithProgids" Name="PlayTorrioPlayer.3ga2" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.3ga2" Description="3GPP Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="3ga2">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".3gpp" Value="PlayTorrio.3gpp" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".3gpp" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".3gpp\OpenWithProgids" Name="PlayTorrio.3gpp" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.3gpp" Description="3GPP Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".3gpp" Value="PlayTorrioPlayer.3gpp" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".3gpp" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".3gpp\OpenWithProgids" Name="PlayTorrioPlayer.3gpp" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.3gpp" Description="3GPP Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="3gpp">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".3gp" Value="PlayTorrio.3gp" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".3gp" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".3gp\OpenWithProgids" Name="PlayTorrio.3gp" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.3gp" Description="3GPP Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".3gp" Value="PlayTorrioPlayer.3gp" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".3gp" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".3gp\OpenWithProgids" Name="PlayTorrioPlayer.3gp" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.3gp" Description="3GPP Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="3gp">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".3gp2" Value="PlayTorrio.3gp2" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".3gp2" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".3gp2\OpenWithProgids" Name="PlayTorrio.3gp2" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.3gp2" Description="3GPP Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".3gp2" Value="PlayTorrioPlayer.3gp2" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".3gp2" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".3gp2\OpenWithProgids" Name="PlayTorrioPlayer.3gp2" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.3gp2" Description="3GPP Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="3gp2">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".3g2" Value="PlayTorrio.3g2" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".3g2" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".3g2\OpenWithProgids" Name="PlayTorrio.3g2" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.3g2" Description="3GPP Video" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".3g2" Value="PlayTorrioPlayer.3g2" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".3g2" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".3g2\OpenWithProgids" Name="PlayTorrioPlayer.3g2" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.3g2" Description="3GPP Video" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="3g2">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".ay" Value="PlayTorrio.ay" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".ay" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".ay\OpenWithProgids" Name="PlayTorrio.ay" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.ay" Description="AY Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".ay" Value="PlayTorrioPlayer.ay" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".ay" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".ay\OpenWithProgids" Name="PlayTorrioPlayer.ay" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.ay" Description="AY Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="ay">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".gbs" Value="PlayTorrio.gbs" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".gbs" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".gbs\OpenWithProgids" Name="PlayTorrio.gbs" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.gbs" Description="GBS Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".gbs" Value="PlayTorrioPlayer.gbs" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".gbs" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".gbs\OpenWithProgids" Name="PlayTorrioPlayer.gbs" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.gbs" Description="GBS Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="gbs">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".gym" Value="PlayTorrio.gym" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".gym" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".gym\OpenWithProgids" Name="PlayTorrio.gym" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.gym" Description="GYM Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".gym" Value="PlayTorrioPlayer.gym" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".gym" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".gym\OpenWithProgids" Name="PlayTorrioPlayer.gym" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.gym" Description="GYM Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="gym">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".hes" Value="PlayTorrio.hes" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".hes" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".hes\OpenWithProgids" Name="PlayTorrio.hes" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.hes" Description="HES Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".hes" Value="PlayTorrioPlayer.hes" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".hes" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".hes\OpenWithProgids" Name="PlayTorrioPlayer.hes" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.hes" Description="HES Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="hes">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".kss" Value="PlayTorrio.kss" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".kss" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".kss\OpenWithProgids" Name="PlayTorrio.kss" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.kss" Description="KSS Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".kss" Value="PlayTorrioPlayer.kss" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".kss" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".kss\OpenWithProgids" Name="PlayTorrioPlayer.kss" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.kss" Description="KSS Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="kss">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".nsf" Value="PlayTorrio.nsf" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".nsf" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".nsf\OpenWithProgids" Name="PlayTorrio.nsf" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.nsf" Description="NSF Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".nsf" Value="PlayTorrioPlayer.nsf" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".nsf" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".nsf\OpenWithProgids" Name="PlayTorrioPlayer.nsf" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.nsf" Description="NSF Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="nsf">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".nsfe" Value="PlayTorrio.nsfe" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".nsfe" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".nsfe\OpenWithProgids" Name="PlayTorrio.nsfe" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.nsfe" Description="NSFE Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".nsfe" Value="PlayTorrioPlayer.nsfe" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".nsfe" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".nsfe\OpenWithProgids" Name="PlayTorrioPlayer.nsfe" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.nsfe" Description="NSFE Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="nsfe">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".sap" Value="PlayTorrio.sap" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".sap" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".sap\OpenWithProgids" Name="PlayTorrio.sap" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.sap" Description="SAP Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".sap" Value="PlayTorrioPlayer.sap" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".sap" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".sap\OpenWithProgids" Name="PlayTorrioPlayer.sap" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.sap" Description="SAP Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="sap">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".spc" Value="PlayTorrio.spc" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".spc" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".spc\OpenWithProgids" Name="PlayTorrio.spc" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.spc" Description="SPC Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".spc" Value="PlayTorrioPlayer.spc" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".spc" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".spc\OpenWithProgids" Name="PlayTorrioPlayer.spc" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.spc" Description="SPC Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="spc">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".vgm" Value="PlayTorrio.vgm" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".vgm" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".vgm\OpenWithProgids" Name="PlayTorrio.vgm" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.vgm" Description="VGM Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".vgm" Value="PlayTorrioPlayer.vgm" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".vgm" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".vgm\OpenWithProgids" Name="PlayTorrioPlayer.vgm" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.vgm" Description="VGM Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="vgm">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".vgz" Value="PlayTorrio.vgz" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".vgz" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".vgz\OpenWithProgids" Name="PlayTorrio.vgz" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.vgz" Description="VGZ Audio" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".vgz" Value="PlayTorrioPlayer.vgz" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".vgz" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".vgz\OpenWithProgids" Name="PlayTorrioPlayer.vgz" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.vgz" Description="VGZ Audio" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="vgz">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".m3u" Value="PlayTorrio.m3u" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".m3u" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".m3u\OpenWithProgids" Name="PlayTorrio.m3u" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.m3u" Description="M3U Playlist" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".m3u" Value="PlayTorrioPlayer.m3u" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".m3u" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".m3u\OpenWithProgids" Name="PlayTorrioPlayer.m3u" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.m3u" Description="M3U Playlist" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="m3u">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".m3u8" Value="PlayTorrio.m3u8" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".m3u8" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".m3u8\OpenWithProgids" Name="PlayTorrio.m3u8" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.m3u8" Description="M3U Playlist" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".m3u8" Value="PlayTorrioPlayer.m3u8" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".m3u8" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".m3u8\OpenWithProgids" Name="PlayTorrioPlayer.m3u8" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.m3u8" Description="M3U Playlist" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="m3u8">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".pls" Value="PlayTorrio.pls" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".pls" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".pls\OpenWithProgids" Name="PlayTorrio.pls" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.pls" Description="PLS Playlist" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".pls" Value="PlayTorrioPlayer.pls" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".pls" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".pls\OpenWithProgids" Name="PlayTorrioPlayer.pls" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.pls" Description="PLS Playlist" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="pls">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
-        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrio\Capabilities\FileAssociations" Name=".cue" Value="PlayTorrio.cue" Type="string" />
-        <RegistryValue Root="HKCR" Key="Applications\PlayTorrio.exe\SupportedTypes" Name=".cue" Value="" Type="string" />
-        <RegistryValue Root="HKCR" Key=".cue\OpenWithProgids" Name="PlayTorrio.cue" Value="" Type="string" />
-        <ProgId Id="PlayTorrio.cue" Description="CUE Sheet" Icon="CM_FP_PlayTorrio.exe">
+        <RegistryValue Root="HKLM" Key="Software\Clients\Media\PlayTorrioPlayer\Capabilities\FileAssociations" Name=".cue" Value="PlayTorrioPlayer.cue" Type="string" />
+        <RegistryValue Root="HKCR" Key="Applications\PlayTorrioPlayer.exe\SupportedTypes" Name=".cue" Value="" Type="string" />
+        <RegistryValue Root="HKCR" Key=".cue\OpenWithProgids" Name="PlayTorrioPlayer.cue" Value="" Type="string" />
+        <ProgId Id="PlayTorrioPlayer.cue" Description="CUE Sheet" Icon="CM_FP_PlayTorrioPlayer.exe">
             <Extension Id="cue">
-                <Verb Id="open" TargetFile="CM_FP_PlayTorrio.exe" Argument="&quot;%1&quot;" />
+                <Verb Id="open" TargetFile="CM_FP_PlayTorrioPlayer.exe" Argument="&quot;%1&quot;" />
             </Extension>
         </ProgId>
         <!-- Default Programs entry -->
-        <RegistryValue Root="HKLM" Key="SOFTWARE\RegisteredApplications" Name="PlayTorrio" Value="SOFTWARE\Clients\Media\PlayTorrio\Capabilities" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\RegisteredApplications" Name="PlayTorrioPlayer" Value="SOFTWARE\Clients\Media\PlayTorrioPlayer\Capabilities" Type="string" />
 	</CPackWiXFragment>
 </CPackWiXPatch>

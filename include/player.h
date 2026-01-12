@@ -25,7 +25,7 @@
 #include "helpers/nfd.h"
 #include "helpers/utils.h"
 
-#define PLAYER_NAME "PlayTorrio Player"
+#define PLAYER_NAME "PlayTorrioPlayer"
 
 namespace ImPlay {
 class Player {

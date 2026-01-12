@@ -11,7 +11,7 @@ function(get_mpv_win_bin name)
     UPDATE_COMMAND ""
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/mpv.com ${CMAKE_BINARY_DIR}/PlayTorrio.com
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/mpv.com ${CMAKE_BINARY_DIR}/PlayTorrioPlayer.com
             COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/doc ${CMAKE_BINARY_DIR}/doc
   )
 endfunction()
@@ -55,7 +55,7 @@ macro(prepare_package)
     target_link_options(${PROJECT_NAME} PRIVATE -mwindows)
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
     install(DIRECTORY ${CMAKE_BINARY_DIR}/doc DESTINATION .)
-    install(FILES ${CMAKE_BINARY_DIR}/PlayTorrio.com DESTINATION .)
+    install(FILES ${CMAKE_BINARY_DIR}/PlayTorrioPlayer.com DESTINATION .)
     install(FILES ${CMAKE_BINARY_DIR}/yt-dlp.exe DESTINATION .)
     
     if(USE_OPENGL_ES3)
@@ -66,7 +66,7 @@ macro(prepare_package)
     endif()
     
     install(CODE [[file(GET_RUNTIME_DEPENDENCIES
-      EXECUTABLES $<TARGET_FILE:PlayTorrio>
+      EXECUTABLES $<TARGET_FILE:PlayTorrioPlayer>
       RESOLVED_DEPENDENCIES_VAR _r_deps
       UNRESOLVED_DEPENDENCIES_VAR _u_deps
       DIRECTORIES $ENV{PATH}
@@ -115,8 +115,8 @@ macro(prepare_package)
   else()
     include(GNUInstallDirs)
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-    install(FILES ${PROJECT_SOURCE_DIR}/resources/linux/implay.desktop DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications RENAME playtorrio.desktop)
-    install(FILES ${PROJECT_SOURCE_DIR}/resources/icon.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps RENAME playtorrio.png)
+    install(FILES ${PROJECT_SOURCE_DIR}/resources/linux/implay.desktop DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications RENAME playtorrioplayer.desktop)
+    install(FILES ${PROJECT_SOURCE_DIR}/resources/icon.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps RENAME playtorrioplayer.png)
   endif()
 endmacro()
 
@@ -127,14 +127,14 @@ macro(create_package)
     set(CPACK_WIX_PRODUCT_ICON "${PROJECT_SOURCE_DIR}/resources/win32/app.ico")
     set(CPACK_WIX_UPGRADE_GUID "D7438EFE-D62A-4E94-A024-6E71AE1A7A63")
     set(CPACK_WIX_PROGRAM_MENU_FOLDER ".")
-    set_property(INSTALL "$<TARGET_FILE_NAME:PlayTorrio>" PROPERTY CPACK_START_MENU_SHORTCUTS "PlayTorrio")
+    set_property(INSTALL "$<TARGET_FILE_NAME:PlayTorrioPlayer>" PROPERTY CPACK_START_MENU_SHORTCUTS "PlayTorrioPlayer")
   elseif (APPLE)
     set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
     set(MACOSX_BUNDLE_ICON_FILE "AppIcon")
     set(MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
     set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}")
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.playtorrio.player")
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.playtorrioplayer.app")
     set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 2022 tsl0922. All rights reserved." )
 
     set(CPACK_GENERATOR DragNDrop)
