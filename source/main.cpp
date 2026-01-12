@@ -16,7 +16,12 @@
 #include "window.h"
 
 static const char* usage =
-    "Usage:   PlayTorrio [options] [url|path/]filename\n"
+    "Usage:   playtp [options] [url|path/]filename\n"
+    "\n"
+    "Examples:\n"
+    " playtp video.mp4              play a local file\n"
+    " playtp https://example.com/v  play a URL\n"
+    " playtp --fs video.mp4         play fullscreen\n"
     "\n"
     "Basic options:\n"
     " --start=<time>    seek to given (percent, seconds, or hh:mm:ss) position\n"

@@ -44,7 +44,10 @@ bool Player::init(std::map<std::string, std::string> &options) {
   mpv->option("input-default-bindings", "yes");
   mpv->option("input-vo-keyboard", "yes");
   mpv->option("load-osd-console", "no");
-  mpv->option("osd-playing-msg", "${media-title}");
+  mpv->option("osd-playing-msg", "");  // No OSD message - PlayTorrioPlayer has its own UI
+  mpv->option("osd-bar", "no");        // No OSD bar
+  mpv->option("osd-level", "0");       // Disable OSD completely
+  mpv->option("osc", "no");            // Always disable OSC - PlayTorrioPlayer has its own controls
   mpv->option("screenshot-directory", "~~desktop/");
   mpv->option("vo", "libmpv");
 
@@ -54,7 +57,6 @@ bool Player::init(std::map<std::string, std::string> &options) {
 
   if (!config->Data.Mpv.UseConfig) {
     writeMpvConf();
-    mpv->option("osc", "no");
     mpv->option("config-dir", config->dir().c_str());
   }
 

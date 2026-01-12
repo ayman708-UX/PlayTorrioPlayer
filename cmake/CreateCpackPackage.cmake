@@ -58,6 +58,10 @@ macro(prepare_package)
     install(FILES ${CMAKE_BINARY_DIR}/PlayTorrioPlayer.com DESTINATION .)
     install(FILES ${CMAKE_BINARY_DIR}/yt-dlp.exe DESTINATION .)
     
+    # Create playtp.cmd for command line usage: playtp "url" or playtp video.mp4
+    file(WRITE ${CMAKE_BINARY_DIR}/playtp.cmd "@echo off\n\"%~dp0PlayTorrioPlayer.exe\" %*")
+    install(FILES ${CMAKE_BINARY_DIR}/playtp.cmd DESTINATION .)
+    
     if(USE_OPENGL_ES3)
       get_electron_bin(electron_bin)
       add_dependencies(${PROJECT_NAME} electron_bin)
@@ -117,6 +121,8 @@ macro(prepare_package)
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
     install(FILES ${PROJECT_SOURCE_DIR}/resources/linux/implay.desktop DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications RENAME playtorrioplayer.desktop)
     install(FILES ${PROJECT_SOURCE_DIR}/resources/icon.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps RENAME playtorrioplayer.png)
+    # Create playtp symlink for command line usage
+    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink PlayTorrioPlayer \${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/playtp)")
   endif()
 endmacro()
 
