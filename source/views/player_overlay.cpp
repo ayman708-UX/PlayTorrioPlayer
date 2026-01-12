@@ -27,7 +27,7 @@ void PlayerOverlay::draw() {
   // Auto-hide controls after inactivity
   double currentTime = ImGui::GetTime();
   if (ImGui::GetIO().MouseDelta.x != 0 || ImGui::GetIO().MouseDelta.y != 0 ||
-      ImGui::IsAnyMouseDown() || ImGui::GetIO().KeysDown[ImGuiKey_Space]) {
+      ImGui::IsAnyMouseDown() || ImGui::IsKeyDown(ImGuiKey_Space)) {
     m_lastActivityTime = currentTime;
     m_showControls = true;
   }
