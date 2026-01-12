@@ -19,27 +19,31 @@ void PlayerOverlay::draw() {
 
   if (m_showURLDialog) openURL();
 
-  // Simplified activity detection - less CPU intensive
+  // Efficient activity detection - only check when needed
   ImGuiIO& io = ImGui::GetIO();
-  bool hasActivity = (std::abs(io.MouseDelta.x) > 0.5f || std::abs(io.MouseDelta.y) > 0.5f ||
-                      io.MouseDown[0] || io.MouseDown[1] ||
-                      m_showSubtitleMenu || m_showAudioMenu || m_showSettingsMenu);
+  double now = ImGui::GetTime();
+  
+  // Check for mouse movement (with threshold to avoid micro-movements)
+  bool mouseActive = (std::abs(io.MouseDelta.x) > 1.0f || std::abs(io.MouseDelta.y) > 1.0f);
+  bool hasActivity = mouseActive || io.MouseDown[0] || io.MouseDown[1] ||
+                     m_showSubtitleMenu || m_showAudioMenu || m_showSettingsMenu;
   
   if (hasActivity) {
-    m_lastActivityTime = ImGui::GetTime();
+    m_lastActivityTime = now;
     m_targetAlpha = 1.0f;
-  } else if (ImGui::GetTime() - m_lastActivityTime > 2.0) {
+  } else if (now - m_lastActivityTime > 2.5) {
     m_targetAlpha = 0.0f;
   }
 
-  // Smooth but fast alpha transition
-  if (m_controlsAlpha != m_targetAlpha) {
-    float diff = m_targetAlpha - m_controlsAlpha;
-    m_controlsAlpha += diff * 0.12f;
-    if (std::abs(diff) < 0.01f) m_controlsAlpha = m_targetAlpha;
+  // Fast alpha transition
+  float diff = m_targetAlpha - m_controlsAlpha;
+  if (std::abs(diff) > 0.005f) {
+    m_controlsAlpha += diff * 0.15f;
+  } else {
+    m_controlsAlpha = m_targetAlpha;
   }
 
-  if (m_controlsAlpha < 0.02f) return;
+  if (m_controlsAlpha < 0.01f) return;
 
   drawTopBar();
   drawBottomBar();
@@ -466,7 +470,7 @@ void PlayerOverlay::drawAudioMenu() {
 
 void PlayerOverlay::drawSettingsMenu() {
   auto vp = ImGui::GetMainViewport();
-  float mw = 300, mh = 340;
+  float mw = 300, mh = 480;  // Taller for subtitle options
   ImGui::SetNextWindowPos(ImVec2(vp->WorkPos.x + vp->WorkSize.x - mw - 20, vp->WorkPos.y + vp->WorkSize.y - mh - 110));
   ImGui::SetNextWindowSize(ImVec2(mw, mh));
 
@@ -487,9 +491,9 @@ void PlayerOverlay::drawSettingsMenu() {
 
     // Speed
     ImGui::Text("Speed");
-    ImGui::SameLine(80);
+    ImGui::SameLine(90);
     float spd = (float)mpv->property<double, MPV_FORMAT_DOUBLE>("speed");
-    ImGui::SetNextItemWidth(mw - 110);
+    ImGui::SetNextItemWidth(mw - 120);
     if (ImGui::SliderFloat("##spd", &spd, 0.25f, 4.0f, "%.2fx"))
       mpv->commandv("set", "speed", fmt::format("{:.2f}", spd).c_str(), nullptr);
 
@@ -497,10 +501,10 @@ void PlayerOverlay::drawSettingsMenu() {
 
     // Aspect Ratio
     ImGui::Text("Aspect");
-    ImGui::SameLine(80);
+    ImGui::SameLine(90);
     const char* aspects[] = {"Auto", "16:9", "4:3", "21:9", "1:1"};
     static int asp = 0;
-    ImGui::SetNextItemWidth(mw - 110);
+    ImGui::SetNextItemWidth(mw - 120);
     if (ImGui::Combo("##asp", &asp, aspects, IM_ARRAYSIZE(aspects)))
       mpv->commandv("set", "video-aspect-override", asp == 0 ? "-1" : aspects[asp], nullptr);
 
@@ -508,7 +512,7 @@ void PlayerOverlay::drawSettingsMenu() {
 
     // Hardware Decoding
     ImGui::Text("HW Decode");
-    ImGui::SameLine(80);
+    ImGui::SameLine(90);
     std::string hwdec = mpv->property("hwdec");
     bool hwOn = hwdec != "no";
     if (ImGui::Checkbox("##hw", &hwOn))
@@ -520,7 +524,7 @@ void PlayerOverlay::drawSettingsMenu() {
 
     // Loop
     ImGui::Text("Loop");
-    ImGui::SameLine(80);
+    ImGui::SameLine(90);
     std::string lf = mpv->property("loop-file");
     bool loop = lf == "inf";
     if (ImGui::Checkbox("##loop", &loop))
@@ -530,30 +534,69 @@ void PlayerOverlay::drawSettingsMenu() {
 
     // Cache/Buffer for streaming
     ImGui::Text("Cache");
-    ImGui::SameLine(80);
+    ImGui::SameLine(90);
     static int cache = 150;  // MB
-    ImGui::SetNextItemWidth(mw - 110);
+    ImGui::SetNextItemWidth(mw - 120);
     if (ImGui::SliderInt("##cache", &cache, 16, 512, "%d MB"))
       mpv->commandv("set", "demuxer-max-bytes", fmt::format("{}MiB", cache).c_str(), nullptr);
 
     ImGui::Spacing();
 
-    // FPS display
-    ImGui::Text("Show FPS");
-    ImGui::SameLine(80);
-    static bool showFps = false;
-    if (ImGui::Checkbox("##fps", &showFps))
-      mpv->commandv("set", "osd-level", showFps ? "3" : "0", nullptr);
-
-    ImGui::Spacing();
-
     // Deinterlace
     ImGui::Text("Deinterlace");
-    ImGui::SameLine(80);
+    ImGui::SameLine(90);
     std::string deint = mpv->property("deinterlace");
     bool deintOn = deint == "yes";
     if (ImGui::Checkbox("##deint", &deintOn))
       mpv->commandv("set", "deinterlace", deintOn ? "yes" : "no", nullptr);
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    // Subtitle section
+    ImGui::TextColored(ImVec4(0.75f, 0.45f, 1.0f, 1.0f), ICON_FA_CLOSED_CAPTIONING "  Subtitles");
+    ImGui::Spacing();
+
+    // Subtitle Size
+    ImGui::Text("Sub Size");
+    ImGui::SameLine(90);
+    static int subSize = 55;  // Default mpv sub-font-size
+    ImGui::SetNextItemWidth(mw - 120);
+    if (ImGui::SliderInt("##subsize", &subSize, 20, 100, "%d"))
+      mpv->commandv("set", "sub-font-size", std::to_string(subSize).c_str(), nullptr);
+
+    ImGui::Spacing();
+
+    // Subtitle Position (vertical)
+    ImGui::Text("Sub Pos");
+    ImGui::SameLine(90);
+    static int subPos = 100;  // 100 = bottom, 0 = top
+    ImGui::SetNextItemWidth(mw - 120);
+    if (ImGui::SliderInt("##subpos", &subPos, 0, 150, "%d%%"))
+      mpv->commandv("set", "sub-pos", std::to_string(subPos).c_str(), nullptr);
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("100 = bottom, lower = higher on screen");
+
+    ImGui::Spacing();
+
+    // Subtitle Scale
+    ImGui::Text("Sub Scale");
+    ImGui::SameLine(90);
+    static float subScale = 1.0f;
+    ImGui::SetNextItemWidth(mw - 120);
+    if (ImGui::SliderFloat("##subscale", &subScale, 0.5f, 2.0f, "%.1fx"))
+      mpv->commandv("set", "sub-scale", fmt::format("{:.2f}", subScale).c_str(), nullptr);
+
+    ImGui::Spacing();
+
+    // Subtitle Delay
+    ImGui::Text("Sub Delay");
+    ImGui::SameLine(90);
+    double subDelay = mpv->property<double, MPV_FORMAT_DOUBLE>("sub-delay");
+    float subDelayF = (float)subDelay;
+    ImGui::SetNextItemWidth(mw - 120);
+    if (ImGui::SliderFloat("##subdelay", &subDelayF, -5.0f, 5.0f, "%.1fs"))
+      mpv->commandv("set", "sub-delay", fmt::format("{:.2f}", subDelayF).c_str(), nullptr);
   }
   ImGui::End();
   ImGui::PopStyleVar(3);

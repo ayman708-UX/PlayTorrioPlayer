@@ -14,7 +14,7 @@ struct ConfigData {
     std::string Lang = "en-US";
     std::string Theme = "playtorrio";
     float Scale = 0;
-    int Fps = 30;
+    int Fps = 60;  // 60fps for smooth UI
     bool Docking = false;
     bool Viewports = false;
     bool Rounding = true;

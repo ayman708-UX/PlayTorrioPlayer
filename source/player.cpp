@@ -53,8 +53,29 @@ bool Player::init(std::map<std::string, std::string> &options) {
   mpv->option("load-osd-console", "no");   // No OSD console
   mpv->option("load-scripts", "no");       // Don't load ANY scripts (including osc.lua)
   
-  mpv->option("screenshot-directory", "~~desktop/");
+  // Performance optimizations for smooth playback
   mpv->option("vo", "libmpv");
+  mpv->option("hwdec", "auto-safe");       // Use safe hardware decoding
+  mpv->option("gpu-api", "auto");          // Auto-select best GPU API
+  mpv->option("opengl-swapinterval", "1"); // VSync
+  mpv->option("video-sync", "display-resample"); // Smooth playback
+  mpv->option("interpolation", "no");      // Disable interpolation (can cause lag)
+  mpv->option("tscale", "oversample");     // Fast temporal scaling
+  mpv->option("correct-downscaling", "no"); // Faster downscaling
+  mpv->option("deband", "no");             // Disable debanding (faster)
+  mpv->option("dither-depth", "no");       // Disable dithering (faster)
+  mpv->option("sws-scaler", "fast-bilinear"); // Fast software scaler
+  mpv->option("vd-lavc-fast", "yes");      // Faster video decoding
+  mpv->option("vd-lavc-skiploopfilter", "nonkey"); // Skip some deblocking
+  mpv->option("demuxer-max-bytes", "150MiB"); // Good buffer for streaming
+  mpv->option("demuxer-max-back-bytes", "50MiB");
+  mpv->option("demuxer-readahead-secs", "20"); // Read ahead for smoother streaming
+  mpv->option("cache", "yes");
+  mpv->option("cache-secs", "120");        // 2 min cache
+  mpv->option("cache-pause-initial", "yes"); // Buffer before playing
+  mpv->option("cache-pause-wait", "3");    // Wait 3 secs if buffer runs low
+  
+  mpv->option("screenshot-directory", "~~desktop/");
 
   // override-display-fps is renamed to display-fps-override in mpv 0.37.0
   mpv->option<int64_t, MPV_FORMAT_INT64>("override-display-fps", GetMonitorRefreshRate());
