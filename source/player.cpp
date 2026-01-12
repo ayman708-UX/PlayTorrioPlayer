@@ -43,11 +43,16 @@ bool Player::init(std::map<std::string, std::string> &options) {
   mpv->option("config", "yes");
   mpv->option("input-default-bindings", "yes");
   mpv->option("input-vo-keyboard", "yes");
-  mpv->option("load-osd-console", "no");
-  mpv->option("osd-playing-msg", "");  // No OSD message - PlayTorrioPlayer has its own UI
-  mpv->option("osd-bar", "no");        // No OSD bar
-  mpv->option("osd-level", "0");       // Disable OSD completely
-  mpv->option("osc", "no");            // Always disable OSC - PlayTorrioPlayer has its own controls
+  
+  // PlayTorrioPlayer: COMPLETELY disable ALL mpv on-screen UI
+  mpv->option("osc", "no");                // Disable On-Screen Controller
+  mpv->option("osd-level", "0");           // Disable OSD completely  
+  mpv->option("osd-bar", "no");            // No OSD bar
+  mpv->option("osd-playing-msg", "");      // No playing message
+  mpv->option("osd-on-seek", "no");        // No OSD on seek
+  mpv->option("load-osd-console", "no");   // No OSD console
+  mpv->option("load-scripts", "no");       // Don't load ANY scripts (including osc.lua)
+  
   mpv->option("screenshot-directory", "~~desktop/");
   mpv->option("vo", "libmpv");
 
@@ -422,6 +427,11 @@ void Player::writeMpvConf() {
     file << "deband=no\n\n";
     file << "# Enable hardware decoding if available.\n";
     file << "hwdec=auto\n";
+    // PlayTorrioPlayer: Disable ALL mpv on-screen controls
+    file << "\n# PlayTorrioPlayer - disable all mpv UI\n";
+    file << "osc=no\n";
+    file << "osd-level=0\n";
+    file << "osd-bar=no\n";
   }
 
   if (!std::filesystem::exists(inputConf)) {
@@ -432,19 +442,8 @@ void Player::writeMpvConf() {
     file << "`            script-message-to implay metrics         # open console window\n";
   }
 
-  auto scrips = path / "scripts";
-  auto scriptOpts = path / "script-opts";
-
-  std::filesystem::create_directories(scrips);
-  std::filesystem::create_directories(scriptOpts);
-
-  auto oscLua = scrips / "osc.lua";
-
-  if (!std::filesystem::exists(oscLua)) {
-    std::ofstream file(oscLua, std::ios::binary);
-    auto content = romfs::get("mpv/osc.lua").span<char>();
-    file.write(content.data(), content.size());
-  }
+  // PlayTorrioPlayer: Do NOT create scripts folder or load osc.lua
+  // We have our own custom UI
 }
 
 void Player::execute(int n_args, const char **args_) {
