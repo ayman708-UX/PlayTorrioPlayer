@@ -52,18 +52,93 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
         run: |
-          brew install cmake ninja git mpv freetype2 pkg-config
+          brew install cmake ninja git mpv freetype2 pkg-config dylibbundler create-dmg
       - name: Build PlayTorrio
         env:
           PKG_CONFIG_PATH: /opt/homebrew/opt/libarchive/lib/pkgconfig:/usr/local/opt/libarchive/lib/pkgconfig
         run: |
           mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=RELEASE -DUSE_PATCHED_GLFW=ON -DCREATE_PACKAGE=ON -G Ninja ..
-          cmake --build . --target package
+          cmake -DCMAKE_BUILD_TYPE=RELEASE -DUSE_PATCHED_GLFW=ON -G Ninja ..
+          cmake --build .
+      - name: Create App Bundle
+        run: |
+          cd build
+          VERSION=$(git describe --tags --always)
+          
+          # Create app bundle structure
+          mkdir -p ImPlay.app/Contents/MacOS
+          mkdir -p ImPlay.app/Contents/Frameworks
+          mkdir -p ImPlay.app/Contents/Resources
+          
+          # Copy executable
+          cp ImPlay ImPlay.app/Contents/MacOS/
+          
+          # Copy icon
+          cp ../resources/macos/AppIcon.icns ImPlay.app/Contents/Resources/ 2>/dev/null || true
+          
+          # Create Info.plist
+          cat > ImPlay.app/Contents/Info.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleExecutable</key>
+            <string>ImPlay</string>
+            <key>CFBundleIconFile</key>
+            <string>AppIcon</string>
+            <key>CFBundleIdentifier</key>
+            <string>com.playtorrio.player</string>
+            <key>CFBundleName</key>
+            <string>PlayTorrio</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+            <key>CFBundleShortVersionString</key>
+            <string>${VERSION}</string>
+            <key>CFBundleVersion</key>
+            <string>${VERSION}</string>
+            <key>NSHighResolutionCapable</key>
+            <true/>
+            <key>LSMinimumSystemVersion</key>
+            <string>11.0</string>
+          </dict>
+          </plist>
+          EOF
+          
+          # Use dylibbundler to bundle all dylib dependencies
+          # This handles all transitive dependencies including libjxl_cms
+          dylibbundler -od -b -x ./ImPlay.app/Contents/MacOS/ImPlay \
+            -d ./ImPlay.app/Contents/Frameworks/ \
+            -p @executable_path/../Frameworks/ \
+            -s /opt/homebrew/lib \
+            -s /usr/local/lib
+          
+          # Ad-hoc code sign the app
+          codesign --force --deep --sign - ImPlay.app
+      - name: Create DMG
+        run: |
+          cd build
+          VERSION=$(git describe --tags --always)
+          
+          # Create DMG using create-dmg
+          create-dmg \
+            --volname "PlayTorrio" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --app-drop-link 450 185 \
+            "ImPlay-${VERSION}.dmg" \
+            "ImPlay.app" || true
+          
+          # Fallback: create zip if DMG creation fails
+          if [ ! -f ImPlay-*.dmg ]; then
+            zip -r "ImPlay-${VERSION}.zip" ImPlay.app
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: PlayTorrio-macOS
-          path: build/ImPlay-*.dmg
+          path: |
+            build/ImPlay-*.dmg
+            build/ImPlay-*.zip
   win:
     runs-on: windows-latest
     name: Windows
