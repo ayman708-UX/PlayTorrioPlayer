@@ -19,14 +19,14 @@ void PlayerOverlay::draw() {
 
   if (m_showURLDialog) openURL();
 
-  // Efficient activity detection - only check when needed
+  // Efficient activity detection
   ImGuiIO& io = ImGui::GetIO();
   double now = ImGui::GetTime();
   
-  // Check for mouse movement (with threshold to avoid micro-movements)
-  bool mouseActive = (std::abs(io.MouseDelta.x) > 1.0f || std::abs(io.MouseDelta.y) > 1.0f);
-  bool hasActivity = mouseActive || io.MouseDown[0] || io.MouseDown[1] ||
-                     m_showSubtitleMenu || m_showAudioMenu || m_showSettingsMenu;
+  // Only check mouse movement if not in a menu
+  bool inMenu = m_showSubtitleMenu || m_showAudioMenu || m_showSettingsMenu;
+  bool mouseActive = !inMenu && (io.MouseDelta.x != 0 || io.MouseDelta.y != 0);
+  bool hasActivity = mouseActive || io.MouseDown[0] || io.MouseDown[1] || inMenu;
   
   if (hasActivity) {
     m_lastActivityTime = now;
@@ -35,14 +35,14 @@ void PlayerOverlay::draw() {
     m_targetAlpha = 0.0f;
   }
 
-  // Fast alpha transition
-  float diff = m_targetAlpha - m_controlsAlpha;
-  if (std::abs(diff) > 0.005f) {
-    m_controlsAlpha += diff * 0.15f;
-  } else {
-    m_controlsAlpha = m_targetAlpha;
+  // Simple alpha lerp
+  if (m_controlsAlpha != m_targetAlpha) {
+    m_controlsAlpha += (m_targetAlpha - m_controlsAlpha) * 0.2f;
+    if (std::abs(m_targetAlpha - m_controlsAlpha) < 0.01f) 
+      m_controlsAlpha = m_targetAlpha;
   }
 
+  // Skip drawing if fully hidden
   if (m_controlsAlpha < 0.01f) return;
 
   drawTopBar();
@@ -384,7 +384,7 @@ void PlayerOverlay::drawControlButtons() {
 
 void PlayerOverlay::drawSubtitleMenu() {
   auto vp = ImGui::GetMainViewport();
-  float mw = 280, mh = 300;
+  float mw = 320, mh = 380;
   ImGui::SetNextWindowPos(ImVec2(vp->WorkPos.x + vp->WorkSize.x - mw - 20, vp->WorkPos.y + vp->WorkSize.y - mh - 110));
   ImGui::SetNextWindowSize(ImVec2(mw, mh));
 
@@ -401,27 +401,105 @@ void PlayerOverlay::drawSubtitleMenu() {
     if (ImGui::Button(ICON_FA_TIMES "##cs", ImVec2(22, 22))) m_showSubtitleMenu = false;
     ImGui::PopStyleColor();
     ImGui::Separator();
+    ImGui::Spacing();
 
-    ImGui::BeginChild("##SL", ImVec2(mw - 28, 130), false);
-    std::string sid = mpv->sid;
-    ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.6f, 0.35f, 0.85f, 0.2f));
-    for (auto &t : mpv->tracks) {
-      if (t.type != "sub") continue;
-      std::string n = t.title.empty() ? fmt::format("Track {}", t.id) : t.title;
-      if (!t.lang.empty()) n += " [" + t.lang + "]";
-      if (ImGui::Selectable(n.c_str(), sid == std::to_string(t.id), 0, ImVec2(0, 24)))
-        mpv->property<int64_t, MPV_FORMAT_INT64>("sid", t.id);
+    // Provider tabs
+    int numTabs = 1 + (int)m_externalProviders.size();
+    float tabWidth = (mw - 28) / std::min(numTabs, 4);  // Max 4 tabs visible
+    
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5);
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 4));
+    
+    // Built-in tab
+    bool isBuiltIn = (m_selectedProviderTab == 0);
+    ImGui::PushStyleColor(ImGuiCol_Button, isBuiltIn ? ImVec4(0.5f, 0.25f, 0.75f, 0.9f) : ImVec4(0.15f, 0.08f, 0.25f, 0.8f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.35f, 0.85f, 1.0f));
+    if (ImGui::Button("Built-in", ImVec2(tabWidth - 2, 26))) m_selectedProviderTab = 0;
+    ImGui::PopStyleColor(2);
+    
+    // External provider tabs
+    for (int i = 0; i < (int)m_externalProviders.size(); i++) {
+      ImGui::SameLine();
+      bool isSelected = (m_selectedProviderTab == i + 1);
+      ImGui::PushStyleColor(ImGuiCol_Button, isSelected ? ImVec4(0.5f, 0.25f, 0.75f, 0.9f) : ImVec4(0.15f, 0.08f, 0.25f, 0.8f));
+      ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.35f, 0.85f, 1.0f));
+      
+      std::string tabName = m_externalProviders[i].name;
+      if (tabName.length() > 10) tabName = tabName.substr(0, 9) + "..";
+      if (ImGui::Button((tabName + "##tab" + std::to_string(i)).c_str(), ImVec2(tabWidth - 2, 26))) 
+        m_selectedProviderTab = i + 1;
+      ImGui::PopStyleColor(2);
     }
-    if (ImGui::Selectable("Disable", sid == "no", 0, ImVec2(0, 24)))
-      mpv->commandv("set", "sid", "no", nullptr);
-    ImGui::PopStyleColor();
-    ImGui::EndChild();
+    
+    ImGui::PopStyleVar(2);
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    // Content based on selected tab
+    float listHeight = mh - 180;
+    
+    if (m_selectedProviderTab == 0) {
+      // Built-in subtitles (from the video file)
+      ImGui::TextColored(ImVec4(0.6f, 0.5f, 0.7f, 0.9f), "Embedded Tracks");
+      ImGui::BeginChild("##SL", ImVec2(mw - 28, listHeight), false);
+      std::string sid = mpv->sid;
+      ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.6f, 0.35f, 0.85f, 0.2f));
+      
+      bool hasBuiltIn = false;
+      for (auto &t : mpv->tracks) {
+        if (t.type != "sub") continue;
+        hasBuiltIn = true;
+        std::string n = t.title.empty() ? fmt::format("Track {}", t.id) : t.title;
+        if (!t.lang.empty()) n += " [" + t.lang + "]";
+        if (ImGui::Selectable(n.c_str(), sid == std::to_string(t.id), 0, ImVec2(0, 24)))
+          mpv->property<int64_t, MPV_FORMAT_INT64>("sid", t.id);
+      }
+      
+      if (!hasBuiltIn) {
+        ImGui::TextColored(ImVec4(0.5f, 0.4f, 0.6f, 0.7f), "No embedded subtitles");
+      }
+      
+      if (ImGui::Selectable("Disable", sid == "no", 0, ImVec2(0, 24)))
+        mpv->commandv("set", "sid", "no", nullptr);
+      ImGui::PopStyleColor();
+      ImGui::EndChild();
+    } else {
+      // External provider subtitles
+      int provIdx = m_selectedProviderTab - 1;
+      if (provIdx >= 0 && provIdx < (int)m_externalProviders.size()) {
+        auto& provider = m_externalProviders[provIdx];
+        ImGui::TextColored(ImVec4(0.6f, 0.5f, 0.7f, 0.9f), "%s (%d)", provider.name.c_str(), (int)provider.subtitles.size());
+        
+        ImGui::BeginChild("##ExtSL", ImVec2(mw - 28, listHeight), false);
+        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.6f, 0.35f, 0.85f, 0.2f));
+        
+        for (int i = 0; i < (int)provider.subtitles.size(); i++) {
+          auto& sub = provider.subtitles[i];
+          if (ImGui::Selectable((sub.name + "##ext" + std::to_string(i)).c_str(), false, 0, ImVec2(0, 24))) {
+            // Load this subtitle URL
+            mpv->commandv("sub-add", sub.url.c_str(), "select", nullptr);
+          }
+          if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Click to load: %s", sub.url.c_str());
+          }
+        }
+        
+        if (provider.subtitles.empty()) {
+          ImGui::TextColored(ImVec4(0.5f, 0.4f, 0.6f, 0.7f), "No subtitles from this provider");
+        }
+        
+        ImGui::PopStyleColor();
+        ImGui::EndChild();
+      }
+    }
 
     ImGui::Separator();
+    ImGui::Spacing();
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.25f, 0.75f, 0.8f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.65f, 0.4f, 0.9f, 1.0f));
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5);
-    if (ImGui::Button(ICON_FA_UPLOAD " Load", ImVec2(mw - 28, 28))) openSubtitleFile();
+    if (ImGui::Button(ICON_FA_UPLOAD " Load File", ImVec2(mw - 28, 28))) openSubtitleFile();
     ImGui::PopStyleVar();
     ImGui::PopStyleColor(2);
   }

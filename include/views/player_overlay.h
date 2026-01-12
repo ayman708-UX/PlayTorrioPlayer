@@ -2,9 +2,25 @@
 // SPDX-License-Identifier: GPL-2.0-only
 
 #pragma once
+#include <map>
+#include <string>
+#include <vector>
 #include "view.h"
 
 namespace ImPlay::Views {
+
+// External subtitle from a provider (not loaded, just metadata)
+struct ExternalSubtitle {
+  std::string name;   // Display name
+  std::string url;    // URL to load when selected
+};
+
+// A subtitle provider (e.g., "OpenSubtitles", "Wyzie")
+struct SubtitleProvider {
+  std::string name;
+  std::vector<ExternalSubtitle> subtitles;
+};
+
 class PlayerOverlay : public View {
  public:
   PlayerOverlay(Config *config, Mpv *mpv);
@@ -20,6 +36,12 @@ class PlayerOverlay : public View {
 
   // Draw idle screen when no media is playing
   void drawIdleScreen();
+
+  // Add external subtitle providers from command line
+  void setExternalProviders(const std::vector<SubtitleProvider>& providers) {
+    m_externalProviders = providers;
+  }
+  void clearExternalProviders() { m_externalProviders.clear(); }
 
  private:
   void drawTopBar();
@@ -48,6 +70,10 @@ class PlayerOverlay : public View {
   // Progress bar state
   bool m_seeking = false;
   float m_seekPos = 0.0f;
+
+  // External subtitle providers
+  std::vector<SubtitleProvider> m_externalProviders;
+  int m_selectedProviderTab = 0;  // 0 = Built-in, 1+ = external providers
 
   // Colors matching PlayTorrio design
   ImVec4 m_primaryPurple = ImVec4(0.616f, 0.306f, 0.867f, 1.0f);   // #9d4edd

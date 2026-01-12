@@ -18,16 +18,29 @@
 namespace ImPlay {
 void OptionParser::parse(int argc, char** argv) {
   bool optEnd = false;
+  bool parsingProviders = false;
+  CmdSubtitleProvider currentProvider;
+  std::string pendingSubName;
+  
 #ifdef _WIN32
   int wideArgc;
   wchar_t** wideArgv = CommandLineToArgvW(GetCommandLineW(), &wideArgc);
+  std::vector<std::string> args;
   for (int i = 1; i < wideArgc; i++) {
-    std::string arg = WideToUTF8(wideArgv[i]);
+    args.push_back(WideToUTF8(wideArgv[i]));
+  }
 #else
+  std::vector<std::string> args;
   for (int i = 1; i < argc; i++) {
-    std::string arg = argv[i];
+    args.push_back(argv[i]);
+  }
 #endif
+
+  for (size_t i = 0; i < args.size(); i++) {
+    std::string arg = args[i];
+    
     if (arg[0] == '-' && !optEnd) {
+      // Handle options (--option or -option)
       if (arg[1] == '\0') {
         paths.emplace_back(arg);
         break;
@@ -50,9 +63,57 @@ void OptionParser::parse(int argc, char** argv) {
       } else {
         options.emplace(arg, "yes");
       }
-    } else {
+    } else if (paths.empty()) {
+      // First non-option is the media URL/path
       paths.emplace_back(arg);
+      parsingProviders = true;  // After media path, start looking for providers
+    } else if (parsingProviders) {
+      // Parse subtitle providers: providername "subname1" "url1" "subname2" "url2" ...
+      // A provider name is followed by pairs of (name, url)
+      
+      if (pendingSubName.empty()) {
+        // Check if this looks like a URL (contains :// or starts with /)
+        bool looksLikeUrl = (arg.find("://") != std::string::npos) || 
+                            (arg[0] == '/') || 
+                            (arg.length() > 1 && arg[1] == ':');  // Windows path like C:
+        
+        if (looksLikeUrl && !currentProvider.name.empty()) {
+          // This is a URL without a name - shouldn't happen in proper usage
+          // Treat as subtitle URL with auto-generated name
+          CmdSubtitle sub;
+          sub.name = fmt::format("Subtitle {}", currentProvider.subtitles.size() + 1);
+          sub.url = arg;
+          currentProvider.subtitles.push_back(sub);
+        } else if (!currentProvider.name.empty() && currentProvider.subtitles.empty() && 
+                   arg.find("://") == std::string::npos && arg[0] != '/') {
+          // This could be a subtitle name (first one after provider)
+          pendingSubName = arg;
+        } else if (currentProvider.name.empty()) {
+          // This is a new provider name
+          if (!currentProvider.subtitles.empty()) {
+            // Save previous provider
+            subtitleProviders.push_back(currentProvider);
+          }
+          currentProvider = CmdSubtitleProvider();
+          currentProvider.name = arg;
+        } else {
+          // This is a subtitle name
+          pendingSubName = arg;
+        }
+      } else {
+        // We have a pending subtitle name, this should be the URL
+        CmdSubtitle sub;
+        sub.name = pendingSubName;
+        sub.url = arg;
+        currentProvider.subtitles.push_back(sub);
+        pendingSubName.clear();
+      }
     }
+  }
+  
+  // Save last provider if it has content
+  if (!currentProvider.name.empty() && !currentProvider.subtitles.empty()) {
+    subtitleProviders.push_back(currentProvider);
   }
 }
 

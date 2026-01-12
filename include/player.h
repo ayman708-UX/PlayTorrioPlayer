@@ -36,6 +36,9 @@ class Player {
  protected:
   bool init(std::map<std::string, std::string> &options);
   void shutdown();
+  
+  // Set external subtitle providers from command line
+  void setExternalSubtitleProviders(const std::vector<CmdSubtitleProvider>& providers);
 
   void initGui();
   void exitGui();

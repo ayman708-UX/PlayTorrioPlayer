@@ -67,6 +67,7 @@ bool Player::init(std::map<std::string, std::string> &options) {
   mpv->option("sws-scaler", "fast-bilinear"); // Fast software scaler
   mpv->option("vd-lavc-fast", "yes");      // Faster video decoding
   mpv->option("vd-lavc-skiploopfilter", "nonkey"); // Skip some deblocking
+  mpv->option("vd-lavc-threads", "0");     // Auto thread count for decoding
   mpv->option("demuxer-max-bytes", "150MiB"); // Good buffer for streaming
   mpv->option("demuxer-max-back-bytes", "50MiB");
   mpv->option("demuxer-readahead-secs", "20"); // Read ahead for smoother streaming
@@ -74,6 +75,8 @@ bool Player::init(std::map<std::string, std::string> &options) {
   mpv->option("cache-secs", "120");        // 2 min cache
   mpv->option("cache-pause-initial", "yes"); // Buffer before playing
   mpv->option("cache-pause-wait", "3");    // Wait 3 secs if buffer runs low
+  mpv->option("hr-seek-framedrop", "yes"); // Drop frames during seek for speed
+  mpv->option("video-latency-hacks", "yes"); // Reduce latency
   
   mpv->option("screenshot-directory", "~~desktop/");
 
@@ -109,6 +112,22 @@ bool Player::init(std::map<std::string, std::string> &options) {
   initObservers();
 
   return true;
+}
+
+void Player::setExternalSubtitleProviders(const std::vector<CmdSubtitleProvider>& providers) {
+  std::vector<Views::SubtitleProvider> overlayProviders;
+  for (const auto& p : providers) {
+    Views::SubtitleProvider sp;
+    sp.name = p.name;
+    for (const auto& s : p.subtitles) {
+      Views::ExternalSubtitle es;
+      es.name = s.name;
+      es.url = s.url;
+      sp.subtitles.push_back(es);
+    }
+    overlayProviders.push_back(sp);
+  }
+  playerOverlay->setExternalProviders(overlayProviders);
 }
 
 void Player::draw() {
@@ -198,7 +217,7 @@ void Player::render() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    SetSwapInterval(config->Data.Interface.Fps > 60 ? 0 : 1);
+    SetSwapInterval(1);  // Always use VSync for smooth playback
     SwapBuffers();
     mpv->reportSwap();
 
@@ -217,12 +236,19 @@ void Player::renderVideo() {
   glBindFramebuffer(GL_FRAMEBUFFER, fbo);
   glBindTexture(GL_TEXTURE_2D, tex);
 
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+  // Only reallocate texture if size changed (expensive operation)
+  static int lastWidth = 0, lastHeight = 0;
+  if (width != lastWidth || height != lastHeight) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    lastWidth = width;
+    lastHeight = height;
+  }
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   mpv->render(width, height, fbo, false);
+}
 }
 
 void Player::initGui() {

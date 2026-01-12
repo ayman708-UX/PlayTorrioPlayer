@@ -79,6 +79,12 @@ bool Window::init(OptionParser& parser) {
     if (path == "-") mpv->property("input-terminal", "yes");
     mpv->commandv("loadfile", path.c_str(), "append-play", nullptr);
   }
+  
+  // Pass external subtitle providers to the overlay
+  if (!parser.subtitleProviders.empty()) {
+    setExternalSubtitleProviders(parser.subtitleProviders);
+  }
+  
 #if defined(__APPLE__) && defined(GLFW_PATCHED)
   const char** openedFileNames = glfwGetOpenedFilenames();
   if (openedFileNames != nullptr) {
@@ -123,25 +129,18 @@ void Window::run() {
   restoreState();
   glfwShowWindow(window);
 
-  double lastTime = glfwGetTime();
   while (!glfwWindowShouldClose(window)) {
-    if (!glfwGetWindowAttrib(window, GLFW_VISIBLE) || glfwGetWindowAttrib(window, GLFW_ICONIFIED))
+    if (!glfwGetWindowAttrib(window, GLFW_VISIBLE) || glfwGetWindowAttrib(window, GLFW_ICONIFIED)) {
       glfwWaitEvents();
-    else
+    } else {
       glfwPollEvents();
+    }
 
     mpv->waitEvent();
-
     render();
     updateCursor();
-
-    double targetDelta = 1.0f / config->Data.Interface.Fps;
-    double delta = lastTime - glfwGetTime();
-    if (delta > 0 && delta < targetDelta)
-      glfwWaitEventsTimeout(delta);
-    else
-      lastTime = glfwGetTime();
-    lastTime += targetDelta;
+    
+    // Let VSync handle frame timing - no artificial limiting needed
   }
 
   shutdown = true;

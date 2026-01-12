@@ -8,6 +8,7 @@ PlayTorrio Player aims to be mpv compatible, which means almost all mpv features
 
 - Modern purple-themed UI with sleek player overlay controls
 - Upload Subtitles button for easy subtitle loading
+- External subtitle providers via command line
 - Highly compatible with mpv
   - GPU Video Decoding
   - High Quality Video Output
@@ -15,29 +16,67 @@ PlayTorrio Player aims to be mpv compatible, which means almost all mpv features
   - [User Scripts](https://github.com/mpv-player/mpv/wiki/User-Scripts) and [Config Files](https://mpv.io/manual/stable/#configuration-files)
   - [Command Line](https://mpv.io/manual/stable/#usage) Interface
   - [Keyboard / Mouse](https://mpv.io/manual/stable/#interactive-control) Control
-  - [On Screen Controler](https://mpv.io/manual/stable/#on-screen-controller) (OSC)
-    - Compatible with popular OSC scripts: [mpv-osc-modern](https://github.com/maoiscat/mpv-osc-modern), [thumbfast](https://github.com/po5/thumbfast)
-  - Take Video Screenshot
-  - Used as Image Viewer
-- Graphical User Interface
-  - Context Menu with most commonly used commands
-  - Command Palette to quickly search commands and keys
-  - Quick Settings View with convenient controls
-    - Playlist / Chapter Manager
-    - Audio / Video / Subtitle Settings
-    - Audio / Video Equalizer Support
-  - Open Dialog for Media Files / Folders
-  - Open Clipboard / DVD / Blu-ray / ISO Image
-  - Shadow and Rounding effect for Interface
-- Notable additional features
-  - Single Instance Mode
-  - Space to play last file on IDLE
-  - Play recently opened files
-- Scripting Developer Friendly
-  - Visual view of mpv's internal properties
-  - Console with completion, history support
-  - Colorful mpv logs view with filter support
-- Cross platform: Window, Linux, macOS
+- Cross platform: Windows, Linux, macOS
+
+# Command Line Usage
+
+## Basic Usage
+
+```bash
+# Play a local file
+playtp video.mp4
+
+# Play a URL
+playtp "https://example.com/video.m3u8"
+
+# Play fullscreen
+playtp --fs video.mp4
+```
+
+## External Subtitle Providers
+
+You can pass external subtitles from different providers (like OpenSubtitles, Wyzie, etc.) via command line. These subtitles appear in the UI organized by provider tabs, and are only loaded when you select them.
+
+**Format:**
+```bash
+playtp "media_url" ProviderName "SubtitleName1" "SubtitleURL1" "SubtitleName2" "SubtitleURL2" ...
+```
+
+**Single Provider Example:**
+```bash
+playtp "https://stream.example.com/movie.m3u8" OpenSubtitles "English" "https://subs.com/en.srt" "Spanish" "https://subs.com/es.srt"
+```
+
+**Multiple Providers Example:**
+```bash
+playtp "https://stream.example.com/movie.m3u8" \
+  OpenSubtitles "English" "https://opensubs.com/en.srt" "French" "https://opensubs.com/fr.srt" \
+  Wyzie "English HD" "https://wyzie.com/en-hd.srt" "English SDH" "https://wyzie.com/en-sdh.srt"
+```
+
+**How it works:**
+- Provider names (e.g., `OpenSubtitles`, `Wyzie`) create tabs in the subtitle menu
+- Subtitles are passed as name/URL pairs after each provider name
+- Subtitles are NOT loaded automatically - they appear in the menu for you to select
+- When you click a subtitle in the menu, it gets loaded
+- The "Built-in" tab always shows embedded subtitles from the video file
+
+## All Options
+
+```bash
+playtp [options] [url|path] [provider "subname" "suburl" ...]
+
+Options:
+  --start=<time>    Seek to position (percent, seconds, or hh:mm:ss)
+  --no-audio        Disable audio
+  --no-video        Disable video  
+  --fs              Fullscreen playback
+  --sub-file=<file> Load subtitle file
+  --playlist=<file> Load playlist file
+  --help            Show help
+```
+
+See [mpv manual](https://mpv.io/manual/stable) for all available options.
 
 # Installation
 

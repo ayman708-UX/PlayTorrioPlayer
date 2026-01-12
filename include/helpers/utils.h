@@ -16,9 +16,23 @@
 #include "lang.h"
 
 namespace ImPlay {
+
+// External subtitle from command line
+struct CmdSubtitle {
+  std::string name;
+  std::string url;
+};
+
+// Subtitle provider from command line
+struct CmdSubtitleProvider {
+  std::string name;
+  std::vector<CmdSubtitle> subtitles;
+};
+
 struct OptionParser {
   std::map<std::string, std::string> options;
   std::vector<std::string> paths;
+  std::vector<CmdSubtitleProvider> subtitleProviders;
 
   void parse(int argc, char** argv);
   bool check(std::string key, std::string value);

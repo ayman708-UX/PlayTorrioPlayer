@@ -14,11 +14,11 @@ struct ConfigData {
     std::string Lang = "en-US";
     std::string Theme = "playtorrio";
     float Scale = 0;
-    int Fps = 60;  // 60fps for smooth UI
+    int Fps = 60;  // Not used anymore - VSync handles timing
     bool Docking = false;
-    bool Viewports = false;
+    bool Viewports = false;  // Disabled for better performance
     bool Rounding = true;
-    bool Shadow = true;
+    bool Shadow = false;  // Disabled for better performance
     bool operator==(const Interface_&) const = default;
   } Interface;
   struct Mpv_ {
