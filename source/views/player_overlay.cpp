@@ -11,6 +11,7 @@ namespace ImPlay::Views {
 PlayerOverlay::PlayerOverlay(Config *config, Mpv *mpv) : View(config, mpv) {
   m_lastActivityTime = 0;
   m_controlsAlpha = 1.0f;
+  m_targetAlpha = 1.0f;
 }
 
 void PlayerOverlay::draw() {
@@ -18,22 +19,27 @@ void PlayerOverlay::draw() {
 
   if (m_showURLDialog) openURL();
 
-  double currentTime = ImGui::GetTime();
+  // Simplified activity detection - less CPU intensive
   ImGuiIO& io = ImGui::GetIO();
-  
-  bool hasActivity = (io.MouseDelta.x != 0 || io.MouseDelta.y != 0 ||
-                      ImGui::IsAnyMouseDown() || 
+  bool hasActivity = (std::abs(io.MouseDelta.x) > 0.5f || std::abs(io.MouseDelta.y) > 0.5f ||
+                      io.MouseDown[0] || io.MouseDown[1] ||
                       m_showSubtitleMenu || m_showAudioMenu || m_showSettingsMenu);
   
-  if (hasActivity) m_lastActivityTime = currentTime;
+  if (hasActivity) {
+    m_lastActivityTime = ImGui::GetTime();
+    m_targetAlpha = 1.0f;
+  } else if (ImGui::GetTime() - m_lastActivityTime > 2.0) {
+    m_targetAlpha = 0.0f;
+  }
 
-  float timeSinceActivity = (float)(currentTime - m_lastActivityTime);
-  float targetAlpha = (timeSinceActivity < 2.5f) ? 1.0f : 0.0f;
-  
-  float speed = targetAlpha > m_controlsAlpha ? 0.15f : 0.05f;
-  m_controlsAlpha += (targetAlpha - m_controlsAlpha) * speed;
+  // Smooth but fast alpha transition
+  if (m_controlsAlpha != m_targetAlpha) {
+    float diff = m_targetAlpha - m_controlsAlpha;
+    m_controlsAlpha += diff * 0.12f;
+    if (std::abs(diff) < 0.01f) m_controlsAlpha = m_targetAlpha;
+  }
 
-  if (m_controlsAlpha < 0.01f) return;
+  if (m_controlsAlpha < 0.02f) return;
 
   drawTopBar();
   drawBottomBar();
@@ -69,12 +75,8 @@ void PlayerOverlay::drawIdleScreen() {
     float cy = wSize.y * 0.38f;
     
     ImVec2 center(wPos.x + wSize.x / 2, wPos.y + cy);
-    for (int i = 3; i >= 0; i--) {
-      float r = 55 + i * 12;
-      int alpha = 15 - i * 3;
-      dl->AddCircleFilled(center, r, IM_COL32(157, 78, 221, alpha), 64);
-    }
-    dl->AddCircle(center, 55, IM_COL32(199, 125, 255, 180), 64, 2.5f);
+    dl->AddCircleFilled(center, 60, IM_COL32(157, 78, 221, 20), 48);
+    dl->AddCircle(center, 55, IM_COL32(199, 125, 255, 180), 48, 2.5f);
     
     ImVec2 p1(center.x - 15, center.y - 22);
     ImVec2 p2(center.x - 15, center.y + 22);
@@ -97,7 +99,6 @@ void PlayerOverlay::drawIdleScreen() {
     float sx = (wSize.x - bw * 2 - gap) / 2;
 
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 25);
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 14));
     
     ImGui::SetCursorPos(ImVec2(sx, cy + 190));
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.616f, 0.306f, 0.867f, 1.0f));
@@ -113,7 +114,7 @@ void PlayerOverlay::drawIdleScreen() {
     if (ImGui::Button(ICON_FA_LINK "  Open URL", ImVec2(bw, bh))) m_showURLDialog = true;
     ImGui::PopStyleColor(3);
     
-    ImGui::PopStyleVar(2);
+    ImGui::PopStyleVar();
 
     const char* hint = "Drop files here to play";
     ImVec2 hs = ImGui::CalcTextSize(hint);
@@ -130,13 +131,13 @@ void PlayerOverlay::drawTopBar() {
   ImVec2 wPos = vp->WorkPos;
   ImVec2 wSize = vp->WorkSize;
 
-  float h = 65;
+  float h = 60;
   ImGui::SetNextWindowPos(wPos);
   ImGui::SetNextWindowSize(ImVec2(wSize.x, h));
 
   ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
                            ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoBringToFrontOnFocus |
-                           ImGuiWindowFlags_NoFocusOnAppearing;
+                           ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
 
   ImGui::PushStyleVar(ImGuiStyleVar_Alpha, m_controlsAlpha);
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
@@ -144,38 +145,32 @@ void PlayerOverlay::drawTopBar() {
 
   if (ImGui::Begin("##TopBar", nullptr, flags)) {
     ImDrawList* dl = ImGui::GetWindowDrawList();
-    
-    ImU32 top = IM_COL32(0, 0, 0, (int)(200 * m_controlsAlpha));
+    ImU32 top = IM_COL32(0, 0, 0, (int)(180 * m_controlsAlpha));
     ImU32 bot = IM_COL32(0, 0, 0, 0);
     dl->AddRectFilledMultiColor(wPos, ImVec2(wPos.x + wSize.x, wPos.y + h), top, top, bot, bot);
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 1, 1, 0.1f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1, 1, 1, 0.2f));
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 20);
 
-    ImGui::SetCursorPos(ImVec2(16, 12));
-    if (ImGui::Button(ICON_FA_ARROW_LEFT, ImVec2(40, 40))) {
-      mpv->command("quit");
-    }
+    ImGui::SetCursorPos(ImVec2(14, 10));
+    if (ImGui::Button(ICON_FA_ARROW_LEFT, ImVec2(40, 40))) mpv->command("quit");
 
     ImGui::SameLine();
-    ImGui::SetCursorPosY(20);
+    ImGui::SetCursorPosY(18);
     
     std::string title = mpv->property("media-title");
     if (title.empty()) title = "PlayTorrioPlayer";
-    
     float maxW = wSize.x - 80;
     ImVec2 ts = ImGui::CalcTextSize(title.c_str());
     if (ts.x > maxW) {
       size_t len = (size_t)(title.length() * maxW / ts.x);
       if (len > 3) title = title.substr(0, len - 3) + "...";
     }
-    
-    ImGui::TextColored(ImVec4(1, 1, 1, 0.92f), "%s", title.c_str());
+    ImGui::TextColored(ImVec4(1, 1, 1, 0.9f), "%s", title.c_str());
 
     ImGui::PopStyleVar();
-    ImGui::PopStyleColor(3);
+    ImGui::PopStyleColor(2);
   }
   ImGui::End();
   ImGui::PopStyleColor();
@@ -187,13 +182,13 @@ void PlayerOverlay::drawBottomBar() {
   ImVec2 wPos = vp->WorkPos;
   ImVec2 wSize = vp->WorkSize;
 
-  float h = 100;
+  float h = 95;
   ImGui::SetNextWindowPos(ImVec2(wPos.x, wPos.y + wSize.y - h));
   ImGui::SetNextWindowSize(ImVec2(wSize.x, h));
 
   ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
                            ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoBringToFrontOnFocus |
-                           ImGuiWindowFlags_NoFocusOnAppearing;
+                           ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
 
   ImGui::PushStyleVar(ImGuiStyleVar_Alpha, m_controlsAlpha);
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
@@ -202,17 +197,14 @@ void PlayerOverlay::drawBottomBar() {
   if (ImGui::Begin("##BottomBar", nullptr, flags)) {
     ImDrawList* dl = ImGui::GetWindowDrawList();
     ImVec2 barPos = ImVec2(wPos.x, wPos.y + wSize.y - h);
-    
     ImU32 top = IM_COL32(0, 0, 0, 0);
-    ImU32 bot = IM_COL32(0, 0, 0, (int)(220 * m_controlsAlpha));
+    ImU32 bot = IM_COL32(0, 0, 0, (int)(200 * m_controlsAlpha));
     dl->AddRectFilledMultiColor(barPos, ImVec2(barPos.x + wSize.x, barPos.y + h), top, top, bot, bot);
 
-    // Progress bar with watched color
-    ImGui::SetCursorPos(ImVec2(24, 15));
+    ImGui::SetCursorPos(ImVec2(20, 12));
     drawProgressBar();
 
-    // All controls on ONE LINE
-    ImGui::SetCursorPos(ImVec2(24, 50));
+    ImGui::SetCursorPos(ImVec2(20, 48));
     drawControlButtons();
   }
   ImGui::End();
@@ -223,10 +215,10 @@ void PlayerOverlay::drawBottomBar() {
 void PlayerOverlay::drawProgressBar() {
   auto vp = ImGui::GetMainViewport();
   ImVec2 wPos = vp->WorkPos;
-  float barWidth = vp->WorkSize.x - 48;
-  float barHeight = 6;
+  float barWidth = vp->WorkSize.x - 40;
+  float barHeight = 5;
   float barY = ImGui::GetCursorScreenPos().y;
-  float barX = wPos.x + 24;
+  float barX = wPos.x + 20;
 
   double duration = mpv->property<double, MPV_FORMAT_DOUBLE>("duration");
   double position = (double)mpv->timePos;
@@ -235,202 +227,151 @@ void PlayerOverlay::drawProgressBar() {
 
   ImDrawList* dl = ImGui::GetWindowDrawList();
   
-  // Background track (unwatched - dark gray)
-  dl->AddRectFilled(
-    ImVec2(barX, barY),
-    ImVec2(barX + barWidth, barY + barHeight),
-    IM_COL32(60, 60, 70, (int)(200 * m_controlsAlpha)),
-    3.0f
-  );
+  // Background (unwatched)
+  dl->AddRectFilled(ImVec2(barX, barY), ImVec2(barX + barWidth, barY + barHeight),
+                    IM_COL32(80, 80, 90, (int)(180 * m_controlsAlpha)), 2.5f);
   
-  // Watched portion (purple)
-  float watchedWidth = barWidth * progress;
-  if (watchedWidth > 0) {
-    dl->AddRectFilled(
-      ImVec2(barX, barY),
-      ImVec2(barX + watchedWidth, barY + barHeight),
-      IM_COL32(180, 100, 255, (int)(255 * m_controlsAlpha)),
-      3.0f
-    );
+  // Watched (purple)
+  float watchedW = barWidth * progress;
+  if (watchedW > 0) {
+    dl->AddRectFilled(ImVec2(barX, barY), ImVec2(barX + watchedW, barY + barHeight),
+                      IM_COL32(180, 100, 255, (int)(255 * m_controlsAlpha)), 2.5f);
   }
   
-  // Scrubber handle (circle)
-  float handleX = barX + watchedWidth;
-  float handleY = barY + barHeight / 2;
-  float handleRadius = 8;
+  // Handle
+  float hx = barX + watchedW;
+  float hy = barY + barHeight / 2;
   
-  // Invisible button for interaction
-  ImGui::SetCursorScreenPos(ImVec2(barX - 5, barY - 10));
-  ImGui::InvisibleButton("##progressBar", ImVec2(barWidth + 10, barHeight + 20));
+  ImGui::SetCursorScreenPos(ImVec2(barX - 8, barY - 12));
+  ImGui::InvisibleButton("##prog", ImVec2(barWidth + 16, barHeight + 24));
   
-  bool hovered = ImGui::IsItemHovered();
-  bool active = ImGui::IsItemActive();
+  bool hov = ImGui::IsItemHovered();
+  bool act = ImGui::IsItemActive();
+  float hr = (hov || act) ? 9.0f : 7.0f;
   
-  if (hovered || active) {
-    handleRadius = 10;
+  if (hov || act) {
+    ImVec2 mp = ImGui::GetMousePos();
+    float hp = std::clamp((mp.x - barX) / barWidth, 0.0f, 1.0f);
+    if (act) { m_seeking = true; m_seekPos = hp; }
     
-    ImVec2 mousePos = ImGui::GetMousePos();
-    float hoverProgress = std::clamp((mousePos.x - barX) / barWidth, 0.0f, 1.0f);
-    
-    if (active) {
-      m_seeking = true;
-      m_seekPos = hoverProgress;
-    }
-    
-    // Tooltip with time
-    double hoverTime = hoverProgress * duration;
-    int hrs = (int)(hoverTime / 3600);
-    int min = (int)((hoverTime - hrs * 3600) / 60);
-    int sec = (int)(hoverTime - hrs * 3600 - min * 60);
-    std::string timeStr = hrs > 0 ? fmt::format("{:02d}:{:02d}:{:02d}", hrs, min, sec)
-                                  : fmt::format("{:02d}:{:02d}", min, sec);
-    ImGui::SetTooltip("%s", timeStr.c_str());
+    double ht = hp * duration;
+    int hh = (int)(ht / 3600), hm = (int)((ht - hh * 3600) / 60), hs = (int)(ht - hh * 3600 - hm * 60);
+    ImGui::SetTooltip("%s", (hh > 0 ? fmt::format("{:02d}:{:02d}:{:02d}", hh, hm, hs) : fmt::format("{:02d}:{:02d}", hm, hs)).c_str());
   }
   
-  if (m_seeking && !active) {
-    double seekTime = m_seekPos * duration;
-    mpv->commandv("seek", std::to_string(seekTime).c_str(), "absolute", nullptr);
+  if (m_seeking && !act) {
+    mpv->commandv("seek", std::to_string(m_seekPos * duration).c_str(), "absolute", nullptr);
     m_seeking = false;
   }
   
-  // Draw handle
-  dl->AddCircleFilled(
-    ImVec2(handleX, handleY),
-    handleRadius,
-    IM_COL32(255, 255, 255, (int)(255 * m_controlsAlpha)),
-    32
-  );
-  
-  // Handle glow when hovered
-  if (hovered || active) {
-    dl->AddCircle(
-      ImVec2(handleX, handleY),
-      handleRadius + 3,
-      IM_COL32(180, 100, 255, (int)(100 * m_controlsAlpha)),
-      32, 2.0f
-    );
+  dl->AddCircleFilled(ImVec2(hx, hy), hr, IM_COL32(255, 255, 255, (int)(255 * m_controlsAlpha)), 24);
+  if (hov || act) {
+    dl->AddCircle(ImVec2(hx, hy), hr + 3, IM_COL32(180, 100, 255, (int)(80 * m_controlsAlpha)), 24, 2.0f);
   }
 }
 
 void PlayerOverlay::drawControlButtons() {
   auto vp = ImGui::GetMainViewport();
   float ww = vp->WorkSize.x;
-  float controlY = ImGui::GetCursorPosY();
-  float btnSize = 40.0f;
-  float playBtnSize = 48.0f;
+  
+  // BIGGER button sizes
+  float bs = 44.0f;
+  float pbs = 52.0f;  // play button
+  float y = ImGui::GetCursorPosY();
+  float centerY = y;  // All buttons same Y
 
   ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-  ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 1, 1, 0.12f));
-  ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.78f, 0.49f, 1.0f, 0.3f));
-  ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 24);
-  ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(6, 0));
+  ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 1, 1, 0.1f));
+  ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.7f, 0.4f, 1.0f, 0.25f));
+  ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 26);
+  ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 0));
 
-  // ALL BUTTONS ON SAME Y LEVEL
-  float centerY = controlY + (playBtnSize - btnSize) / 2;
-
-  // Play/Pause - purple, slightly larger
+  // Play button - purple, bigger
   bool paused = mpv->pause;
-  ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.616f, 0.306f, 0.867f, 0.95f));
-  ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.75f, 0.50f, 0.95f, 1.0f));
-  ImGui::SetCursorPosY(controlY);
-  if (ImGui::Button(paused ? ICON_FA_PLAY : ICON_FA_PAUSE, ImVec2(playBtnSize, playBtnSize))) {
-    mpv->command("cycle pause");
-  }
+  ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.616f, 0.306f, 0.867f, 0.9f));
+  ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.72f, 0.45f, 0.92f, 1.0f));
+  ImGui::SetCursorPosY(centerY);
+  ImGui::SetWindowFontScale(1.3f);
+  if (ImGui::Button(paused ? ICON_FA_PLAY : ICON_FA_PAUSE, ImVec2(pbs, pbs))) mpv->command("cycle pause");
+  ImGui::SetWindowFontScale(1.0f);
   ImGui::PopStyleColor(2);
 
-  // Skip backward - same Y as other buttons
   ImGui::SameLine();
-  ImGui::SetCursorPosY(centerY);
-  if (ImGui::Button(ICON_FA_BACKWARD, ImVec2(btnSize, btnSize))) mpv->command("seek -10");
-  
-  // Skip forward
+  ImGui::SetCursorPosY(centerY + (pbs - bs) / 2);
+  ImGui::SetWindowFontScale(1.2f);
+  if (ImGui::Button(ICON_FA_BACKWARD, ImVec2(bs, bs))) mpv->command("seek -10");
   ImGui::SameLine();
-  ImGui::SetCursorPosY(centerY);
-  if (ImGui::Button(ICON_FA_FORWARD, ImVec2(btnSize, btnSize))) mpv->command("seek 10");
+  ImGui::SetCursorPosY(centerY + (pbs - bs) / 2);
+  if (ImGui::Button(ICON_FA_FORWARD, ImVec2(bs, bs))) mpv->command("seek 10");
+  ImGui::SetWindowFontScale(1.0f);
 
-  // Volume section
+  // Volume
   ImGui::SameLine();
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 8);
-  ImGui::SetCursorPosY(centerY);
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 6);
+  ImGui::SetCursorPosY(centerY + (pbs - bs) / 2);
   
   bool muted = mpv->mute;
   int vol = (int)mpv->volume;
-  const char* volIcon = muted ? ICON_FA_VOLUME_MUTE :
-                        (vol > 60 ? ICON_FA_VOLUME_UP : 
-                         vol > 20 ? ICON_FA_VOLUME_DOWN : ICON_FA_VOLUME_OFF);
-  if (ImGui::Button(volIcon, ImVec2(btnSize, btnSize))) mpv->command("cycle mute");
+  const char* vi = muted ? ICON_FA_VOLUME_MUTE : (vol > 60 ? ICON_FA_VOLUME_UP : vol > 20 ? ICON_FA_VOLUME_DOWN : ICON_FA_VOLUME_OFF);
+  ImGui::SetWindowFontScale(1.2f);
+  if (ImGui::Button(vi, ImVec2(bs, bs))) mpv->command("cycle mute");
+  ImGui::SetWindowFontScale(1.0f);
   
   ImGui::SameLine();
-  ImGui::SetCursorPosY(centerY + (btnSize - 16) / 2);
-  ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(1, 1, 1, 0.1f));
-  ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(1, 1, 1, 0.9f));
-  ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.78f, 0.49f, 1.0f, 1.0f));
+  ImGui::SetCursorPosY(centerY + (pbs - 16) / 2);
+  ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(1, 1, 1, 0.08f));
+  ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(1, 1, 1, 0.85f));
+  ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.7f, 0.4f, 1.0f, 1.0f));
   ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3);
   ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 8);
-  ImGui::SetNextItemWidth(70);
+  ImGui::SetNextItemWidth(65);
   if (ImGui::SliderInt("##vol", &vol, 0, 100, "")) {
     mpv->commandv("set", "volume", std::to_string(vol).c_str(), nullptr);
   }
   ImGui::PopStyleVar(2);
   ImGui::PopStyleColor(3);
 
-  // Time display - same Y level
-  ImGui::SameLine();
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 12);
-  ImGui::SetCursorPosY(centerY + (btnSize - ImGui::GetTextLineHeight()) / 2);
-  
+  // Time - ALL ON SAME LINE, SAME Y
   double dur = mpv->property<double, MPV_FORMAT_DOUBLE>("duration");
   double pos = (double)mpv->timePos;
-
-  auto fmtTime = [](double t) -> std::string {
+  auto fmt = [](double t) -> std::string {
     if (t < 0) t = 0;
-    int h = (int)(t / 3600);
-    int m = (int)((t - h * 3600) / 60);
-    int s = (int)(t - h * 3600 - m * 60);
-    return h > 0 ? fmt::format("{:02d}:{:02d}:{:02d}", h, m, s)
-                 : fmt::format("{:02d}:{:02d}", m, s);
+    int h = (int)(t / 3600), m = (int)((t - h * 3600) / 60), s = (int)(t - h * 3600 - m * 60);
+    return h > 0 ? fmt::format("{:02d}:{:02d}:{:02d}", h, m, s) : fmt::format("{:02d}:{:02d}", m, s);
   };
 
-  ImGui::TextColored(ImVec4(1, 1, 1, 0.9f), "%s", fmtTime(pos).c_str());
-  ImGui::SameLine(0, 4);
-  ImGui::TextColored(ImVec4(1, 1, 1, 0.4f), "/");
-  ImGui::SameLine(0, 4);
-  ImGui::TextColored(ImVec4(1, 1, 1, 0.55f), "%s", fmtTime(dur).c_str());
+  std::string timeStr = fmt(pos) + " / " + fmt(dur);
+  ImGui::SameLine();
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+  ImGui::SetCursorPosY(centerY + (pbs - ImGui::GetTextLineHeight()) / 2);
+  ImGui::TextColored(ImVec4(1, 1, 1, 0.85f), "%s", timeStr.c_str());
 
-  // Right side controls - same Y level
-  float rightX = ww - 200;
+  // Right side - same Y
+  float rx = ww - 195;
   ImGui::SameLine();
-  ImGui::SetCursorPosX(rightX);
-  ImGui::SetCursorPosY(centerY);
+  ImGui::SetCursorPosX(rx);
+  ImGui::SetCursorPosY(centerY + (pbs - bs) / 2);
 
-  if (ImGui::Button(ICON_FA_CLOSED_CAPTIONING, ImVec2(btnSize, btnSize))) {
-    m_showSubtitleMenu = !m_showSubtitleMenu;
-    m_showAudioMenu = false;
-    m_showSettingsMenu = false;
+  ImGui::SetWindowFontScale(1.2f);
+  if (ImGui::Button(ICON_FA_CLOSED_CAPTIONING, ImVec2(bs, bs))) {
+    m_showSubtitleMenu = !m_showSubtitleMenu; m_showAudioMenu = false; m_showSettingsMenu = false;
   }
-  
   ImGui::SameLine();
-  ImGui::SetCursorPosY(centerY);
-  if (ImGui::Button(ICON_FA_HEADPHONES, ImVec2(btnSize, btnSize))) {
-    m_showAudioMenu = !m_showAudioMenu;
-    m_showSubtitleMenu = false;
-    m_showSettingsMenu = false;
+  ImGui::SetCursorPosY(centerY + (pbs - bs) / 2);
+  if (ImGui::Button(ICON_FA_HEADPHONES, ImVec2(bs, bs))) {
+    m_showAudioMenu = !m_showAudioMenu; m_showSubtitleMenu = false; m_showSettingsMenu = false;
   }
-  
   ImGui::SameLine();
-  ImGui::SetCursorPosY(centerY);
-  if (ImGui::Button(ICON_FA_COG, ImVec2(btnSize, btnSize))) {
-    m_showSettingsMenu = !m_showSettingsMenu;
-    m_showSubtitleMenu = false;
-    m_showAudioMenu = false;
+  ImGui::SetCursorPosY(centerY + (pbs - bs) / 2);
+  if (ImGui::Button(ICON_FA_COG, ImVec2(bs, bs))) {
+    m_showSettingsMenu = !m_showSettingsMenu; m_showSubtitleMenu = false; m_showAudioMenu = false;
   }
-  
   ImGui::SameLine();
-  ImGui::SetCursorPosY(centerY);
-  bool fs = mpv->fullscreen;
-  if (ImGui::Button(fs ? ICON_FA_COMPRESS : ICON_FA_EXPAND, ImVec2(btnSize, btnSize))) {
+  ImGui::SetCursorPosY(centerY + (pbs - bs) / 2);
+  if (ImGui::Button(mpv->fullscreen ? ICON_FA_COMPRESS : ICON_FA_EXPAND, ImVec2(bs, bs))) {
     mpv->command("cycle fullscreen");
   }
+  ImGui::SetWindowFontScale(1.0f);
 
   ImGui::PopStyleVar(2);
   ImGui::PopStyleColor(3);
@@ -439,61 +380,44 @@ void PlayerOverlay::drawControlButtons() {
 
 void PlayerOverlay::drawSubtitleMenu() {
   auto vp = ImGui::GetMainViewport();
-  ImVec2 wPos = vp->WorkPos;
-  ImVec2 wSize = vp->WorkSize;
-
-  float mw = 280, mh = 320;
-  ImGui::SetNextWindowPos(ImVec2(wPos.x + wSize.x - mw - 24, wPos.y + wSize.y - mh - 120));
+  float mw = 280, mh = 300;
+  ImGui::SetNextWindowPos(ImVec2(vp->WorkPos.x + vp->WorkSize.x - mw - 20, vp->WorkPos.y + vp->WorkSize.y - mh - 110));
   ImGui::SetNextWindowSize(ImVec2(mw, mh));
 
-  ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.05f, 0.02f, 0.10f, 0.96f));
-  ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.78f, 0.49f, 1.0f, 0.25f));
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12);
+  ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.04f, 0.02f, 0.08f, 0.95f));
+  ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.6f, 0.35f, 0.85f, 0.2f));
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10);
   ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 1);
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 14));
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(14, 12));
 
-  if (ImGui::Begin("##SubMenu", &m_showSubtitleMenu, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
-    ImGui::TextColored(ImVec4(0.78f, 0.49f, 1.0f, 1.0f), ICON_FA_CLOSED_CAPTIONING "  Subtitles");
-    ImGui::SameLine(mw - 44);
+  if (ImGui::Begin("##Sub", &m_showSubtitleMenu, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
+    ImGui::TextColored(ImVec4(0.75f, 0.45f, 1.0f, 1.0f), ICON_FA_CLOSED_CAPTIONING "  Subtitles");
+    ImGui::SameLine(mw - 40);
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-    if (ImGui::Button(ICON_FA_TIMES "##cs", ImVec2(24, 24))) m_showSubtitleMenu = false;
+    if (ImGui::Button(ICON_FA_TIMES "##cs", ImVec2(22, 22))) m_showSubtitleMenu = false;
     ImGui::PopStyleColor();
-
-    ImGui::Spacing();
     ImGui::Separator();
-    ImGui::Spacing();
 
-    ImGui::BeginChild("##SubList", ImVec2(mw - 32, 140), false);
+    ImGui::BeginChild("##SL", ImVec2(mw - 28, 130), false);
     std::string sid = mpv->sid;
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
-    ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.78f, 0.49f, 1.0f, 0.25f));
-
-    bool hasSubs = false;
+    ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.6f, 0.35f, 0.85f, 0.2f));
     for (auto &t : mpv->tracks) {
       if (t.type != "sub") continue;
-      hasSubs = true;
-      std::string name = t.title.empty() ? fmt::format("Track {}", t.id) : t.title;
-      if (!t.lang.empty()) name += fmt::format(" [{}]", t.lang);
-      if (ImGui::Selectable(name.c_str(), sid == std::to_string(t.id), 0, ImVec2(0, 28))) {
+      std::string n = t.title.empty() ? fmt::format("Track {}", t.id) : t.title;
+      if (!t.lang.empty()) n += " [" + t.lang + "]";
+      if (ImGui::Selectable(n.c_str(), sid == std::to_string(t.id), 0, ImVec2(0, 24)))
         mpv->property<int64_t, MPV_FORMAT_INT64>("sid", t.id);
-      }
     }
-    if (ImGui::Selectable("Disable", sid == "no", 0, ImVec2(0, 28))) {
+    if (ImGui::Selectable("Disable", sid == "no", 0, ImVec2(0, 24)))
       mpv->commandv("set", "sid", "no", nullptr);
-    }
     ImGui::PopStyleColor();
-    ImGui::PopStyleVar();
-    if (!hasSubs) ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "No subtitles");
     ImGui::EndChild();
 
-    ImGui::Spacing();
     ImGui::Separator();
-    ImGui::Spacing();
-
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.616f, 0.306f, 0.867f, 0.85f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.75f, 0.50f, 0.95f, 1.0f));
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
-    if (ImGui::Button(ICON_FA_UPLOAD "  Load", ImVec2(mw - 32, 32))) openSubtitleFile();
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.25f, 0.75f, 0.8f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.65f, 0.4f, 0.9f, 1.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5);
+    if (ImGui::Button(ICON_FA_UPLOAD " Load", ImVec2(mw - 28, 28))) openSubtitleFile();
     ImGui::PopStyleVar();
     ImGui::PopStyleColor(2);
   }
@@ -504,48 +428,35 @@ void PlayerOverlay::drawSubtitleMenu() {
 
 void PlayerOverlay::drawAudioMenu() {
   auto vp = ImGui::GetMainViewport();
-  ImVec2 wPos = vp->WorkPos;
-  ImVec2 wSize = vp->WorkSize;
-
-  float mw = 280, mh = 240;
-  ImGui::SetNextWindowPos(ImVec2(wPos.x + wSize.x - mw - 24, wPos.y + wSize.y - mh - 120));
+  float mw = 280, mh = 220;
+  ImGui::SetNextWindowPos(ImVec2(vp->WorkPos.x + vp->WorkSize.x - mw - 20, vp->WorkPos.y + vp->WorkSize.y - mh - 110));
   ImGui::SetNextWindowSize(ImVec2(mw, mh));
 
-  ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.05f, 0.02f, 0.10f, 0.96f));
-  ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.78f, 0.49f, 1.0f, 0.25f));
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12);
+  ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.04f, 0.02f, 0.08f, 0.95f));
+  ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.6f, 0.35f, 0.85f, 0.2f));
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10);
   ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 1);
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 14));
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(14, 12));
 
-  if (ImGui::Begin("##AudioMenu", &m_showAudioMenu, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
-    ImGui::TextColored(ImVec4(0.78f, 0.49f, 1.0f, 1.0f), ICON_FA_HEADPHONES "  Audio");
-    ImGui::SameLine(mw - 44);
+  if (ImGui::Begin("##Aud", &m_showAudioMenu, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
+    ImGui::TextColored(ImVec4(0.75f, 0.45f, 1.0f, 1.0f), ICON_FA_HEADPHONES "  Audio");
+    ImGui::SameLine(mw - 40);
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-    if (ImGui::Button(ICON_FA_TIMES "##ca", ImVec2(24, 24))) m_showAudioMenu = false;
+    if (ImGui::Button(ICON_FA_TIMES "##ca", ImVec2(22, 22))) m_showAudioMenu = false;
     ImGui::PopStyleColor();
-
-    ImGui::Spacing();
     ImGui::Separator();
-    ImGui::Spacing();
 
-    ImGui::BeginChild("##AudioList", ImVec2(mw - 32, mh - 70), false);
+    ImGui::BeginChild("##AL", ImVec2(mw - 28, mh - 60), false);
     std::string aid = mpv->aid;
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
-    ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.78f, 0.49f, 1.0f, 0.25f));
-
-    bool hasAudio = false;
+    ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.6f, 0.35f, 0.85f, 0.2f));
     for (auto &t : mpv->tracks) {
       if (t.type != "audio") continue;
-      hasAudio = true;
-      std::string name = t.title.empty() ? fmt::format("Track {}", t.id) : t.title;
-      if (!t.lang.empty()) name += fmt::format(" [{}]", t.lang);
-      if (ImGui::Selectable(name.c_str(), aid == std::to_string(t.id), 0, ImVec2(0, 28))) {
+      std::string n = t.title.empty() ? fmt::format("Track {}", t.id) : t.title;
+      if (!t.lang.empty()) n += " [" + t.lang + "]";
+      if (ImGui::Selectable(n.c_str(), aid == std::to_string(t.id), 0, ImVec2(0, 24)))
         mpv->property<int64_t, MPV_FORMAT_INT64>("aid", t.id);
-      }
     }
     ImGui::PopStyleColor();
-    ImGui::PopStyleVar();
-    if (!hasAudio) ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "No audio tracks");
     ImGui::EndChild();
   }
   ImGui::End();
@@ -555,46 +466,94 @@ void PlayerOverlay::drawAudioMenu() {
 
 void PlayerOverlay::drawSettingsMenu() {
   auto vp = ImGui::GetMainViewport();
-  ImVec2 wPos = vp->WorkPos;
-  ImVec2 wSize = vp->WorkSize;
-
-  float mw = 280, mh = 220;
-  ImGui::SetNextWindowPos(ImVec2(wPos.x + wSize.x - mw - 24, wPos.y + wSize.y - mh - 120));
+  float mw = 300, mh = 340;
+  ImGui::SetNextWindowPos(ImVec2(vp->WorkPos.x + vp->WorkSize.x - mw - 20, vp->WorkPos.y + vp->WorkSize.y - mh - 110));
   ImGui::SetNextWindowSize(ImVec2(mw, mh));
 
-  ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.05f, 0.02f, 0.10f, 0.96f));
-  ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.78f, 0.49f, 1.0f, 0.25f));
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12);
+  ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.04f, 0.02f, 0.08f, 0.95f));
+  ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.6f, 0.35f, 0.85f, 0.2f));
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10);
   ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 1);
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 14));
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(14, 12));
 
-  if (ImGui::Begin("##SetMenu", &m_showSettingsMenu, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
-    ImGui::TextColored(ImVec4(0.78f, 0.49f, 1.0f, 1.0f), ICON_FA_COG "  Playback");
-    ImGui::SameLine(mw - 44);
+  if (ImGui::Begin("##Set", &m_showSettingsMenu, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
+    ImGui::TextColored(ImVec4(0.75f, 0.45f, 1.0f, 1.0f), ICON_FA_COG "  Settings");
+    ImGui::SameLine(mw - 40);
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-    if (ImGui::Button(ICON_FA_TIMES "##cset", ImVec2(24, 24))) m_showSettingsMenu = false;
+    if (ImGui::Button(ICON_FA_TIMES "##cset", ImVec2(22, 22))) m_showSettingsMenu = false;
     ImGui::PopStyleColor();
-
-    ImGui::Spacing();
     ImGui::Separator();
     ImGui::Spacing();
 
+    // Speed
     ImGui::Text("Speed");
-    ImGui::SameLine(70);
+    ImGui::SameLine(80);
     float spd = (float)mpv->property<double, MPV_FORMAT_DOUBLE>("speed");
-    ImGui::SetNextItemWidth(mw - 100);
-    if (ImGui::SliderFloat("##spd", &spd, 0.25f, 4.0f, "%.2fx")) {
+    ImGui::SetNextItemWidth(mw - 110);
+    if (ImGui::SliderFloat("##spd", &spd, 0.25f, 4.0f, "%.2fx"))
       mpv->commandv("set", "speed", fmt::format("{:.2f}", spd).c_str(), nullptr);
-    }
 
     ImGui::Spacing();
+
+    // Aspect Ratio
+    ImGui::Text("Aspect");
+    ImGui::SameLine(80);
+    const char* aspects[] = {"Auto", "16:9", "4:3", "21:9", "1:1"};
+    static int asp = 0;
+    ImGui::SetNextItemWidth(mw - 110);
+    if (ImGui::Combo("##asp", &asp, aspects, IM_ARRAYSIZE(aspects)))
+      mpv->commandv("set", "video-aspect-override", asp == 0 ? "-1" : aspects[asp], nullptr);
+
+    ImGui::Spacing();
+
+    // Hardware Decoding
+    ImGui::Text("HW Decode");
+    ImGui::SameLine(80);
+    std::string hwdec = mpv->property("hwdec");
+    bool hwOn = hwdec != "no";
+    if (ImGui::Checkbox("##hw", &hwOn))
+      mpv->commandv("set", "hwdec", hwOn ? "auto" : "no", nullptr);
+    ImGui::SameLine();
+    ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), hwOn ? "(faster)" : "(software)");
+
+    ImGui::Spacing();
+
+    // Loop
     ImGui::Text("Loop");
-    ImGui::SameLine(70);
+    ImGui::SameLine(80);
     std::string lf = mpv->property("loop-file");
     bool loop = lf == "inf";
-    if (ImGui::Checkbox("##loop", &loop)) {
+    if (ImGui::Checkbox("##loop", &loop))
       mpv->commandv("set", "loop-file", loop ? "inf" : "no", nullptr);
-    }
+
+    ImGui::Spacing();
+
+    // Cache/Buffer for streaming
+    ImGui::Text("Cache");
+    ImGui::SameLine(80);
+    static int cache = 150;  // MB
+    ImGui::SetNextItemWidth(mw - 110);
+    if (ImGui::SliderInt("##cache", &cache, 16, 512, "%d MB"))
+      mpv->commandv("set", "demuxer-max-bytes", fmt::format("{}MiB", cache).c_str(), nullptr);
+
+    ImGui::Spacing();
+
+    // FPS display
+    ImGui::Text("Show FPS");
+    ImGui::SameLine(80);
+    static bool showFps = false;
+    if (ImGui::Checkbox("##fps", &showFps))
+      mpv->commandv("set", "osd-level", showFps ? "3" : "0", nullptr);
+
+    ImGui::Spacing();
+
+    // Deinterlace
+    ImGui::Text("Deinterlace");
+    ImGui::SameLine(80);
+    std::string deint = mpv->property("deinterlace");
+    bool deintOn = deint == "yes";
+    if (ImGui::Checkbox("##deint", &deintOn))
+      mpv->commandv("set", "deinterlace", deintOn ? "yes" : "no", nullptr);
   }
   ImGui::End();
   ImGui::PopStyleVar(3);
@@ -607,9 +566,8 @@ void PlayerOverlay::openSubtitleFile() {
       {"Subtitle Files", "srt,ass,idx,sub,sup,ttxt,txt,ssa,smi,mks,vtt"},
   };
   mpv->command("set pause yes");
-  if (auto res = NFD::openFile(filters)) {
+  if (auto res = NFD::openFile(filters))
     mpv->commandv("sub-add", res->string().c_str(), "select", nullptr);
-  }
   mpv->command("set pause no");
 }
 
@@ -619,68 +577,56 @@ void PlayerOverlay::openMediaFile() {
       {"Audio Files", "mp3,flac,wav,aac,ogg,m4a,wma,opus"},
       {"All Files", "*"},
   };
-  if (auto res = NFD::openFile(filters)) {
+  if (auto res = NFD::openFile(filters))
     mpv->commandv("loadfile", res->string().c_str(), nullptr);
-  }
 }
 
 void PlayerOverlay::openURL() {
   ImGui::OpenPopup("Open URL##PTP");
-
   ImVec2 ws = ImGui::GetMainViewport()->WorkSize;
-  ImGui::SetNextWindowSize(ImVec2(std::min(ws.x * 0.4f, 380.0f), 0), ImGuiCond_Always);
+  ImGui::SetNextWindowSize(ImVec2(std::min(ws.x * 0.4f, 360.0f), 0), ImGuiCond_Always);
   ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetWorkCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-  ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.05f, 0.02f, 0.10f, 0.98f));
-  ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.78f, 0.49f, 1.0f, 0.3f));
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12);
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(20, 16));
+  ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.04f, 0.02f, 0.08f, 0.97f));
+  ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.6f, 0.35f, 0.85f, 0.25f));
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10);
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(18, 14));
   ImGui::PushStyleVar(ImGuiStyleVar_PopupBorderSize, 1);
 
   if (ImGui::BeginPopupModal("Open URL##PTP", &m_showURLDialog, ImGuiWindowFlags_NoResize)) {
-    ImGui::TextColored(ImVec4(0.78f, 0.49f, 1.0f, 1.0f), ICON_FA_LINK "  Stream URL");
+    ImGui::TextColored(ImVec4(0.75f, 0.45f, 1.0f, 1.0f), ICON_FA_LINK "  Stream URL");
     ImGui::Spacing();
 
     static char url[1024] = {0};
-
-    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.08f, 0.04f, 0.15f, 1.0f));
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 8));
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.06f, 0.03f, 0.12f, 1.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5);
     ImGui::SetNextItemWidth(-1);
     bool enter = ImGui::InputTextWithHint("##url", "https://...", url, IM_ARRAYSIZE(url), ImGuiInputTextFlags_EnterReturnsTrue);
-    ImGui::PopStyleVar(2);
+    ImGui::PopStyleVar();
     ImGui::PopStyleColor();
-
     ImGui::Spacing();
 
-    float bw = 90;
-    ImGui::SetCursorPosX(ImGui::GetContentRegionAvail().x - bw * 2 - 8);
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6);
+    float bw = 85;
+    ImGui::SetCursorPosX(ImGui::GetContentRegionAvail().x - bw * 2 - 6);
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5);
 
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.12f, 0.08f, 0.20f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.20f, 0.14f, 0.32f, 1.0f));
-    if (ImGui::Button("Cancel", ImVec2(bw, 32))) {
-      m_showURLDialog = false;
-      url[0] = '\0';
-      ImGui::CloseCurrentPopup();
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.06f, 0.18f, 1.0f));
+    if (ImGui::Button("Cancel", ImVec2(bw, 30))) {
+      m_showURLDialog = false; url[0] = '\0'; ImGui::CloseCurrentPopup();
     }
-    ImGui::PopStyleColor(2);
+    ImGui::PopStyleColor();
 
-    ImGui::SameLine(0, 8);
+    ImGui::SameLine(0, 6);
     bool ok = url[0] != '\0';
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.616f, 0.306f, 0.867f, ok ? 1.0f : 0.4f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.75f, 0.50f, 0.95f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.25f, 0.75f, ok ? 1.0f : 0.4f));
     if (!ok) ImGui::BeginDisabled();
-    if (ImGui::Button(ICON_FA_PLAY " Play", ImVec2(bw, 32)) || (enter && ok)) {
+    if (ImGui::Button(ICON_FA_PLAY " Play", ImVec2(bw, 30)) || (enter && ok)) {
       mpv->commandv("loadfile", url, nullptr);
-      m_showURLDialog = false;
-      url[0] = '\0';
-      ImGui::CloseCurrentPopup();
+      m_showURLDialog = false; url[0] = '\0'; ImGui::CloseCurrentPopup();
     }
     if (!ok) ImGui::EndDisabled();
-    ImGui::PopStyleColor(2);
+    ImGui::PopStyleColor();
     ImGui::PopStyleVar();
-
     ImGui::EndPopup();
   }
   ImGui::PopStyleVar(3);

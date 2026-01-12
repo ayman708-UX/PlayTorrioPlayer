@@ -26,7 +26,6 @@ class PlayerOverlay : public View {
   void drawBottomBar();
   void drawProgressBar();
   void drawControlButtons();
-  void drawVolumeControl(float y, float btnSize);
   void drawSubtitleMenu();
   void drawAudioMenu();
   void drawSettingsMenu();
@@ -38,6 +37,7 @@ class PlayerOverlay : public View {
   bool m_visible = true;
   bool m_showControls = true;
   float m_controlsAlpha = 1.0f;
+  float m_targetAlpha = 1.0f;
   double m_lastActivityTime = 0;
 
   bool m_showSubtitleMenu = false;
