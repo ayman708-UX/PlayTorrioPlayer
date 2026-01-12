@@ -249,7 +249,6 @@ void Player::renderVideo() {
 
   mpv->render(width, height, fbo, false);
 }
-}
 
 void Player::initGui() {
   ContextGuard guard(this);
