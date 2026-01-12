@@ -4,7 +4,7 @@
 
 # PlayTorrio Player
 
-PlayTorrio Player is a Cross-Platform Desktop Media Player, built on top of [mpv](https://mpv.io) and [ImGui](https://github.com/ocornut/imgui).
+PlayTorrio Player is a Cross-Platform Desktop Media Player, built on top of [IMPlay](https://github.com/tsl0922/ImPlay) [mpv](https://mpv.io) and [ImGui](https://github.com/ocornut/imgui).
 
 PlayTorrio Player aims to be mpv compatible, which means almost all mpv features from the [manual](https://mpv.io/manual) are (or will be) available.
 
