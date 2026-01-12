@@ -6,7 +6,7 @@ include(GetGitVersion)
 
 get_git_version(GIT_VERSION SEM_VER)
 
-project(ImPlay VERSION "${SEM_VER}")
+project(PlayTorrio VERSION "${SEM_VER}")
 set(CMAKE_CXX_STANDARD 20)
 
 include(CMakeDependentOption)
@@ -36,7 +36,7 @@ if(USE_XDG_PORTAL)
   set(NFD_PORTAL ON CACHE BOOL "Use xdg-desktop-portal for file dialogs on Linux" FORCE)
 endif()
 
-set(LIBROMFS_PROJECT_NAME ${PROJECT_NAME})
+set(LIBROMFS_PROJECT_NAME "ImPlay")
 set(LIBROMFS_RESOURCE_LOCATION "${CMAKE_SOURCE_DIR}/resources/romfs")
 set(OPENGL_LIBRARIES "glad")
 

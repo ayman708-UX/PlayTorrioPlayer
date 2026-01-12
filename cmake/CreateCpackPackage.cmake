@@ -11,7 +11,7 @@ function(get_mpv_win_bin name)
     UPDATE_COMMAND ""
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/mpv.com ${CMAKE_BINARY_DIR}/ImPlay.com
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/mpv.com ${CMAKE_BINARY_DIR}/PlayTorrio.com
             COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/doc ${CMAKE_BINARY_DIR}/doc
   )
 endfunction()
@@ -55,7 +55,7 @@ macro(prepare_package)
     target_link_options(${PROJECT_NAME} PRIVATE -mwindows)
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
     install(DIRECTORY ${CMAKE_BINARY_DIR}/doc DESTINATION .)
-    install(FILES ${CMAKE_BINARY_DIR}/ImPlay.com DESTINATION .)
+    install(FILES ${CMAKE_BINARY_DIR}/PlayTorrio.com DESTINATION .)
     install(FILES ${CMAKE_BINARY_DIR}/yt-dlp.exe DESTINATION .)
     
     if(USE_OPENGL_ES3)
@@ -66,7 +66,7 @@ macro(prepare_package)
     endif()
     
     install(CODE [[file(GET_RUNTIME_DEPENDENCIES
-      EXECUTABLES $<TARGET_FILE:ImPlay>
+      EXECUTABLES $<TARGET_FILE:PlayTorrio>
       RESOLVED_DEPENDENCIES_VAR _r_deps
       UNRESOLVED_DEPENDENCIES_VAR _u_deps
       DIRECTORIES $ENV{PATH}
@@ -102,19 +102,21 @@ macro(prepare_package)
     install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION .)
     
     set(APP "\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.app")
-    set(DIRS "/usr/local/lib" "/lib" "/usr/lib")
+    set(DIRS "/opt/homebrew/lib" "/usr/local/lib" "/lib" "/usr/lib")
     file(GLOB_RECURSE LIBS "${APP}/Contents/MacOS/*.dylib")
     install(CODE "include(BundleUtilities)
-    fixup_bundle(\"${APP}\" \"${LIBS}\" \"${DIRS}\" IGNORE_ITEM Python)
+    set(BU_CHMOD_BUNDLE_ITEMS TRUE)
+    fixup_bundle(\"${APP}\" \"${LIBS}\" \"${DIRS}\" IGNORE_ITEM \"Python;libjxl_cms\")
     execute_process(COMMAND ${CMAKE_INSTALL_NAME_TOOL} -add_rpath
       \"@executable_path/../Frameworks/\"
       \"${APP}/Contents/MacOS/${PROJECT_NAME}\"
+      ERROR_QUIET
     )")
   else()
     include(GNUInstallDirs)
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-    install(FILES ${PROJECT_SOURCE_DIR}/resources/linux/implay.desktop DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications)
-    install(FILES ${PROJECT_SOURCE_DIR}/resources/icon.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps RENAME implay.png)
+    install(FILES ${PROJECT_SOURCE_DIR}/resources/linux/implay.desktop DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications RENAME playtorrio.desktop)
+    install(FILES ${PROJECT_SOURCE_DIR}/resources/icon.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps RENAME playtorrio.png)
   endif()
 endmacro()
 
@@ -125,14 +127,14 @@ macro(create_package)
     set(CPACK_WIX_PRODUCT_ICON "${PROJECT_SOURCE_DIR}/resources/win32/app.ico")
     set(CPACK_WIX_UPGRADE_GUID "D7438EFE-D62A-4E94-A024-6E71AE1A7A63")
     set(CPACK_WIX_PROGRAM_MENU_FOLDER ".")
-    set_property(INSTALL "$<TARGET_FILE_NAME:ImPlay>" PROPERTY CPACK_START_MENU_SHORTCUTS "ImPlay")
+    set_property(INSTALL "$<TARGET_FILE_NAME:PlayTorrio>" PROPERTY CPACK_START_MENU_SHORTCUTS "PlayTorrio")
   elseif (APPLE)
     set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
     set(MACOSX_BUNDLE_ICON_FILE "AppIcon")
     set(MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
     set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}")
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.tsl0922.ImPlay")
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.playtorrio.player")
     set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 2022 tsl0922. All rights reserved." )
 
     set(CPACK_GENERATOR DragNDrop)

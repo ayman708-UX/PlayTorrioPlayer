@@ -7,6 +7,9 @@ on:
   workflow_call:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   linux:
     runs-on: ubuntu-22.04
@@ -33,13 +36,15 @@ jobs:
           curl -LO https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
           chmod +x linuxdeploy-x86_64.AppImage linuxdeploy-plugin-gtk.sh
           ./linuxdeploy-x86_64.AppImage --appdir $(pwd)/AppDir --plugin gtk --output appimage
-          mv ImPlay*.AppImage $(echo ImPlay-*.deb | sed 's/deb/AppImage/')
+          # Rename outputs to PlayTorrio
+          for f in PlayTorrio-*.deb; do mv "$f" "${f/PlayTorrio-/PlayTorrio-linux-}"; done 2>/dev/null || true
+          for f in PlayTorrio-*.AppImage; do mv "$f" "${f/PlayTorrio-/PlayTorrio-linux-}"; done 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         with:
           name: PlayTorrio-linux
           path: |
-            build/ImPlay-*.AppImage
-            build/ImPlay-*.deb
+            build/PlayTorrio-*.AppImage
+            build/PlayTorrio-*.deb
   macos:
     runs-on: macos-14
     name: macOS
@@ -66,24 +71,24 @@ jobs:
           VERSION=$(git describe --tags --always)
           
           # Create app bundle structure
-          mkdir -p ImPlay.app/Contents/MacOS
-          mkdir -p ImPlay.app/Contents/Frameworks
-          mkdir -p ImPlay.app/Contents/Resources
+          mkdir -p PlayTorrio.app/Contents/MacOS
+          mkdir -p PlayTorrio.app/Contents/Frameworks
+          mkdir -p PlayTorrio.app/Contents/Resources
           
           # Copy executable
-          cp ImPlay ImPlay.app/Contents/MacOS/
+          cp PlayTorrio PlayTorrio.app/Contents/MacOS/
           
           # Copy icon
-          cp ../resources/macos/AppIcon.icns ImPlay.app/Contents/Resources/ 2>/dev/null || true
+          cp ../resources/macos/AppIcon.icns PlayTorrio.app/Contents/Resources/ 2>/dev/null || true
           
           # Create Info.plist
-          cat > ImPlay.app/Contents/Info.plist << EOF
+          cat > PlayTorrio.app/Contents/Info.plist << EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
           <dict>
             <key>CFBundleExecutable</key>
-            <string>ImPlay</string>
+            <string>PlayTorrio</string>
             <key>CFBundleIconFile</key>
             <string>AppIcon</string>
             <key>CFBundleIdentifier</key>
@@ -106,14 +111,14 @@ jobs:
           
           # Use dylibbundler to bundle all dylib dependencies
           # This handles all transitive dependencies including libjxl_cms
-          dylibbundler -od -b -x ./ImPlay.app/Contents/MacOS/ImPlay \
-            -d ./ImPlay.app/Contents/Frameworks/ \
+          dylibbundler -od -b -x ./PlayTorrio.app/Contents/MacOS/PlayTorrio \
+            -d ./PlayTorrio.app/Contents/Frameworks/ \
             -p @executable_path/../Frameworks/ \
             -s /opt/homebrew/lib \
             -s /usr/local/lib
           
           # Ad-hoc code sign the app
-          codesign --force --deep --sign - ImPlay.app
+          codesign --force --deep --sign - PlayTorrio.app
       - name: Create DMG
         run: |
           cd build
@@ -126,19 +131,19 @@ jobs:
             --window-size 600 400 \
             --icon-size 100 \
             --app-drop-link 450 185 \
-            "ImPlay-${VERSION}.dmg" \
-            "ImPlay.app" || true
+            "PlayTorrio-macOS-${VERSION}.dmg" \
+            "PlayTorrio.app" || true
           
           # Fallback: create zip if DMG creation fails
-          if [ ! -f ImPlay-*.dmg ]; then
-            zip -r "ImPlay-${VERSION}.zip" ImPlay.app
+          if [ ! -f PlayTorrio-*.dmg ]; then
+            zip -r "PlayTorrio-macOS-${VERSION}.zip" PlayTorrio.app
           fi
       - uses: actions/upload-artifact@v4
         with:
           name: PlayTorrio-macOS
           path: |
-            build/ImPlay-*.dmg
-            build/ImPlay-*.zip
+            build/PlayTorrio-*.dmg
+            build/PlayTorrio-*.zip
   win:
     runs-on: windows-latest
     name: Windows
@@ -168,27 +173,26 @@ jobs:
           mkdir build && cd build
           cmake -DCMAKE_BUILD_TYPE=RELEASE -DUSE_PATCHED_GLFW=ON -DUSE_OPENGL_ES3=ON -DCREATE_PACKAGE=ON -G Ninja ..
           cmake --build . --target package
+          # Rename outputs to PlayTorrio
+          for f in PlayTorrio-*.msi; do mv "$f" "${f/PlayTorrio-/PlayTorrio-win64-}" 2>/dev/null; done || true
+          for f in PlayTorrio-*.zip; do mv "$f" "${f/PlayTorrio-/PlayTorrio-win64-}" 2>/dev/null; done || true
       - uses: actions/upload-artifact@v4
         with:
           name: PlayTorrio-win64
           path: |
-            build/ImPlay-*.msi
-            build/ImPlay-*.zip
+            build/PlayTorrio-*.msi
+            build/PlayTorrio-*.zip
   publish:
     needs: [linux, macos, win]
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
-      - run: |
-          for f in PlayTorrio-*/*; do
-            mv "$f" "${f/ImPlay-/PlayTorrio-}"
-          done
-      - uses: rickstaa/action-create-tag@v1
-        with:
-          tag: continuous
-          force_push_tag: true
+      - name: List artifacts
+        run: find . -name "PlayTorrio-*" -type f
       - uses: ncipollo/release-action@v1
         with:
           commit: ${{ github.sha }}
@@ -208,7 +212,7 @@ jobs:
             - Zip
               - Download the windows zip
               - Extract the zip
-              - Run `ImPlay.exe`
+              - Run `PlayTorrio.exe`
             ## macOS
             - Download the dmg file
             - Double click the dmg to show it's contents
