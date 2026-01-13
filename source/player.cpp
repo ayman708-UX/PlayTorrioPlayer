@@ -158,21 +158,33 @@ void Player::setExternalSubtitleProviders(const std::vector<CmdSubtitleProvider>
 }
 
 void Player::draw() {
+  static bool firstDraw = true;
+  if (firstDraw) fmt::print("[LOG] draw() starting, idle={}\n", idle);
+  
   drawVideo();
+  if (firstDraw) fmt::print("[LOG] draw: drawVideo() done\n");
 
   // Draw the PlayTorrioPlayer overlay
   if (!idle) {
     // Playing - show ONLY the PlayTorrioPlayer controls overlay
     // No old ImPlay UI elements during playback
+    if (firstDraw) fmt::print("[LOG] draw: calling playerOverlay->draw()\n");
     playerOverlay->draw();
   } else {
     // Idle - show PlayTorrioPlayer welcome screen
+    if (firstDraw) fmt::print("[LOG] draw: calling playerOverlay->drawIdleScreen()\n");
     playerOverlay->drawIdleScreen();
   }
+  if (firstDraw) fmt::print("[LOG] draw: overlay done\n");
 
   // Only draw dialogs (not the old UI views)
   drawOpenURL();
   drawDialog();
+  
+  if (firstDraw) {
+    fmt::print("[LOG] draw() complete\n");
+    firstDraw = false;
+  }
 }
 
 void Player::drawVideo() {
@@ -190,18 +202,22 @@ void Player::drawVideo() {
 
 void Player::render() {
   static bool firstRender = true;
+  static int renderCount = 0;
+  renderCount++;
+  
   if (firstRender) {
     fmt::print("[LOG] Player::render() first call\n");
-    firstRender = false;
   }
   
   auto g = ImGui::GetCurrentContext();
   if (g != nullptr && g->WithinFrameScope) return;
 
   {
+    if (firstRender) fmt::print("[LOG] render: ContextGuard 1\n");
     ContextGuard guard(this);
 
     if (idle) {
+      if (firstRender) fmt::print("[LOG] render: clearing FBO (idle)\n");
       glBindFramebuffer(GL_FRAMEBUFFER, fbo);
       glClearColor(0, 0, 0, 1);
       glClear(GL_COLOR_BUFFER_BIT);
@@ -212,10 +228,13 @@ void Player::render() {
       loadFonts();
       config->FontReload = false;
     }
+    if (firstRender) fmt::print("[LOG] render: ImGui_ImplOpenGL3_NewFrame\n");
     ImGui_ImplOpenGL3_NewFrame();
   }
 
+  if (firstRender) fmt::print("[LOG] render: BackendNewFrame\n");
   BackendNewFrame();
+  if (firstRender) fmt::print("[LOG] render: ImGui::NewFrame\n");
   ImGui::NewFrame();
 
 #if defined(_WIN32) && defined(IMGUI_HAS_VIEWPORT)
@@ -225,7 +244,9 @@ void Player::render() {
   }
 #endif
 
+  if (firstRender) fmt::print("[LOG] render: calling draw()\n");
   draw();
+  if (firstRender) fmt::print("[LOG] render: draw() returned\n");
 
 #if defined(_WIN32) && defined(IMGUI_HAS_VIEWPORT)
   if (config->Data.Mpv.UseWid && mpv->ontop) {
@@ -239,9 +260,11 @@ void Player::render() {
   }
 #endif
 
+  if (firstRender) fmt::print("[LOG] render: ImGui::Render\n");
   ImGui::Render();
 
   {
+    if (firstRender) fmt::print("[LOG] render: ContextGuard 2\n");
     ContextGuard guard(this);
     GetFramebufferSize(&width, &height);
     glViewport(0, 0, width, height);
@@ -249,10 +272,12 @@ void Player::render() {
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    if (firstRender) fmt::print("[LOG] render: ImGui_ImplOpenGL3_RenderDrawData\n");
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     
     // VSync enabled - mpv handles frame timing via video-sync=display-resample
     SetSwapInterval(1);
+    if (firstRender) fmt::print("[LOG] render: SwapBuffers\n");
     SwapBuffers();
     
     // Report swap to mpv for proper frame timing
@@ -262,10 +287,16 @@ void Player::render() {
 
 #ifdef IMGUI_HAS_VIEWPORT
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+      if (firstRender) fmt::print("[LOG] render: UpdatePlatformWindows\n");
       ImGui::UpdatePlatformWindows();
       ImGui::RenderPlatformWindowsDefault();
     }
 #endif
+  }
+  
+  if (firstRender) {
+    fmt::print("[LOG] render: first frame complete!\n");
+    firstRender = false;
   }
 }
 
