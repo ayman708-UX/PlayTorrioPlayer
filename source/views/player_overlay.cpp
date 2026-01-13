@@ -17,6 +17,7 @@ PlayerOverlay::PlayerOverlay(Config *config, Mpv *mpv) : View(config, mpv) {
 
 void PlayerOverlay::draw() {
   if (!m_visible) return;
+  if (!mpv) return;  // Safety check
 
   if (m_showURLDialog) openURL();
 
@@ -50,6 +51,8 @@ void PlayerOverlay::draw() {
 }
 
 void PlayerOverlay::drawIdleScreen() {
+  if (!mpv) return;  // Safety check
+  
   auto vp = ImGui::GetMainViewport();
   ImVec2 wPos = vp->WorkPos;
   ImVec2 wSize = vp->WorkSize;
@@ -153,6 +156,8 @@ void PlayerOverlay::drawIdleScreen() {
 }
 
 void PlayerOverlay::drawTopBar() {
+  if (!mpv) return;  // Safety check
+  
   auto vp = ImGui::GetMainViewport();
   ImVec2 wPos = vp->WorkPos;
   ImVec2 wSize = vp->WorkSize;
@@ -215,6 +220,8 @@ void PlayerOverlay::drawTopBar() {
 }
 
 void PlayerOverlay::drawBottomControls() {
+  if (!mpv) return;  // Safety check
+  
   auto vp = ImGui::GetMainViewport();
   ImVec2 wPos = vp->WorkPos;
   ImVec2 wSize = vp->WorkSize;
@@ -254,6 +261,8 @@ void PlayerOverlay::drawBottomControls() {
 }
 
 void PlayerOverlay::drawProgressBar() {
+  if (!mpv) return;  // Safety check
+  
   auto vp = ImGui::GetMainViewport();
   ImVec2 wPos = vp->WorkPos;
   float barWidth = vp->WorkSize.x - 60;
@@ -336,6 +345,8 @@ void PlayerOverlay::drawProgressBar() {
 }
 
 void PlayerOverlay::drawControlButtons() {
+  if (!mpv) return;  // Safety check
+  
   auto vp = ImGui::GetMainViewport();
   float windowW = vp->WorkSize.x;
   
@@ -476,6 +487,8 @@ void PlayerOverlay::drawControlButtons() {
 
 
 void PlayerOverlay::drawSubtitleMenu() {
+  if (!mpv) return;  // Safety check
+  
   auto vp = ImGui::GetMainViewport();
   float menuW = 340, menuH = 420;
   ImVec2 menuPos(vp->WorkPos.x + vp->WorkSize.x - menuW - 25, vp->WorkPos.y + vp->WorkSize.y - menuH - 145);
@@ -645,6 +658,8 @@ void PlayerOverlay::drawSubtitleMenu() {
 
 
 void PlayerOverlay::drawAudioMenu() {
+  if (!mpv) return;  // Safety check
+  
   auto vp = ImGui::GetMainViewport();
   float menuW = 320, menuH = 280;
   ImVec2 menuPos(vp->WorkPos.x + vp->WorkSize.x - menuW - 25, vp->WorkPos.y + vp->WorkSize.y - menuH - 145);
@@ -722,6 +737,8 @@ void PlayerOverlay::drawAudioMenu() {
 }
 
 void PlayerOverlay::drawSettingsMenu() {
+  if (!mpv) return;  // Safety check
+  
   auto vp = ImGui::GetMainViewport();
   float menuW = 360, menuH = 520;
   ImVec2 menuPos(vp->WorkPos.x + vp->WorkSize.x - menuW - 25, vp->WorkPos.y + vp->WorkSize.y - menuH - 145);
