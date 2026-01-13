@@ -3,6 +3,9 @@
 
 #include <cstring>
 #include <stdexcept>
+#include <fstream>
+#include <chrono>
+#include <ctime>
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -14,6 +17,33 @@
 #include <nlohmann/json.hpp>
 #include "helpers/utils.h"
 #include "window.h"
+
+// Simple file logger for crash debugging
+static std::ofstream g_logFile;
+
+static void initLog() {
+  auto path = ImPlay::dataPath() / "playtorrio.log";
+  g_logFile.open(path, std::ios::out | std::ios::trunc);
+  if (g_logFile.is_open()) {
+    auto now = std::chrono::system_clock::now();
+    auto time = std::chrono::system_clock::to_time_t(now);
+    g_logFile << "=== PlayTorrioPlayer Log ===" << std::endl;
+    g_logFile << "Started: " << std::ctime(&time);
+    g_logFile.flush();
+  }
+}
+
+static void log(const char* msg) {
+  if (g_logFile.is_open()) {
+    g_logFile << "[LOG] " << msg << std::endl;
+    g_logFile.flush();
+  }
+  fmt::print("[LOG] {}\n", msg);
+}
+
+static void log(const std::string& msg) {
+  log(msg.c_str());
+}
 
 static const char* usage =
     "Usage:   playtp [options] [url|path/]filename [provider \"subname\" \"suburl\" ...]\n"
@@ -118,39 +148,72 @@ static bool send_ipc(std::string sock, std::vector<std::string> paths) {
 
 int main(int argc, char* argv[]) {
 #ifdef _WIN32
-  char* console = getenv("_started_from_console");
-  if (console != nullptr && strcmp(console, "yes") == 0) {
-    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-      freopen("CONIN$", "r", stdin);
-      freopen("CONOUT$", "w", stdout);
-      freopen("CONOUT$", "w", stderr);
-    }
-  }
+  // Always allocate console for debugging
+  AllocConsole();
+  freopen("CONOUT$", "w", stdout);
+  freopen("CONOUT$", "w", stderr);
+  freopen("CONIN$", "r", stdin);
 #endif
 
+  initLog();
+  log("PlayTorrioPlayer starting...");
+
   ImPlay::OptionParser parser;
+  log("Parsing command line arguments...");
   parser.parse(argc, argv);
+  
   if (parser.options.contains("help")) {
     fmt::print("{}", usage);
     return 0;
   }
 
   try {
-    if (parser.options.contains("o") || parser.check("video", "no") || parser.check("vid", "no"))
+    log("Checking for headless mode...");
+    if (parser.options.contains("o") || parser.check("video", "no") || parser.check("vid", "no")) {
+      log("Running in headless mode");
       return run_headless(parser);
+    }
 
+    log("Loading config...");
     ImPlay::Config config;
     config.load();
+    log("Config loaded successfully");
 
-    if (config.Data.Window.Single && send_ipc(config.ipcSocket(), parser.paths)) return 0;
+    if (config.Data.Window.Single && send_ipc(config.ipcSocket(), parser.paths)) {
+      log("Sent to existing instance via IPC");
+      return 0;
+    }
 
+    log("Creating window...");
     ImPlay::Window window(&config);
-    if (!window.init(parser)) return 1;
+    log("Window object created");
+    
+    log("Initializing window...");
+    if (!window.init(parser)) {
+      log("ERROR: Window initialization failed!");
+      return 1;
+    }
+    log("Window initialized successfully");
 
+    log("Starting main loop...");
     window.run();
+    
+    log("Exiting normally");
     return 0;
   } catch (const std::exception& e) {
+    std::string errMsg = fmt::format("EXCEPTION: {}", e.what());
+    log(errMsg);
     fmt::print(fg(fmt::color::red), "Error: {}\n", e.what());
+    
+#ifdef _WIN32
+    MessageBoxA(NULL, e.what(), "PlayTorrioPlayer Error", MB_OK | MB_ICONERROR);
+#endif
+    return 1;
+  } catch (...) {
+    log("UNKNOWN EXCEPTION!");
+#ifdef _WIN32
+    MessageBoxA(NULL, "Unknown error occurred", "PlayTorrioPlayer Error", MB_OK | MB_ICONERROR);
+#endif
     return 1;
   }
 }

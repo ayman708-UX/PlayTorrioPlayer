@@ -29,6 +29,8 @@ Player::~Player() {
 }
 
 bool Player::init(std::map<std::string, std::string> &options) {
+  fmt::print("[LOG] Player::init() starting...\n");
+  
   mpv->option("config", "yes");
   mpv->option("input-default-bindings", "yes");
   mpv->option("input-vo-keyboard", "yes");
@@ -41,6 +43,8 @@ bool Player::init(std::map<std::string, std::string> &options) {
   mpv->option("osd-on-seek", "no");
   mpv->option("load-osd-console", "no");
   mpv->option("load-scripts", "no");
+  
+  fmt::print("[LOG] MPV basic options set\n");
   
   // === ZERO-COPY HARDWARE INTEROP SETTINGS ===
   // Video output: libmpv for direct GPU rendering
@@ -93,11 +97,14 @@ bool Player::init(std::map<std::string, std::string> &options) {
   
   mpv->option("screenshot-directory", "~~desktop/");
 
+  fmt::print("[LOG] MPV video options set\n");
+
   // Display refresh rate for video-sync
   mpv->option<int64_t, MPV_FORMAT_INT64>("override-display-fps", GetMonitorRefreshRate());
   mpv->option<int64_t, MPV_FORMAT_INT64>("display-fps-override", GetMonitorRefreshRate());
 
   if (!config->Data.Mpv.UseConfig) {
+    fmt::print("[LOG] Writing MPV config...\n");
     writeMpvConf();
     mpv->option("config-dir", config->dir().c_str());
   }
@@ -111,18 +118,25 @@ bool Player::init(std::map<std::string, std::string> &options) {
     }
   }
 
+  fmt::print("[LOG] Initializing debug view...\n");
   debug->init();
 
   {
+    fmt::print("[LOG] Loading logo texture and initializing MPV...\n");
     ContextGuard guard(this);
     logoTexture = ImGui::LoadTexture("icon.png");
+    fmt::print("[LOG] Logo texture: {}\n", logoTexture);
     mpv->init(GetGLAddrFunc(), GetWid());
+    fmt::print("[LOG] MPV initialized\n");
   }
 
   SetWindowDecorated(mpv->property<int, MPV_FORMAT_FLAG>("border"));
   mpv->property<int64_t, MPV_FORMAT_INT64>("volume", config->Data.Mpv.Volume);
   if (config->Data.Recent.SpaceToPlayLast) mpv->command("keybind SPACE 'script-message-to implay play-pause'");
+  
+  fmt::print("[LOG] Initializing observers...\n");
   initObservers();
+  fmt::print("[LOG] Player::init() complete\n");
 
   return true;
 }
@@ -273,17 +287,23 @@ void Player::renderVideo() {
 }
 
 void Player::initGui() {
+  fmt::print("[LOG] initGui() starting...\n");
   ContextGuard guard(this);
 
 #ifdef IMGUI_IMPL_OPENGL_ES3
+  fmt::print("[LOG] Loading GLES2...\n");
   if (!gladLoadGLES2((GLADloadfunc)GetGLAddrFunc())) throw std::runtime_error("Failed to load GLES 2!");
 #else
+  fmt::print("[LOG] Loading GL...\n");
   if (!gladLoadGL((GLADloadfunc)GetGLAddrFunc())) throw std::runtime_error("Failed to load GL!");
 #endif
+  fmt::print("[LOG] GL loaded successfully\n");
   SetSwapInterval(1);  // Enable VSync
 
+  fmt::print("[LOG] Creating ImGui context...\n");
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
+  fmt::print("[LOG] ImGui context created\n");
 
   ImGuiIO &io = ImGui::GetIO();
   io.IniFilename = nullptr;
@@ -296,9 +316,12 @@ void Player::initGui() {
   if (config->Data.Interface.Viewports || config->Data.Mpv.UseWid) io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 #endif
 
+  fmt::print("[LOG] Loading fonts...\n");
   loadFonts();
+  fmt::print("[LOG] Fonts loaded\n");
 
   // Create FBO for zero-copy video rendering
+  fmt::print("[LOG] Creating FBO...\n");
   glGenFramebuffers(1, &fbo);
   glGenTextures(1, &tex);
 
@@ -317,14 +340,19 @@ void Player::initGui() {
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  fmt::print("[LOG] FBO created\n");
 
 #ifdef IMGUI_IMPL_OPENGL_ES3
+  fmt::print("[LOG] Initializing ImGui OpenGL3 (ES3)...\n");
   ImGui_ImplOpenGL3_Init("#version 300 es");
 #elif defined(__APPLE__)
+  fmt::print("[LOG] Initializing ImGui OpenGL3 (Apple)...\n");
   ImGui_ImplOpenGL3_Init("#version 150");
 #else
+  fmt::print("[LOG] Initializing ImGui OpenGL3...\n");
   ImGui_ImplOpenGL3_Init("#version 130");
 #endif
+  fmt::print("[LOG] initGui() complete\n");
 }
 
 void Player::exitGui() {
@@ -364,6 +392,8 @@ void Player::restoreState() {
 }
 
 void Player::loadFonts() {
+  fmt::print("[LOG] loadFonts() starting...\n");
+  
   auto interface = config->Data.Interface;
   float baseFontSize = config->Data.Font.Size;
   float scale = interface.Scale;
@@ -378,8 +408,11 @@ void Player::loadFonts() {
   // Larger base font for crisp rendering
   float fontSize = std::floor(std::max(baseFontSize, 16.0f) * scale);
   float iconSize = std::floor(fontSize * 1.1f);  // Icons slightly larger
+  
+  fmt::print("[LOG] Font size: {}, Icon size: {}, Scale: {}\n", fontSize, iconSize, scale);
 
   ImGuiStyle style;
+  fmt::print("[LOG] Setting theme: {}\n", interface.Theme);
   ImGui::SetTheme(interface.Theme.c_str(), &style, interface.Rounding, interface.Shadow);
 
   ImGuiIO &io = ImGui::GetIO();
@@ -391,6 +424,7 @@ void Player::loadFonts() {
   ImGui::GetStyle() = style;
 
   io.Fonts->Clear();
+  fmt::print("[LOG] Fonts cleared\n");
 
   // Font config for smooth rendering
   ImFontConfig cfg;
@@ -400,27 +434,36 @@ void Player::loadFonts() {
   cfg.PixelSnapH = false;  // Smoother subpixel positioning
 
   const ImWchar *font_range = config->buildGlyphRanges();
+  fmt::print("[LOG] Glyph ranges built\n");
   
   // Use Cascadia as primary font (modern, clean look)
-  io.Fonts->AddFontFromMemoryCompressedTTF(cascadia_compressed_data, cascadia_compressed_size, fontSize, &cfg, font_range);
+  fmt::print("[LOG] Loading Cascadia font...\n");
+  auto* font1 = io.Fonts->AddFontFromMemoryCompressedTTF(cascadia_compressed_data, cascadia_compressed_size, fontSize, &cfg, font_range);
+  fmt::print("[LOG] Cascadia font loaded: {}\n", font1 != nullptr ? "OK" : "FAILED");
 
   // Merge FontAwesome icons with larger size
   cfg.MergeMode = true;
   cfg.GlyphMinAdvanceX = iconSize;  // Consistent icon width
   static ImWchar fa_range[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
-  io.Fonts->AddFontFromMemoryCompressedTTF(fa_compressed_data, fa_compressed_size, iconSize, &cfg, fa_range);
+  fmt::print("[LOG] Loading FontAwesome...\n");
+  auto* font2 = io.Fonts->AddFontFromMemoryCompressedTTF(fa_compressed_data, fa_compressed_size, iconSize, &cfg, fa_range);
+  fmt::print("[LOG] FontAwesome loaded: {}\n", font2 != nullptr ? "OK" : "FAILED");
   
   // Add unifont as fallback for international characters
   cfg.MergeMode = true;
   cfg.GlyphMinAdvanceX = 0;
   if (fileExists(config->Data.Font.Path)) {
+    fmt::print("[LOG] Loading custom font from: {}\n", config->Data.Font.Path);
     io.Fonts->AddFontFromFileTTF(config->Data.Font.Path.c_str(), fontSize, &cfg, font_range);
   } else {
+    fmt::print("[LOG] Loading unifont fallback...\n");
     io.Fonts->AddFontFromMemoryCompressedTTF(unifont_compressed_data, unifont_compressed_size, fontSize, &cfg, font_range);
   }
   
   // Build font atlas
+  fmt::print("[LOG] Building font atlas...\n");
   io.Fonts->Build();
+  fmt::print("[LOG] loadFonts() complete\n");
 }
 
 void Player::shutdown() { mpv->command(config->Data.Mpv.WatchLater ? "quit-watch-later" : "quit"); }

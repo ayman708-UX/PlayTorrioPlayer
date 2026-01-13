@@ -18,17 +18,24 @@
 
 namespace ImPlay {
 Window::Window(Config* config) : Player(config) {
+  fmt::print("[LOG] Window::Window() starting...\n");
   initGLFW();
+  fmt::print("[LOG] GLFW initialized\n");
   window = glfwCreateWindow(1280, 720, PLAYER_NAME, nullptr, nullptr);
   if (window == nullptr) throw std::runtime_error("Failed to create window!");
+  fmt::print("[LOG] GLFW window created\n");
 #ifdef _WIN32
   hwnd = glfwGetWin32Window(window);
   if (SUCCEEDED(OleInitialize(nullptr))) oleOk = true;
 #endif
 
+  fmt::print("[LOG] Calling initGui()...\n");
   initGui();
+  fmt::print("[LOG] initGui() returned\n");
   installCallbacks(window);
+  fmt::print("[LOG] Callbacks installed\n");
   ImGui_ImplGlfw_InitForOpenGL(window, true);
+  fmt::print("[LOG] Window::Window() complete\n");
 }
 
 Window::~Window() {
