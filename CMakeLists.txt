@@ -55,12 +55,7 @@ set(SOURCE_FILES
   source/helpers/nfd.cpp
   source/helpers/utils.cpp
   source/views/view.cpp
-  source/views/command_palette.cpp
-  source/views/context_menu.cpp
   source/views/debug.cpp
-  source/views/about.cpp
-  source/views/quickview.cpp
-  source/views/settings.cpp
   source/views/player_overlay.cpp
   source/theme.cpp
   source/config.cpp

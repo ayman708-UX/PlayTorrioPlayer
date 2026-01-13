@@ -6,6 +6,7 @@
 #include <vector>
 #include <functional>
 #include <filesystem>
+#include <atomic>
 #include <mpv/client.h>
 #include <mpv/render_gl.h>
 
@@ -23,6 +24,7 @@ class Mpv {
   void init(GLAddrLoadFunc load, int64_t wid = 0);
   void render(int w, int h, int fbo = 0, bool flip = true);
   bool wantRender();
+  bool frameRendered();
   void reportSwap();
   void waitEvent(double timeout = 0);
   void requestLog(const char *level, LogHandler handler);
@@ -137,6 +139,7 @@ class Mpv {
   mpv_render_context *renderCtx = nullptr;
   LogHandler logHandler = nullptr;
   Callback wakeupCb_, updateCb_;
+  std::atomic<bool> frameRendered_{false};
 
   std::vector<std::tuple<mpv_event_id, EventHandler>> events;
   std::vector<std::tuple<std::string, mpv_format, EventHandler>> propertyEvents;

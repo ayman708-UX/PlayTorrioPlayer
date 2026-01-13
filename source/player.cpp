@@ -18,23 +18,12 @@
 namespace ImPlay {
 Player::Player(Config *config) : config(config) {
   mpv = new Mpv();
-
-  about = new Views::About();
   debug = new Views::Debug(config, mpv);
-  quickview = new Views::Quickview(config, mpv);
-  settings = new Views::Settings(config, mpv);
-  contextMenu = new Views::ContextMenu(config, mpv);
-  commandPalette = new Views::CommandPalette(config, mpv);
   playerOverlay = new Views::PlayerOverlay(config, mpv);
 }
 
 Player::~Player() {
-  delete about;
   delete debug;
-  delete quickview;
-  delete settings;
-  delete contextMenu;
-  delete commandPalette;
   delete playerOverlay;
   delete mpv;
 }
@@ -45,42 +34,66 @@ bool Player::init(std::map<std::string, std::string> &options) {
   mpv->option("input-vo-keyboard", "yes");
   
   // PlayTorrioPlayer: COMPLETELY disable ALL mpv on-screen UI
-  mpv->option("osc", "no");                // Disable On-Screen Controller
-  mpv->option("osd-level", "0");           // Disable OSD completely  
-  mpv->option("osd-bar", "no");            // No OSD bar
-  mpv->option("osd-playing-msg", "");      // No playing message
-  mpv->option("osd-on-seek", "no");        // No OSD on seek
-  mpv->option("load-osd-console", "no");   // No OSD console
-  mpv->option("load-scripts", "no");       // Don't load ANY scripts (including osc.lua)
+  mpv->option("osc", "no");
+  mpv->option("osd-level", "0");
+  mpv->option("osd-bar", "no");
+  mpv->option("osd-playing-msg", "");
+  mpv->option("osd-on-seek", "no");
+  mpv->option("load-osd-console", "no");
+  mpv->option("load-scripts", "no");
   
-  // Performance optimizations for smooth playback
+  // === ZERO-COPY HARDWARE INTEROP SETTINGS ===
+  // Video output: libmpv for direct GPU rendering
   mpv->option("vo", "libmpv");
-  mpv->option("hwdec", "auto-safe");       // Use safe hardware decoding
-  mpv->option("gpu-api", "auto");          // Auto-select best GPU API
-  mpv->option("opengl-swapinterval", "1"); // VSync
-  mpv->option("video-sync", "display-resample"); // Smooth playback
-  mpv->option("interpolation", "no");      // Disable interpolation (can cause lag)
-  mpv->option("tscale", "oversample");     // Fast temporal scaling
-  mpv->option("correct-downscaling", "no"); // Faster downscaling
-  mpv->option("deband", "no");             // Disable debanding (faster)
-  mpv->option("dither-depth", "no");       // Disable dithering (faster)
-  mpv->option("sws-scaler", "fast-bilinear"); // Fast software scaler
-  mpv->option("vd-lavc-fast", "yes");      // Faster video decoding
-  mpv->option("vd-lavc-skiploopfilter", "nonkey"); // Skip some deblocking
-  mpv->option("vd-lavc-threads", "0");     // Auto thread count for decoding
-  mpv->option("demuxer-max-bytes", "150MiB"); // Good buffer for streaming
+  
+  // Hardware decoding: auto-safe tries hardware first, falls back gracefully
+  mpv->option("hwdec", "auto-safe");
+  
+  // GPU API: let mpv choose the best available
+  mpv->option("gpu-api", "auto");
+  
+  // Video sync: display-resample for smoothest playback synced to display
+  mpv->option("video-sync", "display-resample");
+  
+  // Interpolation for smooth motion (optional, can be disabled for lower latency)
+  mpv->option("interpolation", "yes");
+  mpv->option("tscale", "oversample");
+  
+  // Let mpv handle swap timing
+  mpv->option("opengl-swapinterval", "1");
+  
+  // Frame timing
+  mpv->option("video-timing-offset", "0");
+  
+  // Disable expensive post-processing for performance
+  mpv->option("deband", "no");
+  mpv->option("dither-depth", "no");
+  mpv->option("correct-downscaling", "no");
+  
+  // Fast scalers
+  mpv->option("scale", "bilinear");
+  mpv->option("dscale", "bilinear");
+  mpv->option("cscale", "bilinear");
+  
+  // Video decoding optimizations
+  mpv->option("vd-lavc-fast", "yes");
+  mpv->option("vd-lavc-threads", "0");
+  
+  // Demuxer/cache settings for smooth streaming
+  mpv->option("demuxer-max-bytes", "150MiB");
   mpv->option("demuxer-max-back-bytes", "50MiB");
-  mpv->option("demuxer-readahead-secs", "20"); // Read ahead for smoother streaming
+  mpv->option("demuxer-readahead-secs", "20");
   mpv->option("cache", "yes");
-  mpv->option("cache-secs", "120");        // 2 min cache
-  mpv->option("cache-pause-initial", "yes"); // Buffer before playing
-  mpv->option("cache-pause-wait", "3");    // Wait 3 secs if buffer runs low
-  mpv->option("hr-seek-framedrop", "yes"); // Drop frames during seek for speed
-  mpv->option("video-latency-hacks", "yes"); // Reduce latency
+  mpv->option("cache-secs", "120");
+  mpv->option("cache-pause-initial", "yes");
+  mpv->option("cache-pause-wait", "3");
+  
+  // Seeking optimizations
+  mpv->option("hr-seek-framedrop", "yes");
   
   mpv->option("screenshot-directory", "~~desktop/");
 
-  // override-display-fps is renamed to display-fps-override in mpv 0.37.0
+  // Display refresh rate for video-sync
   mpv->option<int64_t, MPV_FORMAT_INT64>("override-display-fps", GetMonitorRefreshRate());
   mpv->option<int64_t, MPV_FORMAT_INT64>("display-fps-override", GetMonitorRefreshRate());
 
@@ -188,7 +201,7 @@ void Player::render() {
 #if defined(_WIN32) && defined(IMGUI_HAS_VIEWPORT)
   if (config->Data.Mpv.UseWid) {
     ImGuiViewport *vp = ImGui::GetMainViewport();
-    vp->Flags &= ~ImGuiViewportFlags_CanHostOtherWindows;  // HACK: disable main viewport merge
+    vp->Flags &= ~ImGuiViewportFlags_CanHostOtherWindows;
   }
 #endif
 
@@ -199,7 +212,7 @@ void Player::render() {
     ImGuiContext *ctx = ImGui::GetCurrentContext();
     for (int i = 1; i < ctx->Windows.Size; i++) {
       ImGuiWindow *w = ctx->Windows[i];
-      if (w->Flags & ImGuiWindowFlags_Popup) {  // HACK: make all popup topmost
+      if (w->Flags & ImGuiWindowFlags_Popup) {
         w->WindowClass.ViewportFlagsOverrideSet = ImGuiViewportFlags_TopMost;
       }
     }
@@ -217,9 +230,15 @@ void Player::render() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    SetSwapInterval(1);  // Always use VSync for smooth playback
+    
+    // VSync enabled - mpv handles frame timing via video-sync=display-resample
+    SetSwapInterval(1);
     SwapBuffers();
-    mpv->reportSwap();
+    
+    // Report swap to mpv for proper frame timing
+    if (mpv->frameRendered()) {
+      mpv->reportSwap();
+    }
 
 #ifdef IMGUI_HAS_VIEWPORT
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
@@ -233,13 +252,15 @@ void Player::render() {
 void Player::renderVideo() {
   ContextGuard guard(this);
 
+  // Bind FBO and texture
   glBindFramebuffer(GL_FRAMEBUFFER, fbo);
   glBindTexture(GL_TEXTURE_2D, tex);
 
   // Only reallocate texture if size changed (expensive operation)
   static int lastWidth = 0, lastHeight = 0;
   if (width != lastWidth || height != lastHeight) {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    // Use GL_RGBA8 for better compatibility and performance
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     lastWidth = width;
     lastHeight = height;
   }
@@ -247,6 +268,7 @@ void Player::renderVideo() {
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+  // Render video frame directly to FBO - zero-copy from GPU decoder
   mpv->render(width, height, fbo, false);
 }
 
@@ -258,7 +280,7 @@ void Player::initGui() {
 #else
   if (!gladLoadGL((GLADloadfunc)GetGLAddrFunc())) throw std::runtime_error("Failed to load GL!");
 #endif
-  SetSwapInterval(1);
+  SetSwapInterval(1);  // Enable VSync
 
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
@@ -276,16 +298,22 @@ void Player::initGui() {
 
   loadFonts();
 
+  // Create FBO for zero-copy video rendering
   glGenFramebuffers(1, &fbo);
   glGenTextures(1, &tex);
 
   glBindFramebuffer(GL_FRAMEBUFFER, fbo);
   glBindTexture(GL_TEXTURE_2D, tex);
 
+  // Optimal texture parameters for video playback
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+  
+  // Initial small texture - will be resized on first render
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 64, 64, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -337,17 +365,19 @@ void Player::restoreState() {
 
 void Player::loadFonts() {
   auto interface = config->Data.Interface;
-  float fontSize = config->Data.Font.Size;
-  float iconSize = fontSize - 2;
+  float baseFontSize = config->Data.Font.Size;
   float scale = interface.Scale;
+  
   if (scale == 0) {
     float xscale, yscale;
     GetWindowScale(&xscale, &yscale);
     scale = std::max(xscale, yscale);
   }
   if (scale <= 0) scale = 1.0f;
-  fontSize = std::floor(fontSize * scale);
-  iconSize = std::floor(iconSize * scale);
+  
+  // Larger base font for crisp rendering
+  float fontSize = std::floor(std::max(baseFontSize, 16.0f) * scale);
+  float iconSize = std::floor(fontSize * 1.1f);  // Icons slightly larger
 
   ImGuiStyle style;
   ImGui::SetTheme(interface.Theme.c_str(), &style, interface.Rounding, interface.Shadow);
@@ -362,20 +392,35 @@ void Player::loadFonts() {
 
   io.Fonts->Clear();
 
+  // Font config for smooth rendering
   ImFontConfig cfg;
   cfg.SizePixels = fontSize;
+  cfg.OversampleH = 2;  // Better horizontal antialiasing
+  cfg.OversampleV = 2;  // Better vertical antialiasing
+  cfg.PixelSnapH = false;  // Smoother subpixel positioning
 
   const ImWchar *font_range = config->buildGlyphRanges();
-  if (fileExists(config->Data.Font.Path))
-    io.Fonts->AddFontFromFileTTF(config->Data.Font.Path.c_str(), 0, &cfg, font_range);
-  else
-    io.Fonts->AddFontFromMemoryCompressedTTF(unifont_compressed_data, unifont_compressed_size, 0, &cfg, font_range);
+  
+  // Use Cascadia as primary font (modern, clean look)
+  io.Fonts->AddFontFromMemoryCompressedTTF(cascadia_compressed_data, cascadia_compressed_size, fontSize, &cfg, font_range);
 
+  // Merge FontAwesome icons with larger size
   cfg.MergeMode = true;
-
+  cfg.GlyphMinAdvanceX = iconSize;  // Consistent icon width
   static ImWchar fa_range[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
   io.Fonts->AddFontFromMemoryCompressedTTF(fa_compressed_data, fa_compressed_size, iconSize, &cfg, fa_range);
-  io.Fonts->AddFontFromMemoryCompressedTTF(cascadia_compressed_data, cascadia_compressed_size, fontSize);
+  
+  // Add unifont as fallback for international characters
+  cfg.MergeMode = true;
+  cfg.GlyphMinAdvanceX = 0;
+  if (fileExists(config->Data.Font.Path)) {
+    io.Fonts->AddFontFromFileTTF(config->Data.Font.Path.c_str(), fontSize, &cfg, font_range);
+  } else {
+    io.Fonts->AddFontFromMemoryCompressedTTF(unifont_compressed_data, unifont_compressed_size, fontSize, &cfg, font_range);
+  }
+  
+  // Build font atlas
+  io.Fonts->Build();
 }
 
 void Player::shutdown() { mpv->command(config->Data.Mpv.WatchLater ? "quit-watch-later" : "quit"); }
@@ -468,13 +513,22 @@ void Player::writeMpvConf() {
     std::ofstream file(mpvConf, std::ios::binary);
     auto content = romfs::get("mpv/mpv.conf");
     file.write(reinterpret_cast<const char *>(content.data()), content.size()) << "\n";
-    file << "# use opengl-hq video output for high-quality video rendering.\n";
+    
+    // Zero-copy hardware interop settings
+    file << "# PlayTorrioPlayer - Optimized for performance\n";
     file << "profile=gpu-hq\n";
-    file << "deband=no\n\n";
-    file << "# Enable hardware decoding if available.\n";
-    file << "hwdec=auto\n";
-    // PlayTorrioPlayer: Disable ALL mpv on-screen controls
-    file << "\n# PlayTorrioPlayer - disable all mpv UI\n";
+    file << "hwdec=auto-safe\n";
+    file << "video-sync=display-resample\n";
+    file << "interpolation=yes\n";
+    file << "tscale=oversample\n\n";
+    
+    // Disable expensive effects
+    file << "# Performance optimizations\n";
+    file << "deband=no\n";
+    file << "dither-depth=no\n\n";
+    
+    // Disable all mpv UI
+    file << "# Disable mpv UI (PlayTorrioPlayer has its own)\n";
     file << "osc=no\n";
     file << "osd-level=0\n";
     file << "osd-bar=no\n";
@@ -484,12 +538,8 @@ void Player::writeMpvConf() {
     std::ofstream file(inputConf, std::ios::binary);
     auto content = romfs::get("mpv/input.conf");
     file.write(reinterpret_cast<const char *>(content.data()), content.size()) << "\n";
-    // PlayTorrioPlayer - clean UI, no context menus or command palettes
-    file << "`            script-message-to implay metrics         # open console window\n";
+    file << "`            script-message-to implay metrics\n";
   }
-
-  // PlayTorrioPlayer: Do NOT create scripts folder or load osc.lua
-  // We have our own custom UI
 }
 
 void Player::execute(int n_args, const char **args_) {

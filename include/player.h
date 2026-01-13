@@ -14,12 +14,7 @@
 #include "mpv.h"
 #include "config.h"
 #include "views/view.h"
-#include "views/about.h"
 #include "views/debug.h"
-#include "views/quickview.h"
-#include "views/settings.h"
-#include "views/context_menu.h"
-#include "views/command_palette.h"
 #include "views/player_overlay.h"
 #include "helpers/imgui.h"
 #include "helpers/nfd.h"
@@ -122,12 +117,7 @@ class Player {
   std::string m_dialog_title = "Dialog";
   std::string m_dialog_msg = "Message";
 
-  Views::About *about;
   Views::Debug *debug;
-  Views::Quickview *quickview;
-  Views::Settings *settings;
-  Views::ContextMenu *contextMenu;
-  Views::CommandPalette *commandPalette;
   Views::PlayerOverlay *playerOverlay;
 
   const std::vector<std::string> videoTypes = {

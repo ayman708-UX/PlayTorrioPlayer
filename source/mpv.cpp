@@ -6,6 +6,7 @@
 #include <thread>
 #include <cstdarg>
 #include <cstring>
+#include <atomic>
 #include <nlohmann/json.hpp>
 #include "mpv.h"
 
@@ -75,17 +76,26 @@ void Mpv::render(int w, int h, int fbo, bool flip) {
   if (renderCtx == nullptr) return;
 
   int flip_y{flip ? 1 : 0};
+  int blockForTarget{1};  // Block until frame is ready for display-sync
   mpv_opengl_fbo mpfbo{fbo, w, h};
   mpv_render_param params[]{
       {MPV_RENDER_PARAM_OPENGL_FBO, &mpfbo},
       {MPV_RENDER_PARAM_FLIP_Y, &flip_y},
+      {MPV_RENDER_PARAM_BLOCK_FOR_TARGET_TIME, &blockForTarget},
       {MPV_RENDER_PARAM_INVALID, nullptr},
   };
   mpv_render_context_render(renderCtx, params);
+  frameRendered_.store(true, std::memory_order_release);
 }
 
 bool Mpv::wantRender() {
-  return renderCtx != nullptr && (mpv_render_context_update(renderCtx) & MPV_RENDER_UPDATE_FRAME);
+  if (renderCtx == nullptr) return false;
+  uint64_t flags = mpv_render_context_update(renderCtx);
+  return (flags & MPV_RENDER_UPDATE_FRAME) != 0;
+}
+
+bool Mpv::frameRendered() {
+  return frameRendered_.exchange(false, std::memory_order_acquire);
 }
 
 void Mpv::reportSwap() {
@@ -98,10 +108,13 @@ void Mpv::init(GLAddrLoadFunc load, int64_t wid) {
   if (mpv_set_property(mpv, "wid", MPV_FORMAT_INT64, &wid) < 0) throw std::runtime_error("could not set mpv wid");
   if (mpv_initialize(mpv) < 0) throw std::runtime_error("could not initialize mpv context");
   if (wid == 0) {
+    // Advanced render params for zero-copy GPU rendering
+    int advCtrl = 1;  // Enable advanced control for better timing
     mpv_opengl_init_params gl_init_params{get_proc_address, (void *)load};
     mpv_render_param params[]{
         {MPV_RENDER_PARAM_API_TYPE, const_cast<char *>(MPV_RENDER_API_TYPE_OPENGL)},
         {MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, &gl_init_params},
+        {MPV_RENDER_PARAM_ADVANCED_CONTROL, &advCtrl},
         {MPV_RENDER_PARAM_INVALID, nullptr},
     };
 

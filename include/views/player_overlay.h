@@ -45,7 +45,7 @@ class PlayerOverlay : public View {
 
  private:
   void drawTopBar();
-  void drawBottomBar();
+  void drawBottomControls();
   void drawProgressBar();
   void drawControlButtons();
   void drawSubtitleMenu();

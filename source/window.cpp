@@ -114,6 +114,8 @@ bool Window::init(OptionParser& parser) {
 
 void Window::run() {
   bool shutdown = false;
+  
+  // Video renderer thread - renders mpv frames when ready
   std::thread videoRenderer([&]() {
     while (!shutdown) {
       videoWaiter.wait();
@@ -121,7 +123,7 @@ void Window::run() {
 
       if (mpv->wantRender()) {
         renderVideo();
-        wakeup();
+        wakeup();  // Signal main thread to composite
       }
     }
   });
@@ -130,6 +132,7 @@ void Window::run() {
   glfwShowWindow(window);
 
   while (!glfwWindowShouldClose(window)) {
+    // Wait for events efficiently - VSync will throttle the loop
     if (!glfwGetWindowAttrib(window, GLFW_VISIBLE) || glfwGetWindowAttrib(window, GLFW_ICONIFIED)) {
       glfwWaitEvents();
     } else {
@@ -140,7 +143,7 @@ void Window::run() {
     render();
     updateCursor();
     
-    // Let VSync handle frame timing - no artificial limiting needed
+    // VSync handles frame timing - no artificial limiting needed
   }
 
   shutdown = true;

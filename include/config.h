@@ -14,11 +14,11 @@ struct ConfigData {
     std::string Lang = "en-US";
     std::string Theme = "playtorrio";
     float Scale = 0;
-    int Fps = 60;  // Not used anymore - VSync handles timing
+    int Fps = 0;  // 0 = VSync (recommended for smooth playback)
     bool Docking = false;
-    bool Viewports = false;  // Disabled for better performance
+    bool Viewports = false;
     bool Rounding = true;
-    bool Shadow = false;  // Disabled for better performance
+    bool Shadow = false;
     bool operator==(const Interface_&) const = default;
   } Interface;
   struct Mpv_ {
@@ -37,7 +37,7 @@ struct ConfigData {
   } Window;
   struct Font_ {
     std::string Path;
-    int Size = 13;
+    int Size = 16;  // Larger default for crisp text
     int GlyphRange = 0;
     bool operator==(const Font_&) const = default;
   } Font;
