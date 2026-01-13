@@ -284,7 +284,9 @@ void Player::render() {
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
       if (firstRender) fmt::print("[LOG] render: UpdatePlatformWindows\n");
       ImGui::UpdatePlatformWindows();
+      if (firstRender) fmt::print("[LOG] render: RenderPlatformWindowsDefault\n");
       ImGui::RenderPlatformWindowsDefault();
+      if (firstRender) fmt::print("[LOG] render: Viewports done\n");
     }
 #endif
   }

@@ -141,23 +141,34 @@ void Window::run() {
 
   fmt::print("[LOG] Restoring window state...\n");
   restoreState();
+  fmt::print("[LOG] restoreState() done\n");
   fmt::print("[LOG] Showing window...\n");
   glfwShowWindow(window);
+  fmt::print("[LOG] glfwShowWindow() done\n");
   fmt::print("[LOG] Window shown, entering main loop...\n");
 
+  int loopCount = 0;
   while (!glfwWindowShouldClose(window)) {
+    loopCount++;
+    if (loopCount <= 3) fmt::print("[LOG] Main loop iteration {}\n", loopCount);
+    
     // Wait for events efficiently - VSync will throttle the loop
     if (!glfwGetWindowAttrib(window, GLFW_VISIBLE) || glfwGetWindowAttrib(window, GLFW_ICONIFIED)) {
+      if (loopCount <= 3) fmt::print("[LOG] glfwWaitEvents...\n");
       glfwWaitEvents();
     } else {
+      if (loopCount <= 3) fmt::print("[LOG] glfwPollEvents...\n");
       glfwPollEvents();
     }
+    if (loopCount <= 3) fmt::print("[LOG] Events done\n");
 
+    if (loopCount <= 3) fmt::print("[LOG] mpv->waitEvent...\n");
     mpv->waitEvent();
+    if (loopCount <= 3) fmt::print("[LOG] Calling render()...\n");
     render();
+    if (loopCount <= 3) fmt::print("[LOG] render() done\n");
     updateCursor();
-    
-    // VSync handles frame timing - no artificial limiting needed
+    if (loopCount <= 3) fmt::print("[LOG] Loop iteration {} complete\n", loopCount);
   }
 
   fmt::print("[LOG] Main loop exited, shutting down...\n");
