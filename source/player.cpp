@@ -275,15 +275,10 @@ void Player::render() {
     if (firstRender) fmt::print("[LOG] render: ImGui_ImplOpenGL3_RenderDrawData\n");
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     
-    // VSync enabled - mpv handles frame timing via video-sync=display-resample
-    SetSwapInterval(1);
+    SetSwapInterval(config->Data.Interface.Fps > 60 ? 0 : 1);
     if (firstRender) fmt::print("[LOG] render: SwapBuffers\n");
     SwapBuffers();
-    
-    // Report swap to mpv for proper frame timing
-    if (mpv->frameRendered()) {
-      mpv->reportSwap();
-    }
+    mpv->reportSwap();
 
 #ifdef IMGUI_HAS_VIEWPORT
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
@@ -303,23 +298,15 @@ void Player::render() {
 void Player::renderVideo() {
   ContextGuard guard(this);
 
-  // Bind FBO and texture
   glBindFramebuffer(GL_FRAMEBUFFER, fbo);
   glBindTexture(GL_TEXTURE_2D, tex);
 
-  // Only reallocate texture if size changed (expensive operation)
-  static int lastWidth = 0, lastHeight = 0;
-  if (width != lastWidth || height != lastHeight) {
-    // Use GL_RGBA8 for better compatibility and performance
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    lastWidth = width;
-    lastHeight = height;
-  }
+  // Use GL_RGBA like the working version (not GL_RGBA8)
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-  // Render video frame directly to FBO - zero-copy from GPU decoder
   mpv->render(width, height, fbo, false);
 }
 
@@ -357,7 +344,7 @@ void Player::initGui() {
   loadFonts();
   fmt::print("[LOG] Fonts loaded\n");
 
-  // Create FBO for zero-copy video rendering
+  // Create FBO for video rendering
   fmt::print("[LOG] Creating FBO...\n");
   glGenFramebuffers(1, &fbo);
   glGenTextures(1, &tex);
@@ -365,15 +352,10 @@ void Player::initGui() {
   glBindFramebuffer(GL_FRAMEBUFFER, fbo);
   glBindTexture(GL_TEXTURE_2D, tex);
 
-  // Optimal texture parameters for video playback
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
-  
-  // Initial small texture - will be resized on first render
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 64, 64, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
