@@ -5,44 +5,214 @@ on:
     tags: ["*"]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  build:
-    uses: ./.github/workflows/build.yml
+  linux:
+    runs-on: ubuntu-22.04
+    name: Linux (Portable AppImage)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          sudo add-apt-repository universe
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build git pkg-config \
+          libfuse2 libgtk-3-dev libglfw3-dev libfreetype6-dev libmpv-dev patchelf
+      - name: Build PlayTorrioPlayer
+        env:
+          DEPLOY_GTK_VERSION: 3
+        run: |
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCREATE_PACKAGE=ON -G Ninja ..
+          cmake --build . --target package
+          cmake --install . --prefix AppDir/usr
+          
+          curl -LO https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          curl -LO https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
+          chmod +x linuxdeploy-x86_64.AppImage linuxdeploy-plugin-gtk.sh
+          
+          ./linuxdeploy-x86_64.AppImage --appdir $(pwd)/AppDir --plugin gtk --output appimage
+          
+          VERSION=$(git describe --tags --always)
+          for f in PlayTorrioPlayer-*.AppImage; do 
+            mv "$f" "PlayTorrioPlayer-linux-portable-${VERSION}.AppImage"
+          done 2>/dev/null || true
+          
+          mkdir -p portable/PlayTorrioPlayer
+          cp -r AppDir/usr/* portable/PlayTorrioPlayer/
+          cd portable && tar -czvf "../PlayTorrioPlayer-linux-portable-${VERSION}.tar.gz" PlayTorrioPlayer
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PlayTorrioPlayer-linux
+          path: |
+            build/PlayTorrioPlayer-linux-portable-*.AppImage
+            build/PlayTorrioPlayer-linux-portable-*.tar.gz
+
+  macos:
+    runs-on: macos-14
+    name: macOS (Portable App Bundle)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+        run: |
+          brew install cmake ninja git mpv freetype2 pkg-config dylibbundler create-dmg
+      - name: Build PlayTorrioPlayer
+        env:
+          PKG_CONFIG_PATH: /opt/homebrew/opt/libarchive/lib/pkgconfig:/usr/local/opt/libarchive/lib/pkgconfig
+        run: |
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=RELEASE -DUSE_PATCHED_GLFW=ON -G Ninja ..
+          cmake --build .
+      - name: Create Portable App Bundle
+        run: |
+          cd build
+          VERSION=$(git describe --tags --always)
+          
+          mkdir -p PlayTorrioPlayer.app/Contents/MacOS
+          mkdir -p PlayTorrioPlayer.app/Contents/Frameworks
+          mkdir -p PlayTorrioPlayer.app/Contents/Resources
+          
+          cp PlayTorrioPlayer PlayTorrioPlayer.app/Contents/MacOS/
+          cp ../resources/macos/AppIcon.icns PlayTorrioPlayer.app/Contents/Resources/ 2>/dev/null || true
+          
+          cat > PlayTorrioPlayer.app/Contents/Info.plist << 'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleExecutable</key>
+            <string>PlayTorrioPlayer</string>
+            <key>CFBundleIconFile</key>
+            <string>AppIcon</string>
+            <key>CFBundleIdentifier</key>
+            <string>com.playtorrioplayer.app</string>
+            <key>CFBundleName</key>
+            <string>PlayTorrioPlayer</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+            <key>CFBundleShortVersionString</key>
+            <string>1.0</string>
+            <key>CFBundleVersion</key>
+            <string>1.0</string>
+            <key>NSHighResolutionCapable</key>
+            <true/>
+            <key>LSMinimumSystemVersion</key>
+            <string>11.0</string>
+          </dict>
+          </plist>
+          PLIST
+          
+          dylibbundler -od -b -x ./PlayTorrioPlayer.app/Contents/MacOS/PlayTorrioPlayer \
+            -d ./PlayTorrioPlayer.app/Contents/Frameworks/ \
+            -p @executable_path/../Frameworks/ \
+            -s /opt/homebrew/lib \
+            -s /usr/local/lib
+          
+          codesign --force --deep --sign - PlayTorrioPlayer.app
+          zip -r "PlayTorrioPlayer-macOS-portable-${VERSION}.zip" PlayTorrioPlayer.app
+          
+      - name: Create DMG
+        run: |
+          cd build
+          VERSION=$(git describe --tags --always)
+          create-dmg \
+            --volname "PlayTorrioPlayer" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --app-drop-link 450 185 \
+            "PlayTorrioPlayer-macOS-portable-${VERSION}.dmg" \
+            "PlayTorrioPlayer.app" || true
+            
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PlayTorrioPlayer-macOS
+          path: |
+            build/PlayTorrioPlayer-macOS-portable-*.dmg
+            build/PlayTorrioPlayer-macOS-portable-*.zip
+
+  win:
+    runs-on: windows-latest
+    name: Windows (Portable)
+    steps:
+      - name: Prepare git
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          install: >-
+            base-devel
+            git
+            p7zip
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-freetype
+          update: true
+      - name: Build PlayTorrioPlayer (Portable)
+        shell: msys2 {0}
+        run: |
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=RELEASE -DUSE_PATCHED_GLFW=ON -DUSE_OPENGL_ES3=ON -DCREATE_PACKAGE=ON -G Ninja ..
+          cmake --build . --target package
+          
+          VERSION=$(git describe --tags --always)
+          
+          for f in PlayTorrioPlayer-*.zip; do 
+            mv "$f" "PlayTorrioPlayer-win64-portable-${VERSION}.zip"
+          done 2>/dev/null || true
+          
+          for f in PlayTorrioPlayer-*.msi; do 
+            mv "$f" "PlayTorrioPlayer-win64-installer-${VERSION}.msi"
+          done 2>/dev/null || true
+          
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PlayTorrioPlayer-win64
+          path: |
+            build/PlayTorrioPlayer-win64-portable-*.zip
+            build/PlayTorrioPlayer-win64-installer-*.msi
+
   publish:
-    needs: [build]
+    needs: [linux, macos, win]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
-      - run: |
+      - name: Rename artifacts
+        run: |
           for f in PlayTorrio-*/*; do
-            mv "$f" "${f/ImPlay-/PlayTorrio-}"
+            mv "$f" "${f/ImPlay-/PlayTorrio-}" 2>/dev/null || true
           done
       - uses: ncipollo/release-action@v1
         with:
           commit: ${{ github.sha }}
-          artifacts: "PlayTorrio-*/*"
+          artifacts: "PlayTorrioPlayer-*/*"
           body: |
-            # Install
+            # PlayTorrioPlayer Release
+            
             ## Windows
-            - MSI
-              - Download the msi executable
-              - Run the MSI installer
-              - Run PlayTorrio from Start Menu
-            - Zip
-              - Download the windows zip
-              - Extract the zip
-              - Run `PlayTorrio.exe`
+            - **ZIP (Portable)**: Extract anywhere and run `PlayTorrioPlayer.exe`
+            - **MSI**: Traditional installer
+            
             ## macOS
-            - Download the dmg file
-            - Double click the dmg to show it's contents
-            - Drag PlayTorrio to `Applications` folder
-            - Run PlayTorrio from Launchpad
+            - **DMG**: Mount and drag to Applications
+            - **ZIP**: Extract and run anywhere
+            
             ## Linux
-            - Debian Package
-              - Download the deb file
-              - Install: `sudo apt install ./PlayTorrio-*.deb`
-              - Run `PlayTorrio`
-            - AppImage
-              - Download the AppImage file
-              - Run `chmod u+x PlayTorrio-*.AppImage && ./PlayTorrio-*.AppImage`
+            - **AppImage**: `chmod +x *.AppImage && ./PlayTorrioPlayer-*.AppImage`
+            - **tar.gz**: Extract and run
