@@ -437,17 +437,27 @@ void Player::loadFonts() {
   fmt::print("[LOG] Glyph ranges built\n");
   
   // Use Cascadia as primary font (modern, clean look)
-  fmt::print("[LOG] Loading Cascadia font...\n");
+  fmt::print("[LOG] Loading Cascadia font (size={}, data={}, compressed_size={})...\n", 
+             fontSize, (void*)cascadia_compressed_data, cascadia_compressed_size);
   auto* font1 = io.Fonts->AddFontFromMemoryCompressedTTF(cascadia_compressed_data, cascadia_compressed_size, fontSize, &cfg, font_range);
-  fmt::print("[LOG] Cascadia font loaded: {}\n", font1 != nullptr ? "OK" : "FAILED");
+  if (font1 == nullptr) {
+    fmt::print(fg(fmt::color::red), "[ERROR] Failed to load Cascadia font! Using default.\n");
+    io.Fonts->AddFontDefault();
+  } else {
+    fmt::print("[LOG] Cascadia font loaded successfully\n");
+  }
 
   // Merge FontAwesome icons with larger size
   cfg.MergeMode = true;
   cfg.GlyphMinAdvanceX = iconSize;  // Consistent icon width
   static ImWchar fa_range[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
-  fmt::print("[LOG] Loading FontAwesome...\n");
+  fmt::print("[LOG] Loading FontAwesome (size={})...\n", iconSize);
   auto* font2 = io.Fonts->AddFontFromMemoryCompressedTTF(fa_compressed_data, fa_compressed_size, iconSize, &cfg, fa_range);
-  fmt::print("[LOG] FontAwesome loaded: {}\n", font2 != nullptr ? "OK" : "FAILED");
+  if (font2 == nullptr) {
+    fmt::print(fg(fmt::color::red), "[ERROR] Failed to load FontAwesome!\n");
+  } else {
+    fmt::print("[LOG] FontAwesome loaded successfully\n");
+  }
   
   // Add unifont as fallback for international characters
   cfg.MergeMode = true;
@@ -462,7 +472,8 @@ void Player::loadFonts() {
   
   // Build font atlas
   fmt::print("[LOG] Building font atlas...\n");
-  io.Fonts->Build();
+  bool built = io.Fonts->Build();
+  fmt::print("[LOG] Font atlas build result: {}\n", built ? "SUCCESS" : "FAILED");
   fmt::print("[LOG] loadFonts() complete\n");
 }
 
