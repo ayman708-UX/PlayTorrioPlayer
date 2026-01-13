@@ -16,26 +16,36 @@
 #include "theme.h"
 #include "window.h"
 
+// External log file from main.cpp
+extern std::ofstream g_logFile;
+
+// Helper to log to both file and console
+#define LOGF(...) do { \
+  std::string _msg = fmt::format(__VA_ARGS__); \
+  if (g_logFile.is_open()) { g_logFile << _msg << std::endl; g_logFile.flush(); } \
+  fmt::print("{}\n", _msg); \
+} while(0)
+
 namespace ImPlay {
 Window::Window(Config* config) : Player(config) {
-  fmt::print("[LOG] Window::Window() starting...\n");
+  LOGF("[LOG] Window::Window() starting...");
   initGLFW();
-  fmt::print("[LOG] GLFW initialized\n");
+  LOGF("[LOG] GLFW initialized");
   window = glfwCreateWindow(1280, 720, PLAYER_NAME, nullptr, nullptr);
   if (window == nullptr) throw std::runtime_error("Failed to create window!");
-  fmt::print("[LOG] GLFW window created\n");
+  LOGF("[LOG] GLFW window created");
 #ifdef _WIN32
   hwnd = glfwGetWin32Window(window);
   if (SUCCEEDED(OleInitialize(nullptr))) oleOk = true;
 #endif
 
-  fmt::print("[LOG] Calling initGui()...\n");
+  LOGF("[LOG] Calling initGui()...");
   initGui();
-  fmt::print("[LOG] initGui() returned\n");
+  LOGF("[LOG] initGui() returned");
   installCallbacks(window);
-  fmt::print("[LOG] Callbacks installed\n");
+  LOGF("[LOG] Callbacks installed");
   ImGui_ImplGlfw_InitForOpenGL(window, true);
-  fmt::print("[LOG] Window::Window() complete\n");
+  LOGF("[LOG] Window::Window() complete");
 }
 
 Window::~Window() {
@@ -120,13 +130,13 @@ bool Window::init(OptionParser& parser) {
 }
 
 void Window::run() {
-  fmt::print("[LOG] Window::run() starting...\n");
+  LOGF("[LOG] Window::run() starting...");
   bool shutdown = false;
   
-  fmt::print("[LOG] Creating video renderer thread...\n");
+  LOGF("[LOG] Creating video renderer thread...");
   // Video renderer thread - renders mpv frames when ready
   std::thread videoRenderer([&]() {
-    fmt::print("[LOG] Video renderer thread started\n");
+    LOGF("[LOG] Video renderer thread started");
     while (!shutdown) {
       videoWaiter.wait();
       if (shutdown) break;
@@ -136,48 +146,48 @@ void Window::run() {
         wakeup();  // Signal main thread to composite
       }
     }
-    fmt::print("[LOG] Video renderer thread exiting\n");
+    LOGF("[LOG] Video renderer thread exiting");
   });
 
-  fmt::print("[LOG] Restoring window state...\n");
+  LOGF("[LOG] Restoring window state...");
   restoreState();
-  fmt::print("[LOG] restoreState() done\n");
-  fmt::print("[LOG] Showing window...\n");
+  LOGF("[LOG] restoreState() done");
+  LOGF("[LOG] Showing window...");
   glfwShowWindow(window);
-  fmt::print("[LOG] glfwShowWindow() done\n");
-  fmt::print("[LOG] Window shown, entering main loop...\n");
+  LOGF("[LOG] glfwShowWindow() done");
+  LOGF("[LOG] Window shown, entering main loop...");
 
   int loopCount = 0;
   while (!glfwWindowShouldClose(window)) {
     loopCount++;
-    if (loopCount <= 3) fmt::print("[LOG] Main loop iteration {}\n", loopCount);
+    if (loopCount <= 3) LOGF("[LOG] Main loop iteration {}", loopCount);
     
     // Wait for events efficiently - VSync will throttle the loop
     if (!glfwGetWindowAttrib(window, GLFW_VISIBLE) || glfwGetWindowAttrib(window, GLFW_ICONIFIED)) {
-      if (loopCount <= 3) fmt::print("[LOG] glfwWaitEvents...\n");
+      if (loopCount <= 3) LOGF("[LOG] glfwWaitEvents...");
       glfwWaitEvents();
     } else {
-      if (loopCount <= 3) fmt::print("[LOG] glfwPollEvents...\n");
+      if (loopCount <= 3) LOGF("[LOG] glfwPollEvents...");
       glfwPollEvents();
     }
-    if (loopCount <= 3) fmt::print("[LOG] Events done\n");
+    if (loopCount <= 3) LOGF("[LOG] Events done");
 
-    if (loopCount <= 3) fmt::print("[LOG] mpv->waitEvent...\n");
+    if (loopCount <= 3) LOGF("[LOG] mpv->waitEvent...");
     mpv->waitEvent();
-    if (loopCount <= 3) fmt::print("[LOG] Calling render()...\n");
+    if (loopCount <= 3) LOGF("[LOG] Calling render()...");
     render();
-    if (loopCount <= 3) fmt::print("[LOG] render() done\n");
+    if (loopCount <= 3) LOGF("[LOG] render() done");
     updateCursor();
-    if (loopCount <= 3) fmt::print("[LOG] Loop iteration {} complete\n", loopCount);
+    if (loopCount <= 3) LOGF("[LOG] Loop iteration {} complete\n", loopCount);
   }
 
-  fmt::print("[LOG] Main loop exited, shutting down...\n");
+  LOGF("[LOG] Main loop exited, shutting down...");
   shutdown = true;
   videoWaiter.notify();
   videoRenderer.join();
 
   saveState();
-  fmt::print("[LOG] Window::run() complete\n");
+  LOGF("[LOG] Window::run() complete");
 }
 
 void Window::wakeup() { glfwPostEmptyEvent(); }

@@ -18,17 +18,27 @@
 #include "helpers/utils.h"
 #include "window.h"
 
-// Simple file logger for crash debugging
-static std::ofstream g_logFile;
+// Simple file logger for crash debugging - writes to exe directory
+std::ofstream g_logFile;  // Made non-static so other files can use it
 
 static void initLog() {
-  auto path = ImPlay::dataPath() / "playtorrio.log";
-  g_logFile.open(path, std::ios::out | std::ios::trunc);
+  // Write log file next to the executable
+#ifdef _WIN32
+  wchar_t exePath[MAX_PATH];
+  GetModuleFileNameW(NULL, exePath, MAX_PATH);
+  std::filesystem::path logPath = std::filesystem::path(exePath).parent_path() / "crash_debug.log";
+#else
+  std::filesystem::path logPath = "crash_debug.log";
+#endif
+  
+  g_logFile.open(logPath, std::ios::out | std::ios::trunc);
   if (g_logFile.is_open()) {
     auto now = std::chrono::system_clock::now();
     auto time = std::chrono::system_clock::to_time_t(now);
-    g_logFile << "=== PlayTorrioPlayer Log ===" << std::endl;
+    g_logFile << "=== PlayTorrioPlayer Crash Debug Log ===" << std::endl;
     g_logFile << "Started: " << std::ctime(&time);
+    g_logFile << "Log file: " << logPath.string() << std::endl;
+    g_logFile << "========================================" << std::endl;
     g_logFile.flush();
   }
 }
@@ -36,13 +46,24 @@ static void initLog() {
 static void log(const char* msg) {
   if (g_logFile.is_open()) {
     g_logFile << "[LOG] " << msg << std::endl;
-    g_logFile.flush();
+    g_logFile.flush();  // Flush immediately so we don't lose logs on crash
   }
   fmt::print("[LOG] {}\n", msg);
 }
 
 static void log(const std::string& msg) {
   log(msg.c_str());
+}
+
+// Log with format support
+template<typename... Args>
+static void logf(const char* format, Args&&... args) {
+  std::string msg = fmt::format(format, std::forward<Args>(args)...);
+  if (g_logFile.is_open()) {
+    g_logFile << msg << std::endl;
+    g_logFile.flush();
+  }
+  fmt::print("{}\n", msg);
 }
 
 static const char* usage =

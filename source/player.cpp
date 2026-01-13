@@ -15,6 +15,16 @@
 #include "theme.h"
 #include "player.h"
 
+// External log file from main.cpp
+extern std::ofstream g_logFile;
+
+// Helper to log to both file and console
+#define LOGF(...) do { \
+  std::string _msg = fmt::format(__VA_ARGS__); \
+  if (g_logFile.is_open()) { g_logFile << _msg << std::endl; g_logFile.flush(); } \
+  fmt::print("{}\n", _msg); \
+} while(0)
+
 namespace ImPlay {
 Player::Player(Config *config) : config(config) {
   mpv = new Mpv();
@@ -29,7 +39,7 @@ Player::~Player() {
 }
 
 bool Player::init(std::map<std::string, std::string> &options) {
-  fmt::print("[LOG] Player::init() starting...\n");
+  LOGF("[LOG] Player::init() starting...");
   
   mpv->option("config", "yes");
   mpv->option("input-default-bindings", "yes");
@@ -44,7 +54,7 @@ bool Player::init(std::map<std::string, std::string> &options) {
   mpv->option("load-osd-console", "no");
   mpv->option("load-scripts", "no");
   
-  fmt::print("[LOG] MPV basic options set\n");
+  LOGF("[LOG] MPV basic options set");
   
   // === ZERO-COPY HARDWARE INTEROP SETTINGS ===
   // Video output: libmpv for direct GPU rendering
@@ -97,14 +107,14 @@ bool Player::init(std::map<std::string, std::string> &options) {
   
   mpv->option("screenshot-directory", "~~desktop/");
 
-  fmt::print("[LOG] MPV video options set\n");
+  LOGF("[LOG] MPV video options set");
 
   // Display refresh rate for video-sync
   mpv->option<int64_t, MPV_FORMAT_INT64>("override-display-fps", GetMonitorRefreshRate());
   mpv->option<int64_t, MPV_FORMAT_INT64>("display-fps-override", GetMonitorRefreshRate());
 
   if (!config->Data.Mpv.UseConfig) {
-    fmt::print("[LOG] Writing MPV config...\n");
+    LOGF("[LOG] Writing MPV config...");
     writeMpvConf();
     mpv->option("config-dir", config->dir().c_str());
   }
@@ -118,25 +128,25 @@ bool Player::init(std::map<std::string, std::string> &options) {
     }
   }
 
-  fmt::print("[LOG] Initializing debug view...\n");
+  LOGF("[LOG] Initializing debug view...");
   debug->init();
 
   {
-    fmt::print("[LOG] Loading logo texture and initializing MPV...\n");
+    LOGF("[LOG] Loading logo texture and initializing MPV...");
     ContextGuard guard(this);
     logoTexture = ImGui::LoadTexture("icon.png");
-    fmt::print("[LOG] Logo texture: {}\n", logoTexture);
+    LOGF("[LOG] Logo texture: {}\n", logoTexture);
     mpv->init(GetGLAddrFunc(), GetWid());
-    fmt::print("[LOG] MPV initialized\n");
+    LOGF("[LOG] MPV initialized");
   }
 
   SetWindowDecorated(mpv->property<int, MPV_FORMAT_FLAG>("border"));
   mpv->property<int64_t, MPV_FORMAT_INT64>("volume", config->Data.Mpv.Volume);
   if (config->Data.Recent.SpaceToPlayLast) mpv->command("keybind SPACE 'script-message-to implay play-pause'");
   
-  fmt::print("[LOG] Initializing observers...\n");
+  LOGF("[LOG] Initializing observers...");
   initObservers();
-  fmt::print("[LOG] Player::init() complete\n");
+  LOGF("[LOG] Player::init() complete");
 
   return true;
 }
@@ -159,30 +169,30 @@ void Player::setExternalSubtitleProviders(const std::vector<CmdSubtitleProvider>
 
 void Player::draw() {
   static bool firstDraw = true;
-  if (firstDraw) fmt::print("[LOG] draw() starting, idle={}\n", idle);
+  if (firstDraw) LOGF("[LOG] draw() starting, idle={}\n", idle);
   
   drawVideo();
-  if (firstDraw) fmt::print("[LOG] draw: drawVideo() done\n");
+  if (firstDraw) LOGF("[LOG] draw: drawVideo() done");
 
   // Draw the PlayTorrioPlayer overlay
   if (!idle) {
     // Playing - show ONLY the PlayTorrioPlayer controls overlay
     // No old ImPlay UI elements during playback
-    if (firstDraw) fmt::print("[LOG] draw: calling playerOverlay->draw()\n");
+    if (firstDraw) LOGF("[LOG] draw: calling playerOverlay->draw()");
     playerOverlay->draw();
   } else {
     // Idle - show PlayTorrioPlayer welcome screen
-    if (firstDraw) fmt::print("[LOG] draw: calling playerOverlay->drawIdleScreen()\n");
+    if (firstDraw) LOGF("[LOG] draw: calling playerOverlay->drawIdleScreen()");
     playerOverlay->drawIdleScreen();
   }
-  if (firstDraw) fmt::print("[LOG] draw: overlay done\n");
+  if (firstDraw) LOGF("[LOG] draw: overlay done");
 
   // Only draw dialogs (not the old UI views)
   drawOpenURL();
   drawDialog();
   
   if (firstDraw) {
-    fmt::print("[LOG] draw() complete\n");
+    LOGF("[LOG] draw() complete");
     firstDraw = false;
   }
 }
@@ -206,18 +216,18 @@ void Player::render() {
   renderCount++;
   
   if (firstRender) {
-    fmt::print("[LOG] Player::render() first call\n");
+    LOGF("[LOG] Player::render() first call");
   }
   
   auto g = ImGui::GetCurrentContext();
   if (g != nullptr && g->WithinFrameScope) return;
 
   {
-    if (firstRender) fmt::print("[LOG] render: ContextGuard 1\n");
+    if (firstRender) LOGF("[LOG] render: ContextGuard 1");
     ContextGuard guard(this);
 
     if (idle) {
-      if (firstRender) fmt::print("[LOG] render: clearing FBO (idle)\n");
+      if (firstRender) LOGF("[LOG] render: clearing FBO (idle)");
       glBindFramebuffer(GL_FRAMEBUFFER, fbo);
       glClearColor(0, 0, 0, 1);
       glClear(GL_COLOR_BUFFER_BIT);
@@ -228,13 +238,13 @@ void Player::render() {
       loadFonts();
       config->FontReload = false;
     }
-    if (firstRender) fmt::print("[LOG] render: ImGui_ImplOpenGL3_NewFrame\n");
+    if (firstRender) LOGF("[LOG] render: ImGui_ImplOpenGL3_NewFrame");
     ImGui_ImplOpenGL3_NewFrame();
   }
 
-  if (firstRender) fmt::print("[LOG] render: BackendNewFrame\n");
+  if (firstRender) LOGF("[LOG] render: BackendNewFrame");
   BackendNewFrame();
-  if (firstRender) fmt::print("[LOG] render: ImGui::NewFrame\n");
+  if (firstRender) LOGF("[LOG] render: ImGui::NewFrame");
   ImGui::NewFrame();
 
 #if defined(_WIN32) && defined(IMGUI_HAS_VIEWPORT)
@@ -244,9 +254,9 @@ void Player::render() {
   }
 #endif
 
-  if (firstRender) fmt::print("[LOG] render: calling draw()\n");
+  if (firstRender) LOGF("[LOG] render: calling draw()");
   draw();
-  if (firstRender) fmt::print("[LOG] render: draw() returned\n");
+  if (firstRender) LOGF("[LOG] render: draw() returned");
 
 #if defined(_WIN32) && defined(IMGUI_HAS_VIEWPORT)
   if (config->Data.Mpv.UseWid && mpv->ontop) {
@@ -260,11 +270,11 @@ void Player::render() {
   }
 #endif
 
-  if (firstRender) fmt::print("[LOG] render: ImGui::Render\n");
+  if (firstRender) LOGF("[LOG] render: ImGui::Render");
   ImGui::Render();
 
   {
-    if (firstRender) fmt::print("[LOG] render: ContextGuard 2\n");
+    if (firstRender) LOGF("[LOG] render: ContextGuard 2");
     ContextGuard guard(this);
     GetFramebufferSize(&width, &height);
     glViewport(0, 0, width, height);
@@ -272,27 +282,27 @@ void Player::render() {
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (firstRender) fmt::print("[LOG] render: ImGui_ImplOpenGL3_RenderDrawData\n");
+    if (firstRender) LOGF("[LOG] render: ImGui_ImplOpenGL3_RenderDrawData");
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     
     SetSwapInterval(config->Data.Interface.Fps > 60 ? 0 : 1);
-    if (firstRender) fmt::print("[LOG] render: SwapBuffers\n");
+    if (firstRender) LOGF("[LOG] render: SwapBuffers");
     SwapBuffers();
     mpv->reportSwap();
 
 #ifdef IMGUI_HAS_VIEWPORT
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-      if (firstRender) fmt::print("[LOG] render: UpdatePlatformWindows\n");
+      if (firstRender) LOGF("[LOG] render: UpdatePlatformWindows");
       ImGui::UpdatePlatformWindows();
-      if (firstRender) fmt::print("[LOG] render: RenderPlatformWindowsDefault\n");
+      if (firstRender) LOGF("[LOG] render: RenderPlatformWindowsDefault");
       ImGui::RenderPlatformWindowsDefault();
-      if (firstRender) fmt::print("[LOG] render: Viewports done\n");
+      if (firstRender) LOGF("[LOG] render: Viewports done");
     }
 #endif
   }
   
   if (firstRender) {
-    fmt::print("[LOG] render: first frame complete!\n");
+    LOGF("[LOG] render: first frame complete!");
     firstRender = false;
   }
 }
@@ -313,23 +323,23 @@ void Player::renderVideo() {
 }
 
 void Player::initGui() {
-  fmt::print("[LOG] initGui() starting...\n");
+  LOGF("[LOG] initGui() starting...");
   ContextGuard guard(this);
 
 #ifdef IMGUI_IMPL_OPENGL_ES3
-  fmt::print("[LOG] Loading GLES2...\n");
+  LOGF("[LOG] Loading GLES2...");
   if (!gladLoadGLES2((GLADloadfunc)GetGLAddrFunc())) throw std::runtime_error("Failed to load GLES 2!");
 #else
-  fmt::print("[LOG] Loading GL...\n");
+  LOGF("[LOG] Loading GL...");
   if (!gladLoadGL((GLADloadfunc)GetGLAddrFunc())) throw std::runtime_error("Failed to load GL!");
 #endif
-  fmt::print("[LOG] GL loaded successfully\n");
+  LOGF("[LOG] GL loaded successfully");
   SetSwapInterval(1);  // Enable VSync
 
-  fmt::print("[LOG] Creating ImGui context...\n");
+  LOGF("[LOG] Creating ImGui context...");
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  fmt::print("[LOG] ImGui context created\n");
+  LOGF("[LOG] ImGui context created");
 
   ImGuiIO &io = ImGui::GetIO();
   io.IniFilename = nullptr;
@@ -342,12 +352,12 @@ void Player::initGui() {
   if (config->Data.Interface.Viewports || config->Data.Mpv.UseWid) io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 #endif
 
-  fmt::print("[LOG] Loading fonts...\n");
+  LOGF("[LOG] Loading fonts...");
   loadFonts();
-  fmt::print("[LOG] Fonts loaded\n");
+  LOGF("[LOG] Fonts loaded");
 
   // Create FBO for video rendering
-  fmt::print("[LOG] Creating FBO...\n");
+  LOGF("[LOG] Creating FBO...");
   glGenFramebuffers(1, &fbo);
   glGenTextures(1, &tex);
 
@@ -361,19 +371,19 @@ void Player::initGui() {
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  fmt::print("[LOG] FBO created\n");
+  LOGF("[LOG] FBO created");
 
 #ifdef IMGUI_IMPL_OPENGL_ES3
-  fmt::print("[LOG] Initializing ImGui OpenGL3 (ES3)...\n");
+  LOGF("[LOG] Initializing ImGui OpenGL3 (ES3)...");
   ImGui_ImplOpenGL3_Init("#version 300 es");
 #elif defined(__APPLE__)
-  fmt::print("[LOG] Initializing ImGui OpenGL3 (Apple)...\n");
+  LOGF("[LOG] Initializing ImGui OpenGL3 (Apple)...");
   ImGui_ImplOpenGL3_Init("#version 150");
 #else
-  fmt::print("[LOG] Initializing ImGui OpenGL3...\n");
+  LOGF("[LOG] Initializing ImGui OpenGL3...");
   ImGui_ImplOpenGL3_Init("#version 130");
 #endif
-  fmt::print("[LOG] initGui() complete\n");
+  LOGF("[LOG] initGui() complete");
 }
 
 void Player::exitGui() {
@@ -413,7 +423,7 @@ void Player::restoreState() {
 }
 
 void Player::loadFonts() {
-  fmt::print("[LOG] loadFonts() starting...\n");
+  LOGF("[LOG] loadFonts() starting...");
   
   auto interface = config->Data.Interface;
   float baseFontSize = config->Data.Font.Size;
@@ -430,10 +440,10 @@ void Player::loadFonts() {
   float fontSize = std::floor(std::max(baseFontSize, 16.0f) * scale);
   float iconSize = std::floor(fontSize * 1.1f);  // Icons slightly larger
   
-  fmt::print("[LOG] Font size: {}, Icon size: {}, Scale: {}\n", fontSize, iconSize, scale);
+  LOGF("[LOG] Font size: {}, Icon size: {}, Scale: {}\n", fontSize, iconSize, scale);
 
   ImGuiStyle style;
-  fmt::print("[LOG] Setting theme: {}\n", interface.Theme);
+  LOGF("[LOG] Setting theme: {}\n", interface.Theme);
   ImGui::SetTheme(interface.Theme.c_str(), &style, interface.Rounding, interface.Shadow);
 
   ImGuiIO &io = ImGui::GetIO();
@@ -445,7 +455,7 @@ void Player::loadFonts() {
   ImGui::GetStyle() = style;
 
   io.Fonts->Clear();
-  fmt::print("[LOG] Fonts cleared\n");
+  LOGF("[LOG] Fonts cleared");
 
   // Font config for smooth rendering
   ImFontConfig cfg;
@@ -455,47 +465,47 @@ void Player::loadFonts() {
   cfg.PixelSnapH = false;  // Smoother subpixel positioning
 
   const ImWchar *font_range = config->buildGlyphRanges();
-  fmt::print("[LOG] Glyph ranges built\n");
+  LOGF("[LOG] Glyph ranges built");
   
   // Use Cascadia as primary font (modern, clean look)
-  fmt::print("[LOG] Loading Cascadia font (size={}, data={}, compressed_size={})...\n", 
+  LOGF("[LOG] Loading Cascadia font (size={}, data={}, compressed_size={})...\n", 
              fontSize, (void*)cascadia_compressed_data, cascadia_compressed_size);
   auto* font1 = io.Fonts->AddFontFromMemoryCompressedTTF(cascadia_compressed_data, cascadia_compressed_size, fontSize, &cfg, font_range);
   if (font1 == nullptr) {
     fmt::print(fg(fmt::color::red), "[ERROR] Failed to load Cascadia font! Using default.\n");
     io.Fonts->AddFontDefault();
   } else {
-    fmt::print("[LOG] Cascadia font loaded successfully\n");
+    LOGF("[LOG] Cascadia font loaded successfully");
   }
 
   // Merge FontAwesome icons with larger size
   cfg.MergeMode = true;
   cfg.GlyphMinAdvanceX = iconSize;  // Consistent icon width
   static ImWchar fa_range[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
-  fmt::print("[LOG] Loading FontAwesome (size={})...\n", iconSize);
+  LOGF("[LOG] Loading FontAwesome (size={})...\n", iconSize);
   auto* font2 = io.Fonts->AddFontFromMemoryCompressedTTF(fa_compressed_data, fa_compressed_size, iconSize, &cfg, fa_range);
   if (font2 == nullptr) {
     fmt::print(fg(fmt::color::red), "[ERROR] Failed to load FontAwesome!\n");
   } else {
-    fmt::print("[LOG] FontAwesome loaded successfully\n");
+    LOGF("[LOG] FontAwesome loaded successfully");
   }
   
   // Add unifont as fallback for international characters
   cfg.MergeMode = true;
   cfg.GlyphMinAdvanceX = 0;
   if (fileExists(config->Data.Font.Path)) {
-    fmt::print("[LOG] Loading custom font from: {}\n", config->Data.Font.Path);
+    LOGF("[LOG] Loading custom font from: {}\n", config->Data.Font.Path);
     io.Fonts->AddFontFromFileTTF(config->Data.Font.Path.c_str(), fontSize, &cfg, font_range);
   } else {
-    fmt::print("[LOG] Loading unifont fallback...\n");
+    LOGF("[LOG] Loading unifont fallback...");
     io.Fonts->AddFontFromMemoryCompressedTTF(unifont_compressed_data, unifont_compressed_size, fontSize, &cfg, font_range);
   }
   
   // Build font atlas
-  fmt::print("[LOG] Building font atlas...\n");
+  LOGF("[LOG] Building font atlas...");
   bool built = io.Fonts->Build();
-  fmt::print("[LOG] Font atlas build result: {}\n", built ? "SUCCESS" : "FAILED");
-  fmt::print("[LOG] loadFonts() complete\n");
+  LOGF("[LOG] Font atlas build result: {}\n", built ? "SUCCESS" : "FAILED");
+  LOGF("[LOG] loadFonts() complete");
 }
 
 void Player::shutdown() { mpv->command(config->Data.Mpv.WatchLater ? "quit-watch-later" : "quit"); }
