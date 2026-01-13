@@ -148,19 +148,24 @@ static bool send_ipc(std::string sock, std::vector<std::string> paths) {
 
 int main(int argc, char* argv[]) {
 #ifdef _WIN32
-  // Always allocate console for debugging
+  // Always allocate console for debugging FIRST
   AllocConsole();
   freopen("CONOUT$", "w", stdout);
   freopen("CONOUT$", "w", stderr);
   freopen("CONIN$", "r", stdin);
+  fmt::print("[EARLY] Console allocated\n");
 #endif
 
+  fmt::print("[EARLY] main() starting, argc={}\n", argc);
+  
   initLog();
   log("PlayTorrioPlayer starting...");
 
+  fmt::print("[EARLY] About to parse args\n");
   ImPlay::OptionParser parser;
   log("Parsing command line arguments...");
   parser.parse(argc, argv);
+  fmt::print("[EARLY] Args parsed\n");
   
   if (parser.options.contains("help")) {
     fmt::print("{}", usage);
@@ -174,27 +179,34 @@ int main(int argc, char* argv[]) {
       return run_headless(parser);
     }
 
+    fmt::print("[EARLY] About to load config\n");
     log("Loading config...");
     ImPlay::Config config;
     config.load();
     log("Config loaded successfully");
+    fmt::print("[EARLY] Config loaded, theme={}\n", config.Data.Interface.Theme);
 
     if (config.Data.Window.Single && send_ipc(config.ipcSocket(), parser.paths)) {
       log("Sent to existing instance via IPC");
       return 0;
     }
 
+    fmt::print("[EARLY] About to create Window object\n");
     log("Creating window...");
     ImPlay::Window window(&config);
     log("Window object created");
+    fmt::print("[EARLY] Window object created\n");
     
+    fmt::print("[EARLY] About to call window.init()\n");
     log("Initializing window...");
     if (!window.init(parser)) {
       log("ERROR: Window initialization failed!");
       return 1;
     }
     log("Window initialized successfully");
+    fmt::print("[EARLY] Window initialized\n");
 
+    fmt::print("[EARLY] About to start main loop\n");
     log("Starting main loop...");
     window.run();
     
@@ -211,6 +223,7 @@ int main(int argc, char* argv[]) {
     return 1;
   } catch (...) {
     log("UNKNOWN EXCEPTION!");
+    fmt::print(fg(fmt::color::red), "UNKNOWN EXCEPTION!\n");
 #ifdef _WIN32
     MessageBoxA(NULL, "Unknown error occurred", "PlayTorrioPlayer Error", MB_OK | MB_ICONERROR);
 #endif

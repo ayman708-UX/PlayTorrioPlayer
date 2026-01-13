@@ -120,10 +120,13 @@ bool Window::init(OptionParser& parser) {
 }
 
 void Window::run() {
+  fmt::print("[LOG] Window::run() starting...\n");
   bool shutdown = false;
   
+  fmt::print("[LOG] Creating video renderer thread...\n");
   // Video renderer thread - renders mpv frames when ready
   std::thread videoRenderer([&]() {
+    fmt::print("[LOG] Video renderer thread started\n");
     while (!shutdown) {
       videoWaiter.wait();
       if (shutdown) break;
@@ -133,10 +136,14 @@ void Window::run() {
         wakeup();  // Signal main thread to composite
       }
     }
+    fmt::print("[LOG] Video renderer thread exiting\n");
   });
 
+  fmt::print("[LOG] Restoring window state...\n");
   restoreState();
+  fmt::print("[LOG] Showing window...\n");
   glfwShowWindow(window);
+  fmt::print("[LOG] Window shown, entering main loop...\n");
 
   while (!glfwWindowShouldClose(window)) {
     // Wait for events efficiently - VSync will throttle the loop
@@ -153,11 +160,13 @@ void Window::run() {
     // VSync handles frame timing - no artificial limiting needed
   }
 
+  fmt::print("[LOG] Main loop exited, shutting down...\n");
   shutdown = true;
   videoWaiter.notify();
   videoRenderer.join();
 
   saveState();
+  fmt::print("[LOG] Window::run() complete\n");
 }
 
 void Window::wakeup() { glfwPostEmptyEvent(); }

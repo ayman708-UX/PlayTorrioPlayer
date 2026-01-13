@@ -189,6 +189,12 @@ void Player::drawVideo() {
 }
 
 void Player::render() {
+  static bool firstRender = true;
+  if (firstRender) {
+    fmt::print("[LOG] Player::render() first call\n");
+    firstRender = false;
+  }
+  
   auto g = ImGui::GetCurrentContext();
   if (g != nullptr && g->WithinFrameScope) return;
 
