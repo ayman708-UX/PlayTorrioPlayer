@@ -18,53 +18,8 @@
 #include "helpers/utils.h"
 #include "window.h"
 
-// Simple file logger for crash debugging - writes to exe directory
-std::ofstream g_logFile;  // Made non-static so other files can use it
-
-static void initLog() {
-  // Write log file next to the executable
-#ifdef _WIN32
-  wchar_t exePath[MAX_PATH];
-  GetModuleFileNameW(NULL, exePath, MAX_PATH);
-  std::filesystem::path logPath = std::filesystem::path(exePath).parent_path() / "crash_debug.log";
-#else
-  std::filesystem::path logPath = "crash_debug.log";
-#endif
-  
-  g_logFile.open(logPath, std::ios::out | std::ios::trunc);
-  if (g_logFile.is_open()) {
-    auto now = std::chrono::system_clock::now();
-    auto time = std::chrono::system_clock::to_time_t(now);
-    g_logFile << "=== PlayTorrioPlayer Crash Debug Log ===" << std::endl;
-    g_logFile << "Started: " << std::ctime(&time);
-    g_logFile << "Log file: " << logPath.string() << std::endl;
-    g_logFile << "========================================" << std::endl;
-    g_logFile.flush();
-  }
-}
-
-static void log(const char* msg) {
-  if (g_logFile.is_open()) {
-    g_logFile << "[LOG] " << msg << std::endl;
-    g_logFile.flush();  // Flush immediately so we don't lose logs on crash
-  }
-  fmt::print("[LOG] {}\n", msg);
-}
-
-static void log(const std::string& msg) {
-  log(msg.c_str());
-}
-
-// Log with format support
-template<typename... Args>
-static void logf(const char* format, Args&&... args) {
-  std::string msg = fmt::format(format, std::forward<Args>(args)...);
-  if (g_logFile.is_open()) {
-    g_logFile << msg << std::endl;
-    g_logFile.flush();
-  }
-  fmt::print("{}\n", msg);
-}
+// Dummy log file for compatibility (logging disabled in release)
+std::ofstream g_logFile;
 
 static const char* usage =
     "Usage:   playtp [options] [url|path/]filename [provider \"subname\" \"suburl\" ...]\n"
@@ -169,24 +124,11 @@ static bool send_ipc(std::string sock, std::vector<std::string> paths) {
 
 int main(int argc, char* argv[]) {
 #ifdef _WIN32
-  // Always allocate console for debugging FIRST
-  AllocConsole();
-  freopen("CONOUT$", "w", stdout);
-  freopen("CONOUT$", "w", stderr);
-  freopen("CONIN$", "r", stdin);
-  fmt::print("[EARLY] Console allocated\n");
+  SetProcessDPIAware();
 #endif
 
-  fmt::print("[EARLY] main() starting, argc={}\n", argc);
-  
-  initLog();
-  log("PlayTorrioPlayer starting...");
-
-  fmt::print("[EARLY] About to parse args\n");
   ImPlay::OptionParser parser;
-  log("Parsing command line arguments...");
   parser.parse(argc, argv);
-  fmt::print("[EARLY] Args parsed\n");
   
   if (parser.options.contains("help")) {
     fmt::print("{}", usage);
@@ -194,48 +136,27 @@ int main(int argc, char* argv[]) {
   }
 
   try {
-    log("Checking for headless mode...");
     if (parser.options.contains("o") || parser.check("video", "no") || parser.check("vid", "no")) {
-      log("Running in headless mode");
       return run_headless(parser);
     }
 
-    fmt::print("[EARLY] About to load config\n");
-    log("Loading config...");
     ImPlay::Config config;
     config.load();
-    log("Config loaded successfully");
-    fmt::print("[EARLY] Config loaded, theme={}\n", config.Data.Interface.Theme);
 
     if (config.Data.Window.Single && send_ipc(config.ipcSocket(), parser.paths)) {
-      log("Sent to existing instance via IPC");
       return 0;
     }
 
-    fmt::print("[EARLY] About to create Window object\n");
-    log("Creating window...");
     ImPlay::Window window(&config);
-    log("Window object created");
-    fmt::print("[EARLY] Window object created\n");
     
-    fmt::print("[EARLY] About to call window.init()\n");
-    log("Initializing window...");
     if (!window.init(parser)) {
-      log("ERROR: Window initialization failed!");
       return 1;
     }
-    log("Window initialized successfully");
-    fmt::print("[EARLY] Window initialized\n");
 
-    fmt::print("[EARLY] About to start main loop\n");
-    log("Starting main loop...");
     window.run();
     
-    log("Exiting normally");
     return 0;
   } catch (const std::exception& e) {
-    std::string errMsg = fmt::format("EXCEPTION: {}", e.what());
-    log(errMsg);
     fmt::print(fg(fmt::color::red), "Error: {}\n", e.what());
     
 #ifdef _WIN32
@@ -243,8 +164,7 @@ int main(int argc, char* argv[]) {
 #endif
     return 1;
   } catch (...) {
-    log("UNKNOWN EXCEPTION!");
-    fmt::print(fg(fmt::color::red), "UNKNOWN EXCEPTION!\n");
+    fmt::print(fg(fmt::color::red), "Unknown error!\n");
 #ifdef _WIN32
     MessageBoxA(NULL, "Unknown error occurred", "PlayTorrioPlayer Error", MB_OK | MB_ICONERROR);
 #endif

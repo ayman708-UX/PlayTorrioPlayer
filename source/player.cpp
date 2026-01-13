@@ -15,16 +15,6 @@
 #include "theme.h"
 #include "player.h"
 
-// External log file from main.cpp
-extern std::ofstream g_logFile;
-
-// Helper to log to both file and console
-#define LOGF(...) do { \
-  std::string _msg = fmt::format(__VA_ARGS__); \
-  if (g_logFile.is_open()) { g_logFile << _msg << std::endl; g_logFile.flush(); } \
-  fmt::print("{}\n", _msg); \
-} while(0)
-
 namespace ImPlay {
 Player::Player(Config *config) : config(config) {
   mpv = new Mpv();
@@ -39,82 +29,20 @@ Player::~Player() {
 }
 
 bool Player::init(std::map<std::string, std::string> &options) {
-  LOGF("[LOG] Player::init() starting...");
-  
+  // Basic mpv options - keep it simple and stable
   mpv->option("config", "yes");
   mpv->option("input-default-bindings", "yes");
   mpv->option("input-vo-keyboard", "yes");
-  
-  // PlayTorrioPlayer: COMPLETELY disable ALL mpv on-screen UI
-  mpv->option("osc", "no");
-  mpv->option("osd-level", "0");
-  mpv->option("osd-bar", "no");
-  mpv->option("osd-playing-msg", "");
-  mpv->option("osd-on-seek", "no");
   mpv->option("load-osd-console", "no");
-  mpv->option("load-scripts", "no");
-  
-  LOGF("[LOG] MPV basic options set");
-  
-  // === ZERO-COPY HARDWARE INTEROP SETTINGS ===
-  // Video output: libmpv for direct GPU rendering
-  mpv->option("vo", "libmpv");
-  
-  // Hardware decoding: auto-safe tries hardware first, falls back gracefully
-  mpv->option("hwdec", "auto-safe");
-  
-  // GPU API: let mpv choose the best available
-  mpv->option("gpu-api", "auto");
-  
-  // Video sync: display-resample for smoothest playback synced to display
-  mpv->option("video-sync", "display-resample");
-  
-  // Interpolation for smooth motion (optional, can be disabled for lower latency)
-  mpv->option("interpolation", "yes");
-  mpv->option("tscale", "oversample");
-  
-  // Let mpv handle swap timing
-  mpv->option("opengl-swapinterval", "1");
-  
-  // Frame timing
-  mpv->option("video-timing-offset", "0");
-  
-  // Disable expensive post-processing for performance
-  mpv->option("deband", "no");
-  mpv->option("dither-depth", "no");
-  mpv->option("correct-downscaling", "no");
-  
-  // Fast scalers
-  mpv->option("scale", "bilinear");
-  mpv->option("dscale", "bilinear");
-  mpv->option("cscale", "bilinear");
-  
-  // Video decoding optimizations
-  mpv->option("vd-lavc-fast", "yes");
-  mpv->option("vd-lavc-threads", "0");
-  
-  // Demuxer/cache settings for smooth streaming
-  mpv->option("demuxer-max-bytes", "150MiB");
-  mpv->option("demuxer-max-back-bytes", "50MiB");
-  mpv->option("demuxer-readahead-secs", "20");
-  mpv->option("cache", "yes");
-  mpv->option("cache-secs", "120");
-  mpv->option("cache-pause-initial", "yes");
-  mpv->option("cache-pause-wait", "3");
-  
-  // Seeking optimizations
-  mpv->option("hr-seek-framedrop", "yes");
-  
+  mpv->option("osd-playing-msg", "${media-title}");
   mpv->option("screenshot-directory", "~~desktop/");
-
-  LOGF("[LOG] MPV video options set");
-
-  // Display refresh rate for video-sync
-  mpv->option<int64_t, MPV_FORMAT_INT64>("override-display-fps", GetMonitorRefreshRate());
-  mpv->option<int64_t, MPV_FORMAT_INT64>("display-fps-override", GetMonitorRefreshRate());
+  mpv->option("vo", "libmpv");
+  mpv->option("osc", "no");
+  
+  // Hardware decoding for native performance (auto-safe is stable)
+  mpv->option("hwdec", "auto-safe");
 
   if (!config->Data.Mpv.UseConfig) {
-    LOGF("[LOG] Writing MPV config...");
     writeMpvConf();
     mpv->option("config-dir", config->dir().c_str());
   }
@@ -128,25 +56,19 @@ bool Player::init(std::map<std::string, std::string> &options) {
     }
   }
 
-  LOGF("[LOG] Initializing debug view...");
   debug->init();
 
   {
-    LOGF("[LOG] Loading logo texture and initializing MPV...");
     ContextGuard guard(this);
     logoTexture = ImGui::LoadTexture("icon.png");
-    LOGF("[LOG] Logo texture: {}\n", logoTexture);
     mpv->init(GetGLAddrFunc(), GetWid());
-    LOGF("[LOG] MPV initialized");
   }
 
   SetWindowDecorated(mpv->property<int, MPV_FORMAT_FLAG>("border"));
   mpv->property<int64_t, MPV_FORMAT_INT64>("volume", config->Data.Mpv.Volume);
   if (config->Data.Recent.SpaceToPlayLast) mpv->command("keybind SPACE 'script-message-to implay play-pause'");
   
-  LOGF("[LOG] Initializing observers...");
   initObservers();
-  LOGF("[LOG] Player::init() complete");
 
   return true;
 }
@@ -168,33 +90,20 @@ void Player::setExternalSubtitleProviders(const std::vector<CmdSubtitleProvider>
 }
 
 void Player::draw() {
-  static bool firstDraw = true;
-  if (firstDraw) LOGF("[LOG] draw() starting, idle={}\n", idle);
-  
   drawVideo();
-  if (firstDraw) LOGF("[LOG] draw: drawVideo() done");
 
   // Draw the PlayTorrioPlayer overlay
   if (!idle) {
     // Playing - show ONLY the PlayTorrioPlayer controls overlay
-    // No old ImPlay UI elements during playback
-    if (firstDraw) LOGF("[LOG] draw: calling playerOverlay->draw()");
     playerOverlay->draw();
   } else {
     // Idle - show PlayTorrioPlayer welcome screen
-    if (firstDraw) LOGF("[LOG] draw: calling playerOverlay->drawIdleScreen()");
     playerOverlay->drawIdleScreen();
   }
-  if (firstDraw) LOGF("[LOG] draw: overlay done");
 
   // Only draw dialogs (not the old UI views)
   drawOpenURL();
   drawDialog();
-  
-  if (firstDraw) {
-    LOGF("[LOG] draw() complete");
-    firstDraw = false;
-  }
 }
 
 void Player::drawVideo() {
@@ -211,23 +120,13 @@ void Player::drawVideo() {
 }
 
 void Player::render() {
-  static bool firstRender = true;
-  static int renderCount = 0;
-  renderCount++;
-  
-  if (firstRender) {
-    LOGF("[LOG] Player::render() first call");
-  }
-  
   auto g = ImGui::GetCurrentContext();
   if (g != nullptr && g->WithinFrameScope) return;
 
   {
-    if (firstRender) LOGF("[LOG] render: ContextGuard 1");
     ContextGuard guard(this);
 
     if (idle) {
-      if (firstRender) LOGF("[LOG] render: clearing FBO (idle)");
       glBindFramebuffer(GL_FRAMEBUFFER, fbo);
       glClearColor(0, 0, 0, 1);
       glClear(GL_COLOR_BUFFER_BIT);
@@ -238,13 +137,10 @@ void Player::render() {
       loadFonts();
       config->FontReload = false;
     }
-    if (firstRender) LOGF("[LOG] render: ImGui_ImplOpenGL3_NewFrame");
     ImGui_ImplOpenGL3_NewFrame();
   }
 
-  if (firstRender) LOGF("[LOG] render: BackendNewFrame");
   BackendNewFrame();
-  if (firstRender) LOGF("[LOG] render: ImGui::NewFrame");
   ImGui::NewFrame();
 
 #if defined(_WIN32) && defined(IMGUI_HAS_VIEWPORT)
@@ -254,9 +150,7 @@ void Player::render() {
   }
 #endif
 
-  if (firstRender) LOGF("[LOG] render: calling draw()");
   draw();
-  if (firstRender) LOGF("[LOG] render: draw() returned");
 
 #if defined(_WIN32) && defined(IMGUI_HAS_VIEWPORT)
   if (config->Data.Mpv.UseWid && mpv->ontop) {
@@ -270,11 +164,9 @@ void Player::render() {
   }
 #endif
 
-  if (firstRender) LOGF("[LOG] render: ImGui::Render");
   ImGui::Render();
 
   {
-    if (firstRender) LOGF("[LOG] render: ContextGuard 2");
     ContextGuard guard(this);
     GetFramebufferSize(&width, &height);
     glViewport(0, 0, width, height);
@@ -282,28 +174,18 @@ void Player::render() {
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (firstRender) LOGF("[LOG] render: ImGui_ImplOpenGL3_RenderDrawData");
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     
     SetSwapInterval(config->Data.Interface.Fps > 60 ? 0 : 1);
-    if (firstRender) LOGF("[LOG] render: SwapBuffers");
     SwapBuffers();
     mpv->reportSwap();
 
 #ifdef IMGUI_HAS_VIEWPORT
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-      if (firstRender) LOGF("[LOG] render: UpdatePlatformWindows");
       ImGui::UpdatePlatformWindows();
-      if (firstRender) LOGF("[LOG] render: RenderPlatformWindowsDefault");
       ImGui::RenderPlatformWindowsDefault();
-      if (firstRender) LOGF("[LOG] render: Viewports done");
     }
 #endif
-  }
-  
-  if (firstRender) {
-    LOGF("[LOG] render: first frame complete!");
-    firstRender = false;
   }
 }
 
@@ -323,23 +205,17 @@ void Player::renderVideo() {
 }
 
 void Player::initGui() {
-  LOGF("[LOG] initGui() starting...");
   ContextGuard guard(this);
 
 #ifdef IMGUI_IMPL_OPENGL_ES3
-  LOGF("[LOG] Loading GLES2...");
   if (!gladLoadGLES2((GLADloadfunc)GetGLAddrFunc())) throw std::runtime_error("Failed to load GLES 2!");
 #else
-  LOGF("[LOG] Loading GL...");
   if (!gladLoadGL((GLADloadfunc)GetGLAddrFunc())) throw std::runtime_error("Failed to load GL!");
 #endif
-  LOGF("[LOG] GL loaded successfully");
   SetSwapInterval(1);  // Enable VSync
 
-  LOGF("[LOG] Creating ImGui context...");
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  LOGF("[LOG] ImGui context created");
 
   ImGuiIO &io = ImGui::GetIO();
   io.IniFilename = nullptr;
@@ -352,12 +228,9 @@ void Player::initGui() {
   if (config->Data.Interface.Viewports || config->Data.Mpv.UseWid) io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 #endif
 
-  LOGF("[LOG] Loading fonts...");
   loadFonts();
-  LOGF("[LOG] Fonts loaded");
 
   // Create FBO for video rendering
-  LOGF("[LOG] Creating FBO...");
   glGenFramebuffers(1, &fbo);
   glGenTextures(1, &tex);
 
@@ -371,19 +244,14 @@ void Player::initGui() {
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  LOGF("[LOG] FBO created");
 
 #ifdef IMGUI_IMPL_OPENGL_ES3
-  LOGF("[LOG] Initializing ImGui OpenGL3 (ES3)...");
   ImGui_ImplOpenGL3_Init("#version 300 es");
 #elif defined(__APPLE__)
-  LOGF("[LOG] Initializing ImGui OpenGL3 (Apple)...");
   ImGui_ImplOpenGL3_Init("#version 150");
 #else
-  LOGF("[LOG] Initializing ImGui OpenGL3...");
   ImGui_ImplOpenGL3_Init("#version 130");
 #endif
-  LOGF("[LOG] initGui() complete");
 }
 
 void Player::exitGui() {
@@ -423,8 +291,6 @@ void Player::restoreState() {
 }
 
 void Player::loadFonts() {
-  LOGF("[LOG] loadFonts() starting...");
-  
   auto interface = config->Data.Interface;
   float baseFontSize = config->Data.Font.Size;
   float scale = interface.Scale;
@@ -439,11 +305,8 @@ void Player::loadFonts() {
   // Larger base font for crisp rendering
   float fontSize = std::floor(std::max(baseFontSize, 16.0f) * scale);
   float iconSize = std::floor(fontSize * 1.1f);  // Icons slightly larger
-  
-  LOGF("[LOG] Font size: {}, Icon size: {}, Scale: {}\n", fontSize, iconSize, scale);
 
   ImGuiStyle style;
-  LOGF("[LOG] Setting theme: {}\n", interface.Theme);
   ImGui::SetTheme(interface.Theme.c_str(), &style, interface.Rounding, interface.Shadow);
 
   ImGuiIO &io = ImGui::GetIO();
@@ -455,7 +318,6 @@ void Player::loadFonts() {
   ImGui::GetStyle() = style;
 
   io.Fonts->Clear();
-  LOGF("[LOG] Fonts cleared");
 
   // Font config for smooth rendering
   ImFontConfig cfg;
@@ -465,47 +327,30 @@ void Player::loadFonts() {
   cfg.PixelSnapH = false;  // Smoother subpixel positioning
 
   const ImWchar *font_range = config->buildGlyphRanges();
-  LOGF("[LOG] Glyph ranges built");
   
   // Use Cascadia as primary font (modern, clean look)
-  LOGF("[LOG] Loading Cascadia font (size={}, data={}, compressed_size={})...\n", 
-             fontSize, (void*)cascadia_compressed_data, cascadia_compressed_size);
   auto* font1 = io.Fonts->AddFontFromMemoryCompressedTTF(cascadia_compressed_data, cascadia_compressed_size, fontSize, &cfg, font_range);
   if (font1 == nullptr) {
-    fmt::print(fg(fmt::color::red), "[ERROR] Failed to load Cascadia font! Using default.\n");
     io.Fonts->AddFontDefault();
-  } else {
-    LOGF("[LOG] Cascadia font loaded successfully");
   }
 
   // Merge FontAwesome icons with larger size
   cfg.MergeMode = true;
   cfg.GlyphMinAdvanceX = iconSize;  // Consistent icon width
   static ImWchar fa_range[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
-  LOGF("[LOG] Loading FontAwesome (size={})...\n", iconSize);
-  auto* font2 = io.Fonts->AddFontFromMemoryCompressedTTF(fa_compressed_data, fa_compressed_size, iconSize, &cfg, fa_range);
-  if (font2 == nullptr) {
-    fmt::print(fg(fmt::color::red), "[ERROR] Failed to load FontAwesome!\n");
-  } else {
-    LOGF("[LOG] FontAwesome loaded successfully");
-  }
+  io.Fonts->AddFontFromMemoryCompressedTTF(fa_compressed_data, fa_compressed_size, iconSize, &cfg, fa_range);
   
   // Add unifont as fallback for international characters
   cfg.MergeMode = true;
   cfg.GlyphMinAdvanceX = 0;
   if (fileExists(config->Data.Font.Path)) {
-    LOGF("[LOG] Loading custom font from: {}\n", config->Data.Font.Path);
     io.Fonts->AddFontFromFileTTF(config->Data.Font.Path.c_str(), fontSize, &cfg, font_range);
   } else {
-    LOGF("[LOG] Loading unifont fallback...");
     io.Fonts->AddFontFromMemoryCompressedTTF(unifont_compressed_data, unifont_compressed_size, fontSize, &cfg, font_range);
   }
   
   // Build font atlas
-  LOGF("[LOG] Building font atlas...");
-  bool built = io.Fonts->Build();
-  LOGF("[LOG] Font atlas build result: {}\n", built ? "SUCCESS" : "FAILED");
-  LOGF("[LOG] loadFonts() complete");
+  io.Fonts->Build();
 }
 
 void Player::shutdown() { mpv->command(config->Data.Mpv.WatchLater ? "quit-watch-later" : "quit"); }
@@ -598,25 +443,6 @@ void Player::writeMpvConf() {
     std::ofstream file(mpvConf, std::ios::binary);
     auto content = romfs::get("mpv/mpv.conf");
     file.write(reinterpret_cast<const char *>(content.data()), content.size()) << "\n";
-    
-    // Zero-copy hardware interop settings
-    file << "# PlayTorrioPlayer - Optimized for performance\n";
-    file << "profile=gpu-hq\n";
-    file << "hwdec=auto-safe\n";
-    file << "video-sync=display-resample\n";
-    file << "interpolation=yes\n";
-    file << "tscale=oversample\n\n";
-    
-    // Disable expensive effects
-    file << "# Performance optimizations\n";
-    file << "deband=no\n";
-    file << "dither-depth=no\n\n";
-    
-    // Disable all mpv UI
-    file << "# Disable mpv UI (PlayTorrioPlayer has its own)\n";
-    file << "osc=no\n";
-    file << "osd-level=0\n";
-    file << "osd-bar=no\n";
   }
 
   if (!std::filesystem::exists(inputConf)) {

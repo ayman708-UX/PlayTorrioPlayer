@@ -17,36 +17,19 @@
 #include "theme.h"
 #include "window.h"
 
-// External log file from main.cpp
-extern std::ofstream g_logFile;
-
-// Helper to log to both file and console
-#define LOGF(...) do { \
-  std::string _msg = fmt::format(__VA_ARGS__); \
-  if (g_logFile.is_open()) { g_logFile << _msg << std::endl; g_logFile.flush(); } \
-  fmt::print("{}\n", _msg); \
-} while(0)
-
 namespace ImPlay {
 Window::Window(Config* config) : Player(config) {
-  LOGF("[LOG] Window::Window() starting...");
   initGLFW();
-  LOGF("[LOG] GLFW initialized");
   window = glfwCreateWindow(1280, 720, PLAYER_NAME, nullptr, nullptr);
   if (window == nullptr) throw std::runtime_error("Failed to create window!");
-  LOGF("[LOG] GLFW window created");
 #ifdef _WIN32
   hwnd = glfwGetWin32Window(window);
   if (SUCCEEDED(OleInitialize(nullptr))) oleOk = true;
 #endif
 
-  LOGF("[LOG] Calling initGui()...");
   initGui();
-  LOGF("[LOG] initGui() returned");
   installCallbacks(window);
-  LOGF("[LOG] Callbacks installed");
   ImGui_ImplGlfw_InitForOpenGL(window, true);
-  LOGF("[LOG] Window::Window() complete");
 }
 
 Window::~Window() {
@@ -131,13 +114,10 @@ bool Window::init(OptionParser& parser) {
 }
 
 void Window::run() {
-  LOGF("[LOG] Window::run() starting...");
   bool shutdown = false;
   
-  LOGF("[LOG] Creating video renderer thread...");
   // Video renderer thread - renders mpv frames when ready
   std::thread videoRenderer([&]() {
-    LOGF("[LOG] Video renderer thread started");
     while (!shutdown) {
       videoWaiter.wait();
       if (shutdown) break;
@@ -147,48 +127,29 @@ void Window::run() {
         wakeup();  // Signal main thread to composite
       }
     }
-    LOGF("[LOG] Video renderer thread exiting");
   });
 
-  LOGF("[LOG] Restoring window state...");
   restoreState();
-  LOGF("[LOG] restoreState() done");
-  LOGF("[LOG] Showing window...");
   glfwShowWindow(window);
-  LOGF("[LOG] glfwShowWindow() done");
-  LOGF("[LOG] Window shown, entering main loop...");
 
-  int loopCount = 0;
   while (!glfwWindowShouldClose(window)) {
-    loopCount++;
-    if (loopCount <= 3) LOGF("[LOG] Main loop iteration {}", loopCount);
-    
     // Wait for events efficiently - VSync will throttle the loop
     if (!glfwGetWindowAttrib(window, GLFW_VISIBLE) || glfwGetWindowAttrib(window, GLFW_ICONIFIED)) {
-      if (loopCount <= 3) LOGF("[LOG] glfwWaitEvents...");
       glfwWaitEvents();
     } else {
-      if (loopCount <= 3) LOGF("[LOG] glfwPollEvents...");
       glfwPollEvents();
     }
-    if (loopCount <= 3) LOGF("[LOG] Events done");
 
-    if (loopCount <= 3) LOGF("[LOG] mpv->waitEvent...");
     mpv->waitEvent();
-    if (loopCount <= 3) LOGF("[LOG] Calling render()...");
     render();
-    if (loopCount <= 3) LOGF("[LOG] render() done");
     updateCursor();
-    if (loopCount <= 3) LOGF("[LOG] Loop iteration {} complete\n", loopCount);
   }
 
-  LOGF("[LOG] Main loop exited, shutting down...");
   shutdown = true;
   videoWaiter.notify();
   videoRenderer.join();
 
   saveState();
-  LOGF("[LOG] Window::run() complete");
 }
 
 void Window::wakeup() { glfwPostEmptyEvent(); }
